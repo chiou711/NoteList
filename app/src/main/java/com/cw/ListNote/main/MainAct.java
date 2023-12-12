@@ -30,7 +30,7 @@ import com.cw.ListNote.db.DB_page;
 import com.cw.ListNote.drawer.Drawer;
 import com.cw.ListNote.folder.Folder;
 import com.cw.ListNote.folder.FolderUi;
-import com.cw.ListNote.note_add.Add_note_option;
+import com.cw.ListNote.note_add.Note_addText;
 import com.cw.ListNote.operation.delete.DeleteFolders;
 import com.cw.ListNote.operation.delete.DeletePages;
 import com.cw.ListNote.page.Checked_notes_option;
@@ -801,18 +801,16 @@ public class MainAct extends AppCompatActivity implements FragmentManager.OnBack
                 return true;
 
             case MenuId.ADD_NEW_NOTE:
-                if(Build.VERSION.SDK_INT >= M)//api23
-                {
-                    // create selection list
-                    if(Build.VERSION.SDK_INT >= 30)
-                        Add_note_option.createSelection(this, Environment.isExternalStorageManager());
-                    else if (Build.VERSION.SDK_INT >= 23) {
-                        int permissionWriteExtStorage = ActivityCompat.checkSelfPermission(mAct, Manifest.permission.WRITE_EXTERNAL_STORAGE);
-                        Add_note_option.createSelection(this, permissionWriteExtStorage == PackageManager.PERMISSION_GRANTED);
-                    }
-                }
+                SharedPreferences mPref_add_new_note_location = getSharedPreferences("add_new_note_option", 0);
+                boolean bTop = mPref_add_new_note_location.getString("KEY_ADD_NEW_NOTE_TO","bottom").equalsIgnoreCase("top");
+
+                Intent intent = new Intent(this, Note_addText.class);
+                if(bTop)
+                    intent.putExtra("extra_ADD_NEW_TO_TOP", "true");
                 else
-                    Add_note_option.createSelection(this,true);
+                    intent.putExtra("extra_ADD_NEW_TO_TOP", "false");
+
+                startActivity(intent);
                 return true;
 
             case MenuId.CHECKED_OPERATION:

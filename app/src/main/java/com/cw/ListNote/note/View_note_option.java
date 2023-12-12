@@ -29,6 +29,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.cw.ListNote.R;
 import com.cw.ListNote.db.DB_page;
 import com.cw.ListNote.operation.mail.MailNotes;
 import com.cw.ListNote.tabs.TabsHost;
@@ -81,11 +82,6 @@ public class View_note_option {
         option_list.add(new View_note_option(ID_OPTION_MAIL ,
                         android.R.drawable.ic_menu_send,
                         R.string.mail_notes_btn));
-
-        // search youtube with keyword
-        option_list.add(new View_note_option(ID_OPTION_SEARCH_YOUTUBE ,
-                R.drawable.ic_youtube,
-                R.string.search_youtube));
 
         // Back
         option_list.add(new View_note_option(ID_OPTION_BACK,

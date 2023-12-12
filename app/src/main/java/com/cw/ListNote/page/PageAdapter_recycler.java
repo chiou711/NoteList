@@ -19,13 +19,11 @@ package com.cw.ListNote.page;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
-import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.cw.ListNote.R;
@@ -39,7 +37,6 @@ import com.cw.ListNote.page.item_touch_helper.ItemTouchHelperViewHolder;
 import com.cw.ListNote.page.item_touch_helper.OnStartDragListener;
 import com.cw.ListNote.tabs.TabsHost;
 import com.cw.ListNote.util.ColorSet;
-import com.cw.ListNote.util.CustomWebView;
 import com.cw.ListNote.util.Util;
 import com.cw.ListNote.util.preferences.Pref;
 
@@ -47,13 +44,9 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
-import static com.cw.ListNote.db.DB_page.KEY_NOTE_AUDIO_URI;
 import static com.cw.ListNote.db.DB_page.KEY_NOTE_BODY;
 import static com.cw.ListNote.db.DB_page.KEY_NOTE_CREATED;
-import static com.cw.ListNote.db.DB_page.KEY_NOTE_DRAWING_URI;
-import static com.cw.ListNote.db.DB_page.KEY_NOTE_LINK_URI;
 import static com.cw.ListNote.db.DB_page.KEY_NOTE_MARKING;
-import static com.cw.ListNote.db.DB_page.KEY_NOTE_PICTURE_URI;
 import static com.cw.ListNote.db.DB_page.KEY_NOTE_TITLE;
 import static com.cw.ListNote.page.Page_recycler.swapRows;
 
@@ -63,7 +56,6 @@ public class PageAdapter_recycler extends RecyclerView.Adapter<PageAdapter_recyc
 {
 	private AppCompatActivity mAct;
 	Cursor cursor;
-	private String linkUri;
 	private static int style;
     private DB_folder dbFolder;
 	private DB_page mDb_page;
@@ -87,22 +79,11 @@ public class PageAdapter_recycler extends RecyclerView.Adapter<PageAdapter_recyc
         ImageView btnMarking;
         ImageView btnViewNote;
         ImageView btnEditNote;
-        ImageView btnPlayAudio;
-        ImageView btnPlayYouTube;
-        ImageView btnPlayWeb;
 		TextView rowId;
-		View audioBlock;
-		ImageView iconAudio;
-		TextView audioName;
 		TextView textTitle;
 		TextView textBody;
 		TextView textTime;
         ImageViewCustom btnDrag;
-		View thumbBlock;
-		ImageView thumbPicture;
-		ImageView thumbAudio;
-		CustomWebView thumbWeb;
-		ProgressBar progressBar;
 
         public ViewHolder(View v) {
             super(v);
@@ -114,23 +95,11 @@ public class PageAdapter_recycler extends RecyclerView.Adapter<PageAdapter_recyc
                 }
             });
 
-            textTitle = (TextView) v.findViewById(R.id.row_title);
             rowId= (TextView) v.findViewById(R.id.row_id);
-            audioBlock = v.findViewById(R.id.audio_block);
-            iconAudio = (ImageView) v.findViewById(R.id.img_audio);
-            audioName = (TextView) v.findViewById(R.id.row_audio_name);
             btnMarking = (ImageView) v.findViewById(R.id.btn_marking);
             btnViewNote = (ImageView) v.findViewById(R.id.btn_view_note);
             btnEditNote = (ImageView) v.findViewById(R.id.btn_edit_note);
-            btnPlayAudio = (ImageView) v.findViewById(R.id.btn_play_audio);
-            btnPlayYouTube = (ImageView) v.findViewById(R.id.btn_play_youtube);
-            btnPlayWeb = (ImageView) v.findViewById(R.id.btn_play_web);
-            thumbBlock = v.findViewById(R.id.row_thumb_nail);
-            thumbPicture = (ImageView) v.findViewById(R.id.thumb_picture);
-            thumbAudio = (ImageView) v.findViewById(R.id.thumb_audio);
-            thumbWeb = (CustomWebView) v.findViewById(R.id.thumb_web);
             btnDrag = (ImageViewCustom) v.findViewById(R.id.btn_drag);
-            progressBar = (ProgressBar) v.findViewById(R.id.thumb_progress);
             textTitle = (TextView) v.findViewById(R.id.row_title);
             textBody = (TextView) v.findViewById(R.id.row_body);
             textTime = (TextView) v.findViewById(R.id.row_time);
@@ -178,11 +147,7 @@ public class PageAdapter_recycler extends RecyclerView.Adapter<PageAdapter_recyc
         // get DB data
         String strTitle = null;
         String strBody = null;
-        String pictureUri = null;
-        String audioUri = null;
-        String drawingUri = null;
         Long timeCreated = null;
-        linkUri = null;
         int marking = 0;
 
 		SharedPreferences pref_show_note_attribute = MainAct.mAct.getSharedPreferences("show_note_attribute", 0);
@@ -193,10 +158,6 @@ public class PageAdapter_recycler extends RecyclerView.Adapter<PageAdapter_recyc
         if(cursor.moveToPosition(position)) {
             strTitle = cursor.getString(cursor.getColumnIndexOrThrow(KEY_NOTE_TITLE));
             strBody = cursor.getString(cursor.getColumnIndexOrThrow(KEY_NOTE_BODY));
-            pictureUri = cursor.getString(cursor.getColumnIndexOrThrow(KEY_NOTE_PICTURE_URI));
-            audioUri = cursor.getString(cursor.getColumnIndexOrThrow(KEY_NOTE_AUDIO_URI));
-            linkUri = cursor.getString(cursor.getColumnIndexOrThrow(KEY_NOTE_LINK_URI));
-            drawingUri = cursor.getString(cursor.getColumnIndexOrThrow(KEY_NOTE_DRAWING_URI));
             marking = cursor.getInt(cursor.getColumnIndexOrThrow(KEY_NOTE_MARKING));
             timeCreated = cursor.getLong(cursor.getColumnIndex(KEY_NOTE_CREATED));
         }
@@ -231,48 +192,13 @@ public class PageAdapter_recycler extends RecyclerView.Adapter<PageAdapter_recyc
             holder.btnDrag.setVisibility(View.GONE);
 
 		// show text title
-		if( Util.isEmptyString(strTitle) )
-		{
-			if(Util.isYouTubeLink(linkUri)) {
-				strTitle = Util.getYouTubeTitle(linkUri);
-				holder.textTitle.setVisibility(View.VISIBLE);
-				holder.textTitle.setText(strTitle);
-				holder.textTitle.setTextColor(Color.GRAY);
-			}
-			else if( (linkUri != null) && (linkUri.startsWith("http")))
-			{
-				holder.textTitle.setVisibility(View.VISIBLE);
-				Util.setHttpTitle(linkUri, mAct,holder.textTitle);
-			}
-			else
-			{
-				// make sure empty title is empty after scrolling
-				holder.textTitle.setVisibility(View.VISIBLE);
-				holder.textTitle.setText("");
-			}
-		}
-		else
-		{
-			holder.textTitle.setVisibility(View.VISIBLE);
-			holder.textTitle.setText(strTitle);
-			holder.textTitle.setTextColor(ColorSet.mText_ColorArray[style]);
-		}
+		holder.textTitle.setVisibility(View.VISIBLE);
+		holder.textTitle.setText(strTitle);
+		holder.textTitle.setTextColor(ColorSet.mText_ColorArray[style]);
 
 		// Show text body
 	  	if(pref_show_note_attribute.getString("KEY_SHOW_BODY", "yes").equalsIgnoreCase("yes"))
 	  	{
-	  		// test only: enabled for showing picture path
-//            String strBody = cursor.getString(cursor.getColumnIndex(KEY_NOTE_BODY));
-	  		if(!Util.isEmptyString(strBody)){
-				//normal: do nothing
-			}
-	  		else if(!Util.isEmptyString(pictureUri)) {
-//				strBody = pictureUri;//show picture Uri
-			}
-	  		else if(!Util.isEmptyString(linkUri)) {
-//				strBody = linkUri; //show link Uri
-			}
-
 			holder.textBody.setText(strBody);
 //			holder.textBody.setTextSize(12);
 
