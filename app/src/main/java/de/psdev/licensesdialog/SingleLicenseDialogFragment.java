@@ -16,7 +16,7 @@
 
 package de.psdev.licensesdialog;
 
-import com.cw.NoteList.R;
+import com.cw.ListNote.R;
 
 import android.app.Dialog;
 import android.content.DialogInterface;

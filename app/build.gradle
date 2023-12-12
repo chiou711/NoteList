@@ -12,7 +12,7 @@ android {
 //    }
 
     defaultConfig {
-        applicationId "com.cw.notelist"
+        applicationId "com.cw.listnote"
         minSdkVersion 16
         targetSdkVersion 30
         multiDexEnabled true

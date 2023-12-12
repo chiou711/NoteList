@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<NoteList>
+<ListNote>
 
     <folder>
         <folder_name>Sample</folder_name>
@@ -8,7 +8,7 @@
         <note>
             <title>[n]local image file</title>
             <body></body>
-            <picture>file:///storage/emulated/0/NoteList/local.jpg</picture>
+            <picture>file:///storage/emulated/0/ListNote/local.jpg</picture>
             <audio></audio>
             <link></link>
         </note>
@@ -20,7 +20,7 @@
             <title>[n]local audio file</title>
             <body></body>
             <picture></picture>
-            <audio>file:///storage/emulated/0/NoteList/local.mp3</audio>
+            <audio>file:///storage/emulated/0/ListNote/local.mp3</audio>
             <link></link>
         </note>
     </page>
@@ -30,7 +30,7 @@
         <note>
             <title>[s]local video file</title>
             <body></body>
-            <picture>file:///storage/emulated/0/NoteList/local.mp4</picture>
+            <picture>file:///storage/emulated/0/ListNote/local.mp4</picture>
             <audio></audio>
             <link></link>
         </note>
@@ -56,4 +56,4 @@
     </folder>
 
 
-</NoteList>
+</ListNote>

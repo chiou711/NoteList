@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    package="com.cw.NoteList">
+    package="com.cw.ListNote">
 
     <uses-permission android:name="android.permission.VIBRATE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
@@ -55,7 +55,7 @@
         <!-- android:theme="@style/Theme.AppCompat" -->
         <!-- android:theme="@style/CustomTheme" -->
         <activity
-            android:name="com.cw.NoteList.main.MainAct"
+            android:name="com.cw.ListNote.main.MainAct"
             android:theme="@style/MyTheme"
             android:launchMode="singleTop"
             android:configChanges="orientation|keyboard|keyboardHidden|screenSize|screenLayout|uiMode"
@@ -74,17 +74,17 @@
             </intent-filter>
         </activity>
 
-        <activity android:name="com.cw.NoteList.note_add.Note_addText"
+        <activity android:name="com.cw.ListNote.note_add.Note_addText"
                   android:theme="@style/MyTheme"
                   android:windowSoftInputMode="adjustPan"
-                  android:parentActivityName="com.cw.NoteList.main.MainAct">
+                  android:parentActivityName="com.cw.ListNote.main.MainAct">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.cw.NoteList.main.MainAct" />
+                android:value="com.cw.ListNote.main.MainAct" />
         </activity>
-        <activity android:name="com.cw.NoteList.note_edit.Note_edit"
+        <activity android:name="com.cw.ListNote.note_edit.Note_edit"
                   android:windowSoftInputMode="adjustPan"/>
-        <activity android:name="com.cw.NoteList.note.Note"
+        <activity android:name="com.cw.ListNote.note.Note"
                   android:theme="@style/MyTheme"
             	  android:configChanges="orientation|keyboard|keyboardHidden|screenSize|screenLayout|uiMode">
             <intent-filter android:priority="0">
@@ -95,12 +95,12 @@
              onPause/onSaveInstanceState/onStop/onDestroy/
                                                 onCreate/onStart/onRestoreInstanceState/onResume    -->
 
-        <activity android:name="com.cw.NoteList.operation.import_export.Import_webAct"
+        <activity android:name="com.cw.ListNote.operation.import_export.Import_webAct"
                   android:theme="@style/MyTheme"/>
 
         <!--receiver-->
         <receiver
-            android:name="com.cw.NoteList.util.DeleteFileAlarmReceiver"
+            android:name="com.cw.ListNote.util.DeleteFileAlarmReceiver"
             android:enabled="true" />
         <receiver android:name="androidx.media.session.MediaButtonReceiver" >
             <intent-filter>

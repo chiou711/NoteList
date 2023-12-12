@@ -13,8 +13,8 @@
     <string name="btn_Finish">完成</string>
     <string name="btn_Select">选择</string>
     <string name="btn_None">无</string>
-    <string name="app_name">笔记列表</string>
-    <string name="app_name_dir">NoteList</string>
+    <string name="app_name">列表笔记</string>
+    <string name="app_name_dir">ListNote</string>
     <string name="mark_handler">mark_handler</string>
     <string name="drag_handler">drag_handler</string>
     <string name="confirm_dialog_title">确认</string>

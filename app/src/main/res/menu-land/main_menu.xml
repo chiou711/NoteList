@@ -132,12 +132,6 @@
             >
             <menu>
                 <item
-                    android:id="@+id/IMPORT_FROM_WEB"
-                    android:orderInCategory="1"
-                    app:showAsAction="never"
-                    android:title="@string/config_import_Web"
-                    android:icon="@android:drawable/ic_menu_revert"/>
-                <item
                     android:id="@+id/IMPORT_FROM_SD_CARD"
                     android:orderInCategory="2"
                     app:showAsAction="never"

@@ -16,7 +16,7 @@
 
 package de.psdev.licensesdialog.licenses;
 
-import com.cw.NoteList.R;
+import com.cw.ListNote.R;
 
 import android.content.Context;
 
