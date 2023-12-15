@@ -415,11 +415,6 @@ public class Note extends AppCompatActivity
 		else
 			menu.findItem(R.id.VIEW_NOTE_CHECK).setIcon(R.drawable.btn_check_on_holo_dark);
 
-		// menu item: view mode
-   		markCurrentSelected(menu.findItem(R.id.VIEW_ALL),"ALL");
-		markCurrentSelected(menu.findItem(R.id.VIEW_PICTURE),"PICTURE_ONLY");
-		markCurrentSelected(menu.findItem(R.id.VIEW_TEXT),"TEXT_ONLY");
-
 	    // menu item: previous
 		MenuItem itemPrev = menu.findItem(R.id.ACTION_PREVIOUS);
 		itemPrev.setEnabled(viewPager.getCurrentItem() > 0);
@@ -464,9 +459,6 @@ public class Note extends AppCompatActivity
             	}
                 return true;
 
-            case R.id.VIEW_NOTE_MODE:
-            	return true;
-
 			case R.id.VIEW_NOTE_CHECK:
 				int markingNow = PageAdapter_recycler.toggleNoteMarking(this,NoteUi.getFocus_notePos());
 
@@ -478,21 +470,6 @@ public class Note extends AppCompatActivity
 
 				return true;
 
-            case R.id.VIEW_ALL:
-        		setViewAllMode();
-				setOutline(act);
-            	return true;
-            	
-            case R.id.VIEW_PICTURE:
-        		setPictureMode();
-				setOutline(act);
-            	return true;
-
-            case R.id.VIEW_TEXT:
-        		setTextMode();
-				setOutline(act);
-            	return true;
-            	
             case R.id.ACTION_PREVIOUS:
                 // Go to the previous step in the wizard. If there is no previous step,
                 // setCurrentItem will do nothing.

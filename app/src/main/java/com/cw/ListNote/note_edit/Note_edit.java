@@ -275,32 +275,7 @@ public class Note_edit extends Activity
 	    }
     }
     
-	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
-
-		// inflate menu
-		getMenuInflater().inflate(R.menu.edit_note_menu, menu);
-
-//	    menu.add(0, CHANGE_LINK, 0, R.string.edit_note_link )
-//	    .setIcon(android.R.drawable.ic_menu_share)
-//	    .setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS | MenuItem.SHOW_AS_ACTION_WITH_TEXT);
-//
-//	    menu.add(0, CHANGE_AUDIO, 1, R.string.audioUi_note )
-//	    .setIcon(R.drawable.ic_audio_unselected)
-//	    .setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS | MenuItem.SHOW_AS_ACTION_WITH_TEXT);
-//
-//	    menu.add(0, CAPTURE_IMAGE, 2, R.string.note_camera_image )
-//	    .setIcon(android.R.drawable.ic_menu_camera)
-//	    .setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS | MenuItem.SHOW_AS_ACTION_WITH_TEXT);
-//
-//	    menu.add(0, CAPTURE_VIDEO, 3, R.string.note_camera_video )
-//	    .setIcon(android.R.drawable.presence_video_online)
-//	    .setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS | MenuItem.SHOW_AS_ACTION_WITH_TEXT);
-
-		return super.onCreateOptionsMenu(menu);
-	}
-    
-    @Override 
+    @Override
     public boolean onOptionsItemSelected(MenuItem item) 
     {
     	switch (item.getItemId()) 
@@ -316,7 +291,6 @@ public class Note_edit extends Activity
 		            finish();
 		    	}
 		        return true;
-
 
             default:
                 return super.onOptionsItemSelected(item);

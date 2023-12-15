@@ -105,10 +105,6 @@ public class Note_edit_ui {
 
 		UI_init_text();
 
-    	audioTextView = (TextView) act.findViewById(R.id.edit_audio);
-    	linkEditText = (EditText) act.findViewById(R.id.edit_link);
-        picImageView = (ImageView) act.findViewById(R.id.edit_picture);
-
         progressBar = (ProgressBar) act.findViewById(R.id.edit_progress_bar);
 
 		DB_folder dbFolder = new DB_folder(act, Pref.getPref_focusView_folder_tableId(act));
@@ -129,7 +125,6 @@ public class Note_edit_ui {
 
 		titleEditText = (EditText) act.findViewById(R.id.edit_title);
 		bodyEditText = (EditText) act.findViewById(R.id.edit_body);
-		linkEditText = (EditText) act.findViewById(R.id.edit_link);
 
 		//set title color
 		titleEditText.setTextColor(ColorSet.mText_ColorArray[style]);
@@ -138,29 +133,7 @@ public class Note_edit_ui {
 		//set body color
 		bodyEditText.setTextColor(ColorSet.mText_ColorArray[style]);
 		bodyEditText.setBackgroundColor(ColorSet.mBG_ColorArray[style]);
-
-		//set link color
-		linkEditText.setTextColor(ColorSet.mText_ColorArray[style]);
-		linkEditText.setBackgroundColor(ColorSet.mBG_ColorArray[style]);
 	}
-
-    // set image close listener
-	private void setCloseImageListeners(EditText editText)
-    {
-    	editText.setOnClickListener(new OnClickListener()
-    	{   @Override
-			public void onClick(View v) 
-			{
-			}
-		});
-    	
-    	editText.setOnFocusChangeListener(new OnFocusChangeListener() 
-    	{   @Override
-            public void onFocusChange(View v, boolean hasFocus) 
-    		{
-            }
-    	});   
-    }
 
 	void deleteNote(Long rowId)
     {
@@ -183,11 +156,6 @@ public class Note_edit_ui {
 			String strBodyEdit = dB_page.getNoteBody_byId(rowId);
 			bodyEditText.setText(strBodyEdit);
 			bodyEditText.setSelection(strBodyEdit.length());
-
-			// link
-			String strLinkEdit = dB_page.getNoteLinkUri_byId(rowId);
-			linkEditText.setText(strLinkEdit);
-			linkEditText.setSelection(strLinkEdit.length());
 		}
         else
         {
@@ -200,10 +168,6 @@ public class Note_edit_ui {
             // renew body
             bodyEditText.setText(strBlank);
             bodyEditText.setSelection(strBlank.length());
-
-			// renew link
-			linkEditText.setText(strBlank);
-			linkEditText.setSelection(strBlank.length());
         }
 	}
 
@@ -214,17 +178,6 @@ public class Note_edit_ui {
     	{
 			populateFields_text(rowId);
         }
-    	else
-    	{
-            // renew link
-			String strLinkEdit = "";
-			if(linkEditText != null)
-			{
-	            linkEditText.setText(strLinkEdit);
-	            linkEditText.setSelection(strLinkEdit.length());
-	            linkEditText.requestFocus();
-			}
-    	}
     }
 
 	private boolean isTitleModified()
@@ -253,9 +206,6 @@ public class Note_edit_ui {
 
 	Long saveStateInDB(Long rowId,boolean enSaveDb, String pictureUri, String audioUri, String drawingUri)
 	{
-		String linkUri = "";
-		if(linkEditText != null)
-			linkUri = linkEditText.getText().toString();
     	String title = titleEditText.getText().toString();
         String body = bodyEditText.getText().toString();
 
@@ -268,7 +218,7 @@ public class Note_edit_ui {
 	        	{
 	        		// insert
 	        		System.out.println("Note_edit_ui / _saveStateInDB / insert");
-	        		rowId = dB_page.insertNote(title, pictureUri, audioUri, drawingUri, linkUri, body, 0, (long) 0);// add new note, get return row Id
+	        		rowId = dB_page.insertNote(title, pictureUri, audioUri, drawingUri, "linkUri", body, 0, (long) 0);// add new note, get return row Id
 	        	}
 	        }
 	        else // for Edit
@@ -284,7 +234,7 @@ public class Note_edit_ui {
 	        			title = oriTitle;
 	        			body = oriBody;
 	        			Long time = oriCreatedTime;
-	        			dB_page.updateNote(rowId, title, pictureUri, audioUri, drawingUri, linkUri, body, oriMarking, time,true);
+	        			dB_page.updateNote(rowId, title, pictureUri, audioUri, drawingUri, "linkUri", body, oriMarking, time,true);
 	        		}
 	        		else // update new
 	        		{
@@ -299,7 +249,7 @@ public class Note_edit_ui {
                             marking = oriMarking;
 
                         boolean isOK;
-	        			isOK = dB_page.updateNote(rowId, title, pictureUri, audioUri, drawingUri, linkUri, body,
+	        			isOK = dB_page.updateNote(rowId, title, pictureUri, audioUri, drawingUri, "", body,
 												marking, now.getTime(),true); // update note
 	        			System.out.println("--- isOK = " + isOK);
 	        		}

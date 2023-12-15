@@ -81,18 +81,6 @@ public class Config extends Fragment
 	    //Set text style
 		setNewPageTextStyle();
 		
-		//Set Take Picture Option
-		setTakeImageOption();
-
-		//set YouTube auto play
-		setYouTube_auto_play();
-
-		//Set YouTube launch delay
-		setYouTubeLaunchDelay();
-
-		//Set slideshow switch time
-		setSlideshowSwitchTime();
-
 		//Set vibration time length
 		setVibrationTimeLength();
 
@@ -107,77 +95,6 @@ public class Config extends Fragment
 
 		return mRootView;
 	}   	
-
-	/**
-	 *  set take picture option
-	 *  
-	 */
-	SharedPreferences mPref_takePicture;
-	TextView mTextViewTakePicture;	
-	void setTakeImageOption()
-	{
-		//  set current
-		mPref_takePicture = getActivity().getSharedPreferences("takeImage", 0);
-		View viewOption = mRootView.findViewById(R.id.takePictureOption);
-		mTextViewTakePicture = (TextView)mRootView.findViewById(R.id.TakePictureOptionSetting);
-		
-		if(mPref_takePicture.getString("KEY_SHOW_CONFIRMATION_DIALOG","no").equalsIgnoreCase("yes"))		   
-			mTextViewTakePicture.setText(getResources().getText(R.string.confirm_dialog_button_yes).toString());
-		else
-			mTextViewTakePicture.setText(getResources().getText(R.string.confirm_dialog_button_no).toString());
-
-		// Select new 
-		viewOption.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				
-				selectTakePictureOptionDialog();
-			}
-		});
-	}
-
-	void selectTakePictureOptionDialog()
-	{
-		   final String[] items = new String[]{
-				   getResources().getText(R.string.confirm_dialog_button_yes).toString(),
-				   getResources().getText(R.string.confirm_dialog_button_no).toString()   };
-		   AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-		   
-		   String strTakePicture = mPref_takePicture.getString("KEY_SHOW_CONFIRMATION_DIALOG","no");
-		   
-		   // add current selection
-		   for(int i=0;i< items.length;i++)
-		   {
-			   if(strTakePicture.equalsIgnoreCase("yes"))
-				   items[0] = getResources().getText(R.string.confirm_dialog_button_yes).toString() + " *";
-			   else if(strTakePicture.equalsIgnoreCase("no"))
-				   items[1] = getResources().getText(R.string.confirm_dialog_button_no).toString() + " *";
-		   }
-		   
-		   DialogInterface.OnClickListener listener = new DialogInterface.OnClickListener()
-		   {
-				@Override
-				public void onClick(DialogInterface dialog, int which) {
-					if(which == 0)
-					{
-						mPref_takePicture.edit().putString("KEY_SHOW_CONFIRMATION_DIALOG","yes").apply();
-						mTextViewTakePicture.setText(getResources().getText(R.string.confirm_dialog_button_yes).toString());
-					}
-					else if(which == 1)
-					{
-						mPref_takePicture.edit().putString("KEY_SHOW_CONFIRMATION_DIALOG","no").apply();
-						mTextViewTakePicture.setText(getResources().getText(R.string.confirm_dialog_button_no).toString());
-					}
-					
-					//end
-					dialog.dismiss();
-				}
-		   };
-		   builder.setTitle(R.string.config_confirm_taken_picture)
-				  .setSingleChoiceItems(items, -1, listener)
-				  .setNegativeButton(R.string.btn_Cancel, null)
-				  .show();
-	}
 
 	/**
 	 *  select style
@@ -272,78 +189,6 @@ public class Config extends Fragment
    };
 
 	/**
-	 * Set YouTube auto play
-	 *
-	 */
-	private void setYouTube_auto_play(){
-		Switch sw = mRootView.findViewById(R.id.switch_youtube_auto_play);
-		if(Pref.getPref_is_autoPlay_YouTubeApi(getActivity()) ) {
-			sw.setChecked(true);
-			sw.setText(R.string.config_status_enabled);
-		}
-		else {
-			sw.setChecked(false);
-			sw.setText(R.string.config_status_disabled);
-		}
-
-		sw.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-			@Override
-			public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-				Pref.setPref_is_autoPlay_YouTubeApi(getActivity(),isChecked);
-				if(isChecked)
-					sw.setText(R.string.config_status_enabled);
-				else
-					sw.setText(R.string.config_status_disabled);
-			}
-		});
-	}
-
-
-	/**
-	 *  set YouTube launch delay
-	 *
-	 */
-	void setYouTubeLaunchDelay()
-	{
-		//  set current
-		SharedPreferences pref_sw_time = getActivity().getSharedPreferences("youtube_launch_delay", 0);
-		View swTimeView = mRootView.findViewById(R.id.youtube_launch_delay);
-		TextView slideshow_text_view = (TextView)mRootView.findViewById(R.id.youtube_launch_delay_setting);
-		String strSwTime = pref_sw_time.getString("KEY_YOUTUBE_LAUNCH_DELAY","10");
-		slideshow_text_view.setText(strSwTime +"s");
-
-		// switch time picker
-		swTimeView.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				youtubeLaunchDelayPickerDialog();
-			}
-		});
-	}
-
-	/**
-	 *  set slideshow switch time
-	 *
-	 */
-	void setSlideshowSwitchTime()
-	{
-		//  set current
-		SharedPreferences pref_sw_time = getActivity().getSharedPreferences("slideshow_sw_time", 0);
-		View swTimeView = mRootView.findViewById(R.id.slideshow_sw_time);
-		TextView slideshow_text_view = (TextView)mRootView.findViewById(R.id.slideshow_sw_time_setting);
-		String strSwTime = pref_sw_time.getString("KEY_SLIDESHOW_SW_TIME","5");
-		slideshow_text_view.setText(strSwTime +"s");
-
-		// switch time picker
-		swTimeView.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				slideshowSwTimePickerDialog();
-			}
-		});
-	}
-
-	/**
 	 *  select vibration time length
 	 *  
 	 */
@@ -367,95 +212,6 @@ public class Config extends Fragment
 				selectVibrationLengthDialog();
 			}
 		});
-	}
-
-
-	/**
-	 * Dialog for setting youtube launch delay
-	 */
-	void youtubeLaunchDelayPickerDialog()
-	{
-		final AlertDialog.Builder d = new AlertDialog.Builder(getActivity());
-		LayoutInflater inflater = getActivity().getLayoutInflater();
-		View dialogView = inflater.inflate(R.layout.config_slideshow_sw_time_picker, null);
-		d.setTitle(R.string.config_set_slideshow_dlg_title);
-		d.setMessage(R.string.config_set_slideshow_dlg_message);
-		d.setView(dialogView);
-
-		final SharedPreferences pref_sw_time = getActivity().getSharedPreferences("youtube_launch_delay", 0);
-		final String strSwitchTime = pref_sw_time.getString("KEY_YOUTUBE_LAUNCH_DELAY","10");
-
-		final NumberPicker numberPicker = (NumberPicker) dialogView.findViewById(R.id.dialog_number_picker);
-		numberPicker.setMaxValue(20);
-		numberPicker.setMinValue(1);
-		numberPicker.setValue(Integer.valueOf(strSwitchTime));
-		numberPicker.setWrapSelectorWheel(true);
-		numberPicker.setOnValueChangedListener(new NumberPicker.OnValueChangeListener() {
-			@Override
-			public void onValueChange(NumberPicker numberPicker, int i, int i1) {
-			}
-		});
-		d.setPositiveButton(R.string.btn_OK, new DialogInterface.OnClickListener() {
-			@Override
-			public void onClick(DialogInterface dialogInterface, int i) {
-				int len = numberPicker.getValue();
-				pref_sw_time.edit().putString("KEY_YOUTUBE_LAUNCH_DELAY",String.valueOf(len)).apply();
-				TextView slideshow_text_view = (TextView)mRootView.findViewById(R.id.youtube_launch_delay_setting);
-				slideshow_text_view.setText(len + "s");
-			}
-		});
-		d.setNegativeButton(R.string.btn_Cancel, new DialogInterface.OnClickListener() {
-			@Override
-			public void onClick(DialogInterface dialogInterface, int i) {
-			}
-		});
-		AlertDialog alertDialog = d.create();
-		alertDialog.show();
-	}
-
-
-
-	/**
-	 * Dialog for setting slideshow switch time
-	 */
-	void slideshowSwTimePickerDialog()
-	{
-		final AlertDialog.Builder d = new AlertDialog.Builder(getActivity());
-		LayoutInflater inflater = getActivity().getLayoutInflater();
-		View dialogView = inflater.inflate(R.layout.config_slideshow_sw_time_picker, null);
-		d.setTitle(R.string.config_set_slideshow_dlg_title);
-		d.setMessage(R.string.config_set_slideshow_dlg_message);
-		d.setView(dialogView);
-
-		final SharedPreferences pref_sw_time = getActivity().getSharedPreferences("slideshow_sw_time", 0);
-		final String strSwitchTime = pref_sw_time.getString("KEY_SLIDESHOW_SW_TIME","5");
-
-		final NumberPicker numberPicker = (NumberPicker) dialogView.findViewById(R.id.dialog_number_picker);
-		numberPicker.setMaxValue(120);
-		numberPicker.setMinValue(1);
-		numberPicker.setValue(Integer.valueOf(strSwitchTime));
-		numberPicker.setWrapSelectorWheel(true);
-		numberPicker.setOnValueChangedListener(new NumberPicker.OnValueChangeListener() {
-			@Override
-			public void onValueChange(NumberPicker numberPicker, int i, int i1) {
-			}
-		});
-		d.setPositiveButton(R.string.btn_OK, new DialogInterface.OnClickListener() {
-			@Override
-			public void onClick(DialogInterface dialogInterface, int i) {
-				int len = numberPicker.getValue();
-				pref_sw_time.edit().putString("KEY_SLIDESHOW_SW_TIME",String.valueOf(len)).apply();
-				TextView slideshow_text_view = (TextView)mRootView.findViewById(R.id.slideshow_sw_time_setting);
-				slideshow_text_view.setText(len + "s");
-			}
-		});
-		d.setNegativeButton(R.string.btn_Cancel, new DialogInterface.OnClickListener() {
-			@Override
-			public void onClick(DialogInterface dialogInterface, int i) {
-			}
-		});
-		AlertDialog alertDialog = d.create();
-		alertDialog.show();
 	}
 
 
