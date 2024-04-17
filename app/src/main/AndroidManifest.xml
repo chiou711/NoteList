@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    package="com.cw.ListNote">
+    xmlns:tools="http://schemas.android.com/tools">
 
     <uses-permission android:name="android.permission.VIBRATE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
@@ -59,7 +58,8 @@
             android:theme="@style/MyTheme"
             android:launchMode="singleTop"
             android:configChanges="orientation|keyboard|keyboardHidden|screenSize|screenLayout|uiMode"
-            android:label="@string/app_name">
+            android:label="@string/app_name"
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
@@ -86,7 +86,8 @@
                   android:windowSoftInputMode="adjustPan"/>
         <activity android:name="com.cw.ListNote.note.Note"
                   android:theme="@style/MyTheme"
-            	  android:configChanges="orientation|keyboard|keyboardHidden|screenSize|screenLayout|uiMode">
+            	  android:configChanges="orientation|keyboard|keyboardHidden|screenSize|screenLayout|uiMode"
+            android:exported="true">
             <intent-filter android:priority="0">
                 <action android:name="android.intent.action.MEDIA_BUTTON" />
             </intent-filter>
@@ -95,20 +96,11 @@
              onPause/onSaveInstanceState/onStop/onDestroy/
                                                 onCreate/onStart/onRestoreInstanceState/onResume    -->
 
-        <activity android:name="com.cw.ListNote.operation.import_export.Import_webAct"
-                  android:theme="@style/MyTheme"/>
 
         <!--receiver-->
         <receiver
             android:name="com.cw.ListNote.util.DeleteFileAlarmReceiver"
             android:enabled="true" />
-        <receiver android:name="androidx.media.session.MediaButtonReceiver" >
-            <intent-filter>
-                <action android:name="android.intent.action.MEDIA_BUTTON" />
-                <action android:name="android.media.AUDIO_BECOMING_NOISY" />
-            </intent-filter>
-        </receiver>
-
 
         <meta-data
             android:name="com.google.android.gms.ads.APPLICATION_ID"
