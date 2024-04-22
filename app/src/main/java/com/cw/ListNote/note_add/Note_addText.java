@@ -93,7 +93,7 @@ public class Note_addText extends AppCompatActivity {
 	protected void onPause() {
 		System.out.println("Note_addText / _onPause");
 		super.onPause();
-		rowId = saveStateInDB(rowId, enSaveDb,"", "", "");
+		rowId = saveStateInDB(rowId, enSaveDb);
 		System.out.println("Note_addText / _onPause / rowId = " + rowId);
 	}
 
@@ -152,7 +152,7 @@ public class Note_addText extends AppCompatActivity {
 				if(isTextAdded())
 				{
 					enSaveDb = true;
-					rowId = saveStateInDB(rowId, enSaveDb,"", "", "");
+					rowId = saveStateInDB(rowId, enSaveDb);
 
 					int notes_count = TabsHost.getCurrentPage().getNotesCountInPage(this);
 
@@ -307,7 +307,7 @@ public class Note_addText extends AppCompatActivity {
 	}
 
 
-	Long saveStateInDB(Long rowId,boolean enSaveDb, String pictureUri, String audioUri, String drawingUri)
+	Long saveStateInDB(Long rowId,boolean enSaveDb)
 	{
 		String title = titleEditText.getText().toString();
 		String body = bodyEditText.getText().toString();
@@ -317,20 +317,15 @@ public class Note_addText extends AppCompatActivity {
 			if (rowId == null) // for Add new
 			{
 				if( (!Util.isEmptyString(title)) ||
-						(!Util.isEmptyString(body)) ||
-						(!Util.isEmptyString(pictureUri)) ||
-						(!Util.isEmptyString(audioUri))           )
+						(!Util.isEmptyString(body)) )
 				{
 					// insert
 					System.out.println("Note_addText / _saveStateInDB / insert");
-					rowId = dB_page.insertNote(title, pictureUri, audioUri, drawingUri, "", body, 0, (long) 0);// add new note, get return row Id
+					rowId = dB_page.insertNote(title, body, 0, (long) 0);// add new note, get return row Id
 				}
 			}
 			else if ( Util.isEmptyString(title) &&
-					Util.isEmptyString(body) &&
-					Util.isEmptyString(pictureUri) &&
-					Util.isEmptyString(drawingUri) &&
-					Util.isEmptyString(audioUri)       )
+					Util.isEmptyString(body)       )
 			{
 				// delete
 				System.out.println("Note_edit_ui / _saveStateInDB / delete");

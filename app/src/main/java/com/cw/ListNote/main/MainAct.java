@@ -94,7 +94,6 @@ public class MainAct extends AppCompatActivity implements FragmentManager.OnBack
     OnBackPressedListener onBackPressedListener;
     public Drawer drawer;
     public static Folder mFolder;
-    public static MainUi mMainUi;
     public static Toolbar mToolbar;
 
     public static MediaBrowserCompat mMediaBrowserCompat;
@@ -128,7 +127,6 @@ public class MainAct extends AppCompatActivity implements FragmentManager.OnBack
 
         mAct = this;
         mAppTitle = getTitle();
-        mMainUi = new MainUi();
 
         // add the following to disable this requirement
         if (Build.VERSION.SDK_INT >= 24) {
@@ -164,32 +162,23 @@ public class MainAct extends AppCompatActivity implements FragmentManager.OnBack
 
         mFolderTitles = new ArrayList<>();
 
-        //Add note with the link which got from other App
-        String intentLink = mMainUi.addNote_IntentLink(getIntent(), mAct);
-        if (!Util.isEmptyString(intentLink)) {
-            finish(); // ListNote not running at first, keep closing
-            return;
-        } else {
-            // check DB
-            final boolean ENABLE_DB_CHECK = false;//true;//false
-            if (ENABLE_DB_CHECK) {
-                // list all folder tables
-                FolderUi.listAllFolderTables(mAct);
+        // check DB
+        final boolean ENABLE_DB_CHECK = false;//true;//false
+        if (ENABLE_DB_CHECK) {
+            // list all folder tables
+            FolderUi.listAllFolderTables(mAct);
 
-                // recover focus
-                DB_folder.setFocusFolder_tableId(Pref.getPref_focusView_folder_tableId(this));
-                DB_page.setFocusPage_tableId(Pref.getPref_focusView_page_tableId(this));
-            }//if(ENABLE_DB_CHECK)
+            // recover focus
+            DB_folder.setFocusFolder_tableId(Pref.getPref_focusView_folder_tableId(this));
+            DB_page.setFocusPage_tableId(Pref.getPref_focusView_page_tableId(this));
+        }//if(ENABLE_DB_CHECK)
 
-            mContext = getBaseContext();
+        mContext = getBaseContext();
 
-            // add on back stack changed listener
-            mFragmentManager = getSupportFragmentManager();
-            mOnBackStackChangedListener = this;
-            mFragmentManager.addOnBackStackChangedListener(mOnBackStackChangedListener);
-        }
-
-        isAddedOnNewIntent = false;
+        // add on back stack changed listener
+        mFragmentManager = getSupportFragmentManager();
+        mOnBackStackChangedListener = this;
+        mFragmentManager.addOnBackStackChangedListener(mOnBackStackChangedListener);
 
         configLayoutView(); //createAssetsFile inside
     }
@@ -299,26 +288,10 @@ public class MainAct extends AppCompatActivity implements FragmentManager.OnBack
      *
      *********************************************************************************/
 
-    boolean isAddedOnNewIntent;
-    // if one ListNote Intent is already running, call it again in YouTube or Browser will run into this
     @Override
     protected void onNewIntent(Intent intent)
     {
         super.onNewIntent(intent);
-
-        if(!isAddedOnNewIntent)
-        {
-            String intentTitle = mMainUi.addNote_IntentLink(intent, mAct);
-//            if (!Util.isEmptyString(intentTitle) && intentTitle.startsWith("http")) {
-//                Page.itemAdapter.notifyDataSetChanged();
-//            }
-
-            if (!Util.isEmptyString(intentTitle))
-                TabsHost.reloadCurrentPage();
-
-            if(Build.VERSION.SDK_INT >= O)//API26
-                isAddedOnNewIntent = true; // fix 2 times _onNewIntent on API26
-        }
     }
 
     @Override

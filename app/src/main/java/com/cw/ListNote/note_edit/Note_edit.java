@@ -42,13 +42,12 @@ public class Note_edit extends Activity
 {
 
     private Long noteId, createdTime;
-    private String title, picUriStr, drawingUri, audioUri, linkUri, cameraPictureUri, body;
+    private String title, body;
     Note_edit_ui note_edit_ui;
     private boolean enSaveDb = true;
     boolean bUseCameraImage;
     DB_page dB;
     int position;
-    final int EDIT_LINK = 1;
     @Override
     protected void onCreate(Bundle savedInstanceState) 
     {
@@ -76,32 +75,19 @@ public class Note_edit extends Activity
     	Bundle extras = getIntent().getExtras();
     	position = extras.getInt("list_view_position");
     	noteId = extras.getLong(DB_page.KEY_NOTE_ID);
-		picUriStr = extras.getString(DB_page.KEY_NOTE_PICTURE_URI);
-		drawingUri = extras.getString(DB_page.KEY_NOTE_DRAWING_URI);
-    	audioUri = extras.getString(DB_page.KEY_NOTE_AUDIO_URI);
-    	linkUri = extras.getString(DB_page.KEY_NOTE_LINK_URI);
     	title = extras.getString(DB_page.KEY_NOTE_TITLE);
     	body = extras.getString(DB_page.KEY_NOTE_BODY);
     	createdTime = extras.getLong(DB_page.KEY_NOTE_CREATED);
         
 
         //initialization
-        note_edit_ui = new Note_edit_ui(this, dB, noteId, title, picUriStr, audioUri, drawingUri, linkUri, body, createdTime);
+        note_edit_ui = new Note_edit_ui(this, dB, noteId, title, body, createdTime);
         note_edit_ui.UI_init();
-        cameraPictureUri = "";
         bUseCameraImage = false;
 
         if(savedInstanceState != null)
         {
 	        System.out.println("Note_edit / onCreate / noteId =  " + noteId);
-	        if(noteId != null)
-	        {
-	        	picUriStr = dB.getNotePictureUri_byId(noteId);
-				note_edit_ui.currPictureUri = picUriStr;
-	        	audioUri = dB.getNoteAudioUri_byId(noteId);
-				note_edit_ui.currAudioUri = audioUri;
-				drawingUri = dB.getNoteDrawingUri_byId(noteId);
-	        }
         }
         
     	// show view
@@ -115,14 +101,6 @@ public class Note_edit extends Activity
 
             public void onClick(View view) {
                 setResult(RESULT_OK);
-				if(note_edit_ui.bRemovePictureUri)
-				{
-					picUriStr = "";
-				}
-				if(note_edit_ui.bRemoveAudioUri)
-				{
-					audioUri = "";
-				}	
 				System.out.println("Note_edit / onClick (okButton) / noteId = " + noteId);
                 enSaveDb = true;
                 finish();
@@ -195,14 +173,6 @@ public class Note_edit extends Activity
 					@Override
 					public void onClick(DialogInterface dialog, int which) 
 					{
-						if(note_edit_ui.bRemovePictureUri)
-						{
-							picUriStr = "";
-						}
-						if(note_edit_ui.bRemoveAudioUri)
-						{
-							audioUri = "";
-						}						
 					    enSaveDb = true;
 					    finish();
 					}})
@@ -231,7 +201,7 @@ public class Note_edit extends Activity
         super.onPause();
         
         System.out.println("Note_edit / onPause / enSaveDb = " + enSaveDb);
-        noteId = note_edit_ui.saveStateInDB(noteId, enSaveDb, picUriStr, audioUri, drawingUri);
+        noteId = note_edit_ui.saveStateInDB(noteId, enSaveDb);
     }
 
     // for Rotate screen
@@ -240,10 +210,8 @@ public class Note_edit extends Activity
         super.onSaveInstanceState(outState);
 
         System.out.println("Note_edit / onSaveInstanceState / enSaveDb = " + enSaveDb);
-        System.out.println("Note_edit / onSaveInstanceState / bUseCameraImage = " + bUseCameraImage);
-        System.out.println("Note_edit / onSaveInstanceState / cameraPictureUri = " + cameraPictureUri);
-        
-        noteId = note_edit_ui.saveStateInDB(noteId, enSaveDb, picUriStr, audioUri, drawingUri);
+
+        noteId = note_edit_ui.saveStateInDB(noteId, enSaveDb);
         outState.putSerializable(DB_page.KEY_NOTE_ID, noteId);
         
     }
@@ -295,77 +263,6 @@ public class Note_edit extends Activity
             default:
                 return super.onOptionsItemSelected(item);
         }
-    }
-    
-    
-    void setAudioSource() 
-    {
-		AlertDialog.Builder builder = new AlertDialog.Builder(this);
-		builder.setTitle(R.string.edit_note_set_audio_dlg_title);
-		// Cancel
-		builder.setNegativeButton(R.string.btn_Cancel, new DialogInterface.OnClickListener()
-		   	   {
-				@Override
-				public void onClick(DialogInterface dialog, int which) 
-				{// cancel
-				}});
-		// Set
-		builder.setNeutralButton(R.string.btn_Select, new DialogInterface.OnClickListener(){
-		@Override
-		public void onClick(DialogInterface dialog, int which) 
-		{
-		    enSaveDb = true;
-	        startActivityForResult(Util.chooseMediaIntentByType(Note_edit.this,"audio/*"),
-	        					   Util.CHOOSER_SET_AUDIO);
-		}});
-
-		Dialog dialog = builder.create();
-		dialog.show();
-    }
-    
-    void setLinkUri() 
-    {
-		AlertDialog.Builder builder = new AlertDialog.Builder(this);
-		builder.setTitle(R.string.edit_note_dlg_set_link);
-		
-		// select Web link
-		builder.setNegativeButton(R.string.note_web_link, new DialogInterface.OnClickListener()
-   	   {
-			@Override
-			public void onClick(DialogInterface dialog, int which) 
-			{
-	    		Intent intent_web_link = new Intent(Intent.ACTION_VIEW,Uri.parse("http://www.google.com"));
-	    		startActivityForResult(intent_web_link,EDIT_LINK);	
-	    		enSaveDb = false;
-			}
-		});
-		
-		// select YouTube link
-		builder.setNeutralButton(R.string.note_youtube_link, new DialogInterface.OnClickListener()
-		{
-			@Override
-			public void onClick(DialogInterface dialog, int which) 
-			{
-	        	Intent intent_youtube_link = new Intent(Intent.ACTION_VIEW,Uri.parse("https://www.youtube.com"));
-	        	startActivityForResult(intent_youtube_link,EDIT_LINK);
-	        	enSaveDb = false;
-			}
-		});
-		// None
-		if(!Util.isEmptyString(linkUri))
-		{
-			builder.setPositiveButton(R.string.btn_None, new DialogInterface.OnClickListener()
-			{
-				@Override
-				public void onClick(DialogInterface dialog, int which) 
-				{
-					note_edit_ui.populateFields_all(noteId);
-				}
-			});		
-		}
-		
-		Dialog dialog = builder.create();
-		dialog.show();
     }
 
 }

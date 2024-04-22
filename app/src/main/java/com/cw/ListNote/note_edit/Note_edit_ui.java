@@ -41,21 +41,6 @@ import android.widget.TextView;
 
 public class Note_edit_ui {
 
-	private TextView audioTextView;
-
-	private ImageView picImageView;
-	private String pictureUriInDB;
-	private String drawingUriInDB;
-	private String audioUriInDB;
-	String oriPictureUri;
-	String currPictureUri;
-	String currAudioUri;
-
-	String oriAudioUri;
-	private String oriDrawingUri;
-	String oriLinkUri;
-
-	private EditText linkEditText;
 	private EditText titleEditText;
 	private EditText bodyEditText;
 	private String oriTitle;
@@ -66,38 +51,26 @@ public class Note_edit_ui {
 	private Long oriMarking;
 
 	boolean bRollBackData;
-	boolean bRemovePictureUri = false;
-	boolean bRemoveAudioUri = false;
-	private boolean bEditPicture = false;
 
     private DB_page dB_page;
 	private Activity act;
 	private int style;
 	private ProgressBar progressBar;
-	private ProgressBar progressBarExpand;
 
-	Note_edit_ui(Activity act, DB_page _db, Long noteId, String strTitle, String pictureUri, String audioUri, String drawingUri, String linkUri, String strBody, Long createdTime)
+	Note_edit_ui(Activity act, DB_page _db, Long noteId, String strTitle, String strBody, Long createdTime)
     {
     	this.act = act;
     	this.noteId = noteId;
     			
     	oriTitle = strTitle;
 	    oriBody = strBody;
-	    oriPictureUri = pictureUri;
-	    oriAudioUri = audioUri;
-	    oriDrawingUri = drawingUri;
-	    oriLinkUri = linkUri;
-	    
+
 	    oriCreatedTime = createdTime;
-	    currPictureUri = pictureUri;
-	    currAudioUri = audioUri;
-	    
+
 	    dB_page = _db;//Page.mDb_page;
 	    
-	    oriMarking = dB_page.getNoteMarking_byId(noteId);
-		
+
 	    bRollBackData = false;
-		bEditPicture = true;
     }
 
 	void UI_init()
@@ -204,7 +177,7 @@ public class Note_edit_ui {
     	return bModified;
     }
 
-	Long saveStateInDB(Long rowId,boolean enSaveDb, String pictureUri, String audioUri, String drawingUri)
+	Long saveStateInDB(Long rowId,boolean enSaveDb)
 	{
     	String title = titleEditText.getText().toString();
         String body = bodyEditText.getText().toString();
@@ -218,7 +191,7 @@ public class Note_edit_ui {
 	        	{
 	        		// insert
 	        		System.out.println("Note_edit_ui / _saveStateInDB / insert");
-	        		rowId = dB_page.insertNote(title, pictureUri, audioUri, drawingUri, "linkUri", body, 0, (long) 0);// add new note, get return row Id
+	        		rowId = dB_page.insertNote(title, body, 0, (long) 0);// add new note, get return row Id
 	        	}
 	        }
 	        else // for Edit
@@ -234,7 +207,7 @@ public class Note_edit_ui {
 	        			title = oriTitle;
 	        			body = oriBody;
 	        			Long time = oriCreatedTime;
-	        			dB_page.updateNote(rowId, title, pictureUri, audioUri, drawingUri, "linkUri", body, oriMarking, time,true);
+	        			dB_page.updateNote(rowId, title,    body, oriMarking, time,true);
 	        		}
 	        		else // update new
 	        		{
@@ -249,8 +222,7 @@ public class Note_edit_ui {
                             marking = oriMarking;
 
                         boolean isOK;
-	        			isOK = dB_page.updateNote(rowId, title, pictureUri, audioUri, drawingUri, "", body,
-												marking, now.getTime(),true); // update note
+	        			isOK = dB_page.updateNote(rowId, title, body,marking, now.getTime(),true); // update note
 	        			System.out.println("--- isOK = " + isOK);
 	        		}
 	        	}

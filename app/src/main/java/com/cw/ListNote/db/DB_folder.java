@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2019 CW Chiu
+ * Copyright (C) 2024 CW Chiu
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,6 +16,7 @@
 
 package com.cw.ListNote.db;
 
+import android.annotation.SuppressLint;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
@@ -31,15 +32,15 @@ import java.util.Date;
 public class DB_folder
 {
 
-    private Context mContext = null;
-    private static DatabaseHelper mDbHelper ;
+    private final Context mContext;
+    private DatabaseHelper mDbHelper ;
     public SQLiteDatabase mSqlDb;
 
 	// Table name format: Folder1
-	private static String DB_FOLDER_TABLE_PREFIX = "Folder";
+	private static final String DB_FOLDER_TABLE_PREFIX = "Folder";
 
 	// Table name format: Page1_2
-	private static String DB_PAGE_TABLE_PREFIX = "Page";
+	private static final String DB_PAGE_TABLE_PREFIX = "Page";
     private static String DB_PAGE_TABLE_NAME; // Note: name = prefix + id
 
 	// Page rows
@@ -49,11 +50,8 @@ public class DB_folder
     static final String KEY_PAGE_STYLE = "page_style";
     static final String KEY_PAGE_CREATED = "page_created";
 
-	// DB
-    DB_folder mDb_folder;
-
 	// Cursor
-	static Cursor mCursor_page;
+	Cursor mCursor_page;
 
 	// Table Id
 	private static int mTableId_folder;
@@ -111,10 +109,6 @@ public class DB_folder
         String dB_insert_table = "CREATE TABLE IF NOT EXISTS " + DB_PAGE_TABLE_NAME + "(" +
         							DB_page.KEY_NOTE_ID + " INTEGER PRIMARY KEY," +
 									DB_page.KEY_NOTE_TITLE + " TEXT," +
-									DB_page.KEY_NOTE_PICTURE_URI + " TEXT," +
-									DB_page.KEY_NOTE_AUDIO_URI + " TEXT," +
-									DB_page.KEY_NOTE_DRAWING_URI + " TEXT," +
-									DB_page.KEY_NOTE_LINK_URI + " TEXT," +
 									DB_page.KEY_NOTE_BODY + " TEXT," +
 									DB_page.KEY_NOTE_MARKING + " INTEGER," +
 									DB_page.KEY_NOTE_CREATED + " INTEGER);";
@@ -166,7 +160,7 @@ public class DB_folder
 
     // get page cursor
     public Cursor getPageCursor_byFolderTableId(int i) {
-        return mSqlDb.query(DB_FOLDER_TABLE_PREFIX + String.valueOf(i),
+        return mSqlDb.query(DB_FOLDER_TABLE_PREFIX + i,
 							strPageColumns,
 							null,
 							null,
@@ -177,7 +171,7 @@ public class DB_folder
     }
 
     // insert page with SqlDb parameter
-    public long insertPage(SQLiteDatabase sqlDb, String intoTable, String title, long ntId, int style)
+    public void insertPage(SQLiteDatabase sqlDb, String intoTable, String title, long ntId, int style)
     {
         Date now = new Date();
         ContentValues args = new ContentValues();
@@ -186,11 +180,11 @@ public class DB_folder
         args.put(KEY_PAGE_STYLE, style);
         args.put(KEY_PAGE_CREATED, now.getTime());
 
-        return sqlDb.insert(intoTable, null, args);
+	    sqlDb.insert(intoTable, null, args);
     }
     
     // insert page
-    public long insertPage(String intoTable, String title, long ntId, int style, boolean enDbOpenClose)
+    public void insertPage(String intoTable, String title, long ntId, int style, boolean enDbOpenClose)
     {
         if(enDbOpenClose)
     	    this.open();
@@ -205,11 +199,10 @@ public class DB_folder
 
         if(enDbOpenClose)
             this.close();
-        return rowId;
     }
     
     // delete page
-    public long deletePage(String table, int pageId, boolean enDbOpenClose)
+    public void deletePage(String table, int pageId, boolean enDbOpenClose)
     {
         System.out.println("DB / deletePage / table = " + table + ", page Id = " + pageId);
 
@@ -224,11 +217,10 @@ public class DB_folder
         else
             System.out.println("DB / deletePage / failed to delete");
 
-        return rowsNumber;
     }
 
     //update page
-    public boolean updatePage(long id, String title, long ntId, int style, boolean enDbOpenClose)
+    public void updatePage(long id, String title, long ntId, int style, boolean enDbOpenClose)
     {
         if(enDbOpenClose)
     	    this.open();
@@ -244,7 +236,6 @@ public class DB_folder
         if(enDbOpenClose)
             this.close();
 
-        return  (rowsNumber>0)?true:false;
     }
 
     public Cursor getPageCursor()
@@ -272,7 +263,7 @@ public class DB_folder
 
         if(mCursor_page.moveToPosition(position))
         {
-            int pageId = mCursor_page.getInt(mCursor_page.getColumnIndex(KEY_PAGE_ID));
+            @SuppressLint("Range") int pageId = mCursor_page.getInt(mCursor_page.getColumnIndex(KEY_PAGE_ID));
 //			System.out.println("DB_folder / _getPageId / pageId = " + pageId);
 
             if(enDbOpenClose)
@@ -308,13 +299,14 @@ public class DB_folder
         return title;
     }
 
+	@SuppressLint("SuspiciousIndentation")
 	public int getPageTableId(int position, boolean enDbOpenClose)
 	{
 		if(enDbOpenClose)
 			this.open();
 
         mCursor_page.moveToPosition(position);
-        int id = mCursor_page.getInt(mCursor_page.getColumnIndex(KEY_PAGE_TABLE_ID));
+        @SuppressLint("Range") int id = mCursor_page.getInt(mCursor_page.getColumnIndex(KEY_PAGE_TABLE_ID));
 
         if(enDbOpenClose)
         	this.close();
@@ -328,7 +320,7 @@ public class DB_folder
 			this.open();
 
         mCursor_page.moveToPosition(position);
-        String title = mCursor_page.getString(mCursor_page.getColumnIndex(KEY_PAGE_TITLE));
+        @SuppressLint("Range") String title = mCursor_page.getString(mCursor_page.getColumnIndex(KEY_PAGE_TITLE));
 
         if(enDbOpenClose)
         	this.close();
@@ -336,6 +328,7 @@ public class DB_folder
         return title;
 	}
 
+	@SuppressLint("Range")
 	public int getPageStyle(int position, boolean enDbOpenClose)
 	{
 		int style = 0;

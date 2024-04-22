@@ -49,13 +49,11 @@ public class MailNotes {
     AlertDialog mDialog;
     Activity mAct;
     String mSentString;
-    String[] mPicFileNameArray;
 
-    public MailNotes(final Activity act, String sentString, String[] picFileArray)
+    public MailNotes(final Activity act, String sentString)
     {
         mAct = act;
         mSentString = sentString;
-        mPicFileNameArray = picFileArray;
 
         AlertDialog.Builder builder1;
         mPref_email = act.getSharedPreferences("email_addr", 0);
@@ -146,8 +144,8 @@ public class MailNotes {
 
                 // call next dialog
                 sendEMail(strEMailAddr,  // eMail address
-                          attachmentFileName, // attachment file name
-                          mPicFileNameArray); // picture file name array. For page selection, this is null
+                          attachmentFileName // attachment file name
+                          );
                 dialog.dismiss();
             }
             else
@@ -163,8 +161,8 @@ public class MailNotes {
     public static String[] mAttachmentFileName;
     public final static int EMAIL = 101;
     void sendEMail(String strEMailAddr,  // eMail address
-                   String[] attachmentFileName, // attachment name
-                   String[] picFileNameArray) // attachment picture file name
+                   String[] attachmentFileName // attachment name
+                   )
     {
         mAttachmentFileName = attachmentFileName;
         // new ACTION_SEND intent
@@ -186,15 +184,6 @@ public class MailNotes {
                     "/" + Util.getStorageDirName(mAct) + "/" +
                     attachmentFileName[i];// message file name
             filePaths.add(messagePath);
-        }
-
-        // attachment: pictures
-        if(picFileNameArray != null)
-        {
-            for(int i=0;i<picFileNameArray.length;i++)
-            {
-                filePaths.add(picFileNameArray[i]);
-            }
         }
 
         ArrayList<Uri> uris = new ArrayList<Uri>();

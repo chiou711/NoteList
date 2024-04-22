@@ -26,7 +26,7 @@ import com.cw.ListNote.define.Define;
 class DatabaseHelper extends SQLiteOpenHelper
 {
     static final String DB_NAME = Define.DB_FILE_NAME;
-    private static int DB_VERSION = 1;
+    private static final int DB_VERSION = 1;
     
     DatabaseHelper(Context context)
     {
@@ -40,7 +40,7 @@ class DatabaseHelper extends SQLiteOpenHelper
     	String tableCreated;
     	String DB_CREATE;
     	
-    	System.out.println("DatabaseHelper / _onCreate");
+	  	System.out.println("DatabaseHelper / _onCreate");
 
 		// Create Drawer table
 		tableCreated = DB_drawer.DB_DRAWER_TABLE_NAME;

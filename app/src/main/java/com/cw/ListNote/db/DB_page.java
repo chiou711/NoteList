@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2019 CW Chiu
+ * Copyright (C) 2024 CW Chiu
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,6 +16,7 @@
 
 package com.cw.ListNote.db;
 
+import android.annotation.SuppressLint;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
@@ -31,12 +32,12 @@ import java.util.Date;
 public class DB_page
 {
 
-    private Context mContext = null;
-    private static DatabaseHelper mDbHelper ;
+    private final Context mContext;
+    private DatabaseHelper mDbHelper ;
     private SQLiteDatabase mSqlDb;
 
 	// Table name format: Page1_2
-	private static String DB_PAGE_TABLE_PREFIX = "Page";
+	private static final String DB_PAGE_TABLE_PREFIX = "Page";
     private static String DB_PAGE_TABLE_NAME; // Note: name = prefix + id
 
 	// Note rows
@@ -44,14 +45,7 @@ public class DB_page
     public static final String KEY_NOTE_TITLE = "note_title";
     public static final String KEY_NOTE_BODY = "note_body";
     public static final String KEY_NOTE_MARKING = "note_marking";
-    public static final String KEY_NOTE_PICTURE_URI = "note_picture_uri";
-    public static final String KEY_NOTE_AUDIO_URI = "note_audio_uri";
-    public static final String KEY_NOTE_DRAWING_URI = "note_drawing_uri";
-    public static final String KEY_NOTE_LINK_URI = "note_link_uri";
     public static final String KEY_NOTE_CREATED = "note_created";
-
-	// DB
-    public DB_page mDb_page;
 
 	// Cursor
 	public Cursor mCursor_note;
@@ -103,13 +97,9 @@ public class DB_page
      *  Page table columns for note row
      * 
      */
-    private String[] strNoteColumns = new String[] {
+    private final String[] strNoteColumns = new String[] {
           KEY_NOTE_ID,
           KEY_NOTE_TITLE,
-          KEY_NOTE_PICTURE_URI,
-          KEY_NOTE_AUDIO_URI,
-		  KEY_NOTE_DRAWING_URI,
-          KEY_NOTE_LINK_URI,
           KEY_NOTE_BODY,
           KEY_NOTE_MARKING,
           KEY_NOTE_CREATED
@@ -119,10 +109,9 @@ public class DB_page
     private Cursor getNoteCursor_byPageTableId(int pageTableId) {
 
         // table number initialization: name = prefix + id
-        DB_PAGE_TABLE_NAME = DB_PAGE_TABLE_PREFIX.concat(
-                                                    String.valueOf(DB_folder.getFocusFolder_tableId())+
+        DB_PAGE_TABLE_NAME = DB_PAGE_TABLE_PREFIX.concat(DB_folder.getFocusFolder_tableId()+
                                                     "_"+
-                                                    String.valueOf(pageTableId) );
+                                                    pageTableId);
 
         return mSqlDb.query(DB_PAGE_TABLE_NAME,
              strNoteColumns,
@@ -148,17 +137,13 @@ public class DB_page
     
     // Insert note
     // createTime: 0 will update time
-    public long insertNote(String title,String pictureUri, String audioUri, String drawingUri, String linkUri, String body, int marking, Long createTime)
+    public long insertNote(String title,String body, int marking, Long createTime)
     {
     	this.open();
 
         Date now = new Date();  
         ContentValues args = new ContentValues(); 
         args.put(KEY_NOTE_TITLE, title);   
-        args.put(KEY_NOTE_PICTURE_URI, pictureUri);
-        args.put(KEY_NOTE_AUDIO_URI, audioUri);
-        args.put(KEY_NOTE_DRAWING_URI, drawingUri);
-        args.put(KEY_NOTE_LINK_URI, linkUri);
         args.put(KEY_NOTE_BODY, body);
         if(createTime == 0)
         	args.put(KEY_NOTE_CREATED, now.getTime());
@@ -173,18 +158,17 @@ public class DB_page
         return rowId;  
     }  
     
-    public boolean deleteNote(long rowId,boolean enDbOpenClose) 
+    public void deleteNote(long rowId, boolean enDbOpenClose)
     {
     	if(enDbOpenClose)
     		this.open();
 
-    	int rowsEffected = mSqlDb.delete(DB_PAGE_TABLE_NAME, KEY_NOTE_ID + "=" + rowId, null);
+    	mSqlDb.delete(DB_PAGE_TABLE_NAME, KEY_NOTE_ID + "=" + rowId, null);
 
         if(enDbOpenClose)
         	this.close();
 
-        return (rowsEffected > 0);
-    }    
+    }
     
     //query note
     public Cursor queryNote(long rowId) throws SQLException 
@@ -193,10 +177,6 @@ public class DB_page
 									DB_PAGE_TABLE_NAME,
 					                new String[] {KEY_NOTE_ID,
 				  								  KEY_NOTE_TITLE,
-				  								  KEY_NOTE_PICTURE_URI,
-				  								  KEY_NOTE_AUDIO_URI,
-												  KEY_NOTE_DRAWING_URI,
-				  								  KEY_NOTE_LINK_URI,
         										  KEY_NOTE_BODY,
         										  KEY_NOTE_MARKING,
         										  KEY_NOTE_CREATED},
@@ -212,18 +192,14 @@ public class DB_page
 
     // update note
     // 		createTime:  0 for Don't update time
-    public boolean updateNote(long rowId, String title, String pictureUri, String audioUri, String drawingUri, 
-    						  String linkUri, String body, long marking, long createTime,boolean enDbOpenClose) 
+    @SuppressLint("Range")
+    public boolean updateNote(long rowId, String title, String body, long marking, long createTime, boolean enDbOpenClose)
     {
     	if(enDbOpenClose)
     		this.open();
 
         ContentValues args = new ContentValues();
         args.put(KEY_NOTE_TITLE, title);
-        args.put(KEY_NOTE_PICTURE_URI, pictureUri);
-        args.put(KEY_NOTE_AUDIO_URI, audioUri);
-        args.put(KEY_NOTE_DRAWING_URI, drawingUri);
-        args.put(KEY_NOTE_LINK_URI, linkUri);
         args.put(KEY_NOTE_BODY, body);
         args.put(KEY_NOTE_MARKING, marking);
         
@@ -274,25 +250,12 @@ public class DB_page
 		return countCheck;
 	}		
 	
-	
-	// get note by Id
-	public String getNoteLink_byId(Long mRowId)
-	{
-		this.open();
-
-		String link = queryNote(mRowId).getString(queryNote(mRowId)
-									   .getColumnIndexOrThrow(DB_page.KEY_NOTE_LINK_URI));
-		this.close();
-
-		return link;
-	}	
-	
 	public String getNoteTitle_byId(Long mRowId)
 	{
 		this.open();
 
 		String title = queryNote(mRowId).getString(queryNote(mRowId)
-											.getColumnIndexOrThrow(DB_page.KEY_NOTE_TITLE));
+										.getColumnIndexOrThrow(DB_page.KEY_NOTE_TITLE));
 
 		this.close();
 
@@ -308,74 +271,6 @@ public class DB_page
 		this.close();
 
 		return id;
-	}
-
-	public String getNotePictureUri_byId(Long mRowId)
-	{
-		this.open();
-
-        String pictureUri = queryNote(mRowId).getString(queryNote(mRowId)
-														.getColumnIndexOrThrow(DB_page.KEY_NOTE_PICTURE_URI));
-
-		this.close();
-
-		return pictureUri;
-	}
-	
-	public String getNotePictureUri_byId(Long mRowId, boolean enOpen, boolean enClose)
-	{
-		if(enOpen)
-			this.open();
-
-        String pictureUri = queryNote(mRowId).getString(queryNote(mRowId)
-														.getColumnIndexOrThrow(DB_page.KEY_NOTE_PICTURE_URI));
-		if(enClose)
-			this.close();
-
-		return pictureUri;
-	}	
-	
-	public String getNoteAudioUri_byId(Long mRowId)
-	{
-		this.open();
-
-		String audioUri = queryNote(mRowId).getString(queryNote(mRowId)
-														.getColumnIndexOrThrow(DB_page.KEY_NOTE_AUDIO_URI));
-
-		this.close();
-
-		return audioUri;
-	}	
-	
-	public String getNoteDrawingUri_byId(Long mRowId)
-	{
-		this.open();
-		String drawingUri = queryNote(mRowId).getString(queryNote(mRowId)
-											 			.getColumnIndexOrThrow(DB_page.KEY_NOTE_DRAWING_URI));
-		this.close();
-
-		return drawingUri;
-	}	
-	
-	public String getNoteLinkUri_byId(Long mRowId)
-	{
-		this.open();
-		String linkUri = queryNote(mRowId).getString(queryNote(mRowId)
-														.getColumnIndexOrThrow(DB_page.KEY_NOTE_LINK_URI));
-		this.close();
-
-		return linkUri;
-	}		
-	
-	public Long getNoteMarking_byId(Long mRowId)
-	{
-		this.open();
-		Long marking = queryNote(mRowId).getLong(queryNote(mRowId)
-											.getColumnIndexOrThrow(DB_page.KEY_NOTE_MARKING));
-		this.close();
-
-		return marking;
-		
 	}
 
 	public Long getNoteCreatedTime_byId(Long mRowId)
@@ -397,7 +292,7 @@ public class DB_page
 			this.open();
 
 		mCursor_note.moveToPosition(position);
-	    Long id = mCursor_note.getLong(mCursor_note.getColumnIndex(KEY_NOTE_ID));
+	    @SuppressLint("Range") Long id = mCursor_note.getLong(mCursor_note.getColumnIndex(KEY_NOTE_ID));
 
 		if(enDbOpenClose)
 	    	this.close();
@@ -405,7 +300,8 @@ public class DB_page
 		return id;
 	}	
 	
-	public String getNoteTitle(int position,boolean enDbOpenClose)
+	@SuppressLint("Range")
+	public String getNoteTitle(int position, boolean enDbOpenClose)
 	{
 		String title = null;
 
@@ -428,72 +324,14 @@ public class DB_page
 
 		mCursor_note.moveToPosition(position);
 
-		String body = mCursor_note.getString(mCursor_note.getColumnIndex(KEY_NOTE_BODY));
+		@SuppressLint("Range") String body = mCursor_note.getString(mCursor_note.getColumnIndex(KEY_NOTE_BODY));
 
 		if(enDbOpenClose)
         	this.close();
 
 		return body;
 	}
-	
-	public String getNotePictureUri(int position,boolean enDbOpenClose)
-	{
-		if(enDbOpenClose)
-			this.open();
 
-		mCursor_note.moveToPosition(position);
-
-		String pictureUri = mCursor_note.getString(mCursor_note.getColumnIndex(KEY_NOTE_PICTURE_URI));
-
-		if(enDbOpenClose)
-        	this.close();
-
-		return pictureUri;
-	}
-	
-	public String getNoteAudioUri(int position,boolean enDbOpenClose)
-	{
-		if(enDbOpenClose)
-			this.open();
-
-		mCursor_note.moveToPosition(position);
-
-		String audioUri = mCursor_note.getString(mCursor_note.getColumnIndex(KEY_NOTE_AUDIO_URI));
-
-		if(enDbOpenClose)
-        	this.close();
-
-		return audioUri;
-	}	
-	
-	public String getNoteDrawingUri(int position,boolean enDbOpenClose)
-	{
-		if(enDbOpenClose) 
-			this.open();
-
-		mCursor_note.moveToPosition(position);
-        String drawingUri = mCursor_note.getString(mCursor_note.getColumnIndex(KEY_NOTE_DRAWING_URI));
-
-		if(enDbOpenClose)
-        	this.close();
-
-		return drawingUri;
-	}	
-	
-	public String getNoteLinkUri(int position,boolean enDbOpenClose)
-	{
-		if(enDbOpenClose) 
-			this.open();
-
-		mCursor_note.moveToPosition(position);
-        String linkUri = mCursor_note.getString(mCursor_note.getColumnIndex(KEY_NOTE_LINK_URI));
-
-		if(enDbOpenClose)
-        	this.close();
-
-		return linkUri;
-	}	
-	
 	public int getNoteMarking(int position,boolean enDbOpenClose)
 	{
 		if(enDbOpenClose)
@@ -501,7 +339,7 @@ public class DB_page
 
 		mCursor_note.moveToPosition(position);
 
-		int marking = mCursor_note.getInt(mCursor_note.getColumnIndex(KEY_NOTE_MARKING));
+		@SuppressLint("Range") int marking = mCursor_note.getInt(mCursor_note.getColumnIndex(KEY_NOTE_MARKING));
 
 		if(enDbOpenClose)
 			this.close();
@@ -515,7 +353,7 @@ public class DB_page
 			this.open();
 
 		mCursor_note.moveToPosition(position);
-		Long time = mCursor_note.getLong(mCursor_note.getColumnIndex(KEY_NOTE_CREATED));
+		@SuppressLint("Range") Long time = mCursor_note.getLong(mCursor_note.getColumnIndex(KEY_NOTE_CREATED));
 
 		if(enDbOpenClose)
 			this.close();

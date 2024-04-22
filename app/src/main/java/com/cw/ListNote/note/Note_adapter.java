@@ -81,16 +81,10 @@ public class Note_adapter extends FragmentStatePagerAdapter
     {
     	System.out.println("Note_adapter / instantiateItem / position = " + position);
     	// Inflate the layout containing 
-    	// 1. picture group: image,video, thumb nail, control buttons
-    	// 2. text group: title, body, time 
+    	// text group: title, body, time
     	View pagerView = inflater.inflate(R.layout.note_view_adapter, container, false);
     	int style = Note.getStyle();
         pagerView.setBackgroundColor(ColorSet.mBG_ColorArray[style]);
-
-    	// Picture group
-        ViewGroup pictureGroup = (ViewGroup) pagerView.findViewById(R.id.pictureContent);
-        String tagPictureStr = "current"+ position +"pictureView";
-        pictureGroup.setTag(tagPictureStr);
 
 		ProgressBar spinner = (ProgressBar) pagerView.findViewById(R.id.loading);
 
@@ -110,22 +104,18 @@ public class Note_adapter extends FragmentStatePagerAdapter
 		// set text web view
         setWebView(textWebView,spinner,CustomWebView.TEXT_VIEW);
 
-        String linkUri = db_page.getNoteLinkUri(position,true);
         String strTitle = db_page.getNoteTitle(position,true);
         String strBody = db_page.getNoteBody(position,true);
 
         // View mode
 	  	{
 			System.out.println("Note_adapter / _instantiateItem / isTextMode ");
-	  		pictureGroup.setVisibility(View.GONE);
 
 	  		line_view.setVisibility(View.VISIBLE);
 	  		textGroup.setVisibility(View.VISIBLE);
 
-	  	    if( Util.isYouTubeLink(linkUri) ||
-	 	  	   !Util.isEmptyString(strTitle)||
-	 	  	   !Util.isEmptyString(strBody) ||
-				linkUri.startsWith("http")      )
+	  	    if(!Util.isEmptyString(strTitle)||
+	 	  	   !Util.isEmptyString(strBody)     )
 	  	    {
 	  	    	showTextWebView(position,textWebView);
 	  	    }
@@ -133,15 +123,10 @@ public class Note_adapter extends FragmentStatePagerAdapter
 
 		// footer of note view
 		TextView footerText = (TextView) pagerView.findViewById(R.id.note_view_footer);
-		if(!Note.isPictureMode())
-		{
-			footerText.setVisibility(View.VISIBLE);
-			footerText.setText(String.valueOf(position+1)+"/"+ pager.getAdapter().getCount());
-            footerText.setTextColor(ColorSet.mText_ColorArray[Note.mStyle]);
-            footerText.setBackgroundColor(ColorSet.mBG_ColorArray[Note.mStyle]);
-		}
-		else
-			footerText.setVisibility(View.GONE);
+		footerText.setVisibility(View.VISIBLE);
+		footerText.setText(String.valueOf(position+1)+"/"+ pager.getAdapter().getCount());
+        footerText.setTextColor(ColorSet.mText_ColorArray[Note.mStyle]);
+        footerText.setBackgroundColor(ColorSet.mBG_ColorArray[Note.mStyle]);
 
     	container.addView(pagerView, 0);
     	
@@ -277,64 +262,6 @@ public class Note_adapter extends FragmentStatePagerAdapter
 	        });
 
    		}
-	    
-    	if(whichView == CustomWebView.LINK_VIEW)
-    	{
-	        webView.setWebChromeClient(new WebChromeClient()
-	        {
-	            public void onProgressChanged(WebView view, int progress)
-	            {
-                    System.out.println("---------------- spinner progress = " + progress);
-
-                    if(spinner != null )
-	            	{
-						if(bWebViewIsShown)
-						{
-							if (progress < 100 && (spinner.getVisibility() == ProgressBar.GONE)) {
-								webView.setVisibility(View.GONE);
-								spinner.setVisibility(ProgressBar.VISIBLE);
-							}
-
-							spinner.setProgress(progress);
-
-							if (progress > 30)
-								bWebViewIsShown = true;
-						}
-
-						if(bWebViewIsShown || (progress == 100))
-						{
-							spinner.setVisibility(ProgressBar.GONE);
-							webView.setVisibility(View.VISIBLE);
-						}
-	            	}
-	            }
-
-	            @Override
-			    public void onReceivedTitle(WebView view, String title) {
-			        super.onReceivedTitle(view, title);
-			        if (!TextUtils.isEmpty(title) &&
-			        	!title.equalsIgnoreCase("about:blank"))
-			        {
-			        	System.out.println("Note_adapter / _onReceivedTitle / title = " + title);
-
-						int position = NoteUi.getFocus_notePos();
-				    	String tag = "current"+position+"textWebView";
-				    	CustomWebView textWebView = (CustomWebView) pager.findViewWithTag(tag);
-
-				    	String strLink = db_page.getNoteLinkUri(position,true);
-
-						// show title of http link
-				    	if((textWebView != null) &&
-				    	    !Util.isYouTubeLink(strLink) &&
-				    	    strLink.startsWith("http")        )
-			        	{
-				        	mWebTitle = title;
-		        			showTextWebView(position,textWebView);
-			        	}
-			        }
-			    }
-			});
-    	}
 	}
 
     final private static int VIEW_PORT_BY_NONE = 0;
@@ -349,25 +276,10 @@ public class Note_adapter extends FragmentStatePagerAdapter
     	System.out.println("Note_adapter / _getHtmlStringWithViewPort");
     	String strTitle = db_page.getNoteTitle(position,true);
     	String strBody = db_page.getNoteBody(position,true);
-    	String linkUri = db_page.getNoteLinkUri(position,true);
 
     	// replace note title
 		//若沒有Title與Body,但有YouTube link或Web link則Title會使用link得到的title,且用Gray顏色
 		boolean bSetGray = false;
-		if( Util.isEmptyString(strTitle) &&
-			Util.isEmptyString(strBody)     )
-		{
-			if(Util.isYouTubeLink(linkUri))
-			{
-				strTitle = Util.getYouTubeTitle(linkUri);
-				bSetGray = true;
-			}
-			else if(linkUri.startsWith("http"))
-			{
-				strTitle = mWebTitle;
-				bSetGray = true;
-			}
-		}
 
     	Long createTime = db_page.getNoteCreatedTime(position,true);
     	String head = "<?xml version=\"1.0\" encoding=\"UTF-8\" ?>"+

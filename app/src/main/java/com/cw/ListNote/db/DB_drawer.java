@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2019 CW Chiu
+ * Copyright (C) 2024 CW Chiu
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,6 +20,7 @@ import java.util.Date;
 
 import com.cw.ListNote.R;
 
+import android.annotation.SuppressLint;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
@@ -35,15 +36,15 @@ import android.widget.Toast;
 public class DB_drawer
 {
 
-    private Context mContext = null;
-    private static DatabaseHelper mDbHelper ;
+    private final Context mContext;
+    private DatabaseHelper mDbHelper ;
     private SQLiteDatabase mSqlDb;
 
     // Table name format: Drawer
     static String DB_DRAWER_TABLE_NAME = "Drawer";
 
 	// Table name format: Folder1
-	private static String DB_FOLDER_TABLE_PREFIX = "Folder";
+	private static final String DB_FOLDER_TABLE_PREFIX = "Folder";
 
 	// Folder rows
     static final String KEY_FOLDER_ID = "folder_id"; //can rename _id for using BaseAdapter
@@ -52,7 +53,7 @@ public class DB_drawer
     static final String KEY_FOLDER_CREATED = "folder_created";
 
 	// Cursor
-	public static Cursor mCursor_folder;
+	public Cursor mCursor_folder;
 
 
     /** Constructor */
@@ -92,6 +93,7 @@ public class DB_drawer
 	        mSqlDb.setTransactionSuccessful();
 	    }
 	    catch (Exception e) {
+			e.printStackTrace();
 	    }
 	    finally {
 	    	Toast.makeText(mContext,R.string.config_delete_DB_toast,Toast.LENGTH_SHORT).show();
@@ -201,7 +203,8 @@ public class DB_drawer
         return bUpdate;
     }    
     
-    public long getFolderId(int position,boolean enDbOpenClose)
+    @SuppressLint("Range")
+    public long getFolderId(int position, boolean enDbOpenClose)
     {
         if(enDbOpenClose)
             this.open();
@@ -234,7 +237,7 @@ public class DB_drawer
         if(enDbOpenClose)
             this.open();
         mCursor_folder.moveToPosition(position);
-        int id = mCursor_folder.getInt(mCursor_folder.getColumnIndex(KEY_FOLDER_TABLE_ID));
+        @SuppressLint("Range") int id = mCursor_folder.getInt(mCursor_folder.getColumnIndex(KEY_FOLDER_TABLE_ID));
 
         if(enDbOpenClose)
             this.close();
@@ -242,7 +245,8 @@ public class DB_drawer
 
     }
 
-	public String getFolderTitle(int position,boolean enDbOpenClose)
+	@SuppressLint("Range")
+	public String getFolderTitle(int position, boolean enDbOpenClose)
 	{
         if(enDbOpenClose)
             this.open();

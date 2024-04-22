@@ -265,8 +265,8 @@ public class MailPagesFragment extends Fragment {
 
 	        	// call next dialog
 				sendEMail(strEMailAddr,  // eMail address
-					      attachmentFileName, // attachment file name
-						  picFileNameArr ); // picture file name array. For page selection, this is null
+					      attachmentFileName // attachment file name
+						   );
 				dialog.dismiss();
 	        }
 	        else
@@ -282,8 +282,8 @@ public class MailPagesFragment extends Fragment {
     public final static int EMAIL_PAGES = 102;
 	public static String[] mAttachmentFileName;
 	void sendEMail(String strEMailAddr,  // eMail address
-			       String[] attachmentFileName, // attachment name
-			       String[] picFileNameArray) // attachment picture file name
+			       String[] attachmentFileName // attachment name
+			       )
 	{
 		mAttachmentFileName = attachmentFileName;
 		// new ACTION_SEND intent
@@ -305,15 +305,6 @@ public class MailPagesFragment extends Fragment {
 					attachmentFileName[i];// message file name
 			filePaths.add(messagePath);
 		}
-    	
-    	// attachment: pictures
-    	if(picFileNameArray != null)
-    	{
-	    	for(int i=0;i<picFileNameArray.length;i++)
-	    	{
-	        	filePaths.add(picFileNameArray[i]);
-	    	}
-    	}
     	
         ArrayList<Uri> uris = new ArrayList<Uri>();
         for (String file : filePaths)

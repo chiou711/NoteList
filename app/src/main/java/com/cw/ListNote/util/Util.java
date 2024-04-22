@@ -112,19 +112,10 @@ public class Util
     public static String NEW_LINE = "\r" + System.getProperty("line.separator");
 
 	private static int STYLE_DEFAULT = 1;
-    
-    public static int ACTIVITY_TAKE_PICTURE = 3;
-    public static int CHOOSER_SET_PICTURE = 4;
-	public static int CHOOSER_SET_AUDIO = 5;
-	public static int DRAWING_ADD = 6;
-	public static int DRAWING_EDIT = 7;
 
 	private int defaultBgClr;
 	private int defaultTextClr;
 
-	public static final int PERMISSIONS_REQUEST_CAMERA = 10;
-	public static final int PERMISSIONS_REQUEST_STORAGE_WITH_DEFAULT_CONTENT_YES = 11;
-	public static final int PERMISSIONS_REQUEST_STORAGE_WITH_DEFAULT_CONTENT_NO = 12;
 	public static final int PERMISSIONS_REQUEST_STORAGE = 13;
 	public static final int PERMISSIONS_REQUEST_STORAGE_IMPORT = 14;
 	public static final int PERMISSIONS_REQUEST_STORAGE_EXPORT = 15;
@@ -495,12 +486,6 @@ public class Util
 		String TITLE_TAG_E = "</title>";
 		String BODY_TAG_B = "<body>";
 		String BODY_TAG_E = "</body>";
-		String PICTURE_TAG_B = "<picture>";
-		String PICTURE_TAG_E = "</picture>";
-		String AUDIO_TAG_B = "<audio>";
-		String AUDIO_TAG_E = "</audio>";
-		String LINK_TAG_B = "<link>";
-		String LINK_TAG_E = "</link>";
 		String PAGE_TAG_E = "</page>";
 
 		String sentString = NEW_LINE;
@@ -543,9 +528,6 @@ public class Util
 			sentString = sentString.concat(NEW_LINE + NOTE_ITEM_TAG_B);
 			sentString = sentString.concat(NEW_LINE + TITLE_TAG_B + TITLE_TAG_E);
 			sentString = sentString.concat(NEW_LINE + BODY_TAG_B +  BODY_TAG_E);
-			sentString = sentString.concat(NEW_LINE + PICTURE_TAG_B + PICTURE_TAG_E);
-			sentString = sentString.concat(NEW_LINE + AUDIO_TAG_B + AUDIO_TAG_E);
-			sentString = sentString.concat(NEW_LINE + LINK_TAG_B + LINK_TAG_E);
 			sentString = sentString.concat(NEW_LINE + NOTE_ITEM_TAG_E);
 			sentString = sentString.concat(NEW_LINE + PAGE_TAG_E );
 			sentString = sentString.concat(NEW_LINE);
@@ -562,16 +544,6 @@ public class Util
 				String body = cursorNote.getString(cursorNote.getColumnIndexOrThrow(DB_page.KEY_NOTE_BODY));
 				body = replaceEscapeCharacter(body);
 
-				String picUrl = cursorNote.getString(cursorNote.getColumnIndexOrThrow(DB_page.KEY_NOTE_PICTURE_URI));
-				picUrl = replaceEscapeCharacter(picUrl);
-
-				String audioUrl = cursorNote.getString(cursorNote.getColumnIndexOrThrow(DB_page.KEY_NOTE_AUDIO_URI));
-				audioUrl = replaceEscapeCharacter(audioUrl);
-
-				String linkUrl = cursorNote.getString(cursorNote.getColumnIndexOrThrow(DB_page.KEY_NOTE_LINK_URI));
-
-				linkUrl = replaceEscapeCharacter(linkUrl);
-
 				int mark = cursorNote.getInt(cursorNote.getColumnIndexOrThrow(DB_page.KEY_NOTE_MARKING));
 				String srtMark = (mark == 1)? "[s]":"[n]";
 				dbPage.close();
@@ -586,9 +558,6 @@ public class Util
 				sentString = sentString.concat(NEW_LINE + NOTE_ITEM_TAG_B);
 				sentString = sentString.concat(NEW_LINE + TITLE_TAG_B + srtMark + title + TITLE_TAG_E);
 				sentString = sentString.concat(NEW_LINE + BODY_TAG_B + body + BODY_TAG_E);
-				sentString = sentString.concat(NEW_LINE + PICTURE_TAG_B + picUrl + PICTURE_TAG_E);
-				sentString = sentString.concat(NEW_LINE + AUDIO_TAG_B + audioUrl + AUDIO_TAG_E);
-				sentString = sentString.concat(NEW_LINE + LINK_TAG_B + linkUrl + LINK_TAG_E);
 				sentString = sentString.concat(NEW_LINE + NOTE_ITEM_TAG_E);
 				sentString = sentString.concat(NEW_LINE);
 				if(i==noteIdArray.size()-1)
@@ -643,182 +612,17 @@ public class Util
 		string = string.replace("[n]","");
 		string = string.replace("<title></title>"+NEW_LINE,"");
         string = string.replace("<body></body>"+NEW_LINE,"");
-        string = string.replace("<picture></picture>"+NEW_LINE,"");
-        string = string.replace("<audio></audio>"+NEW_LINE,"");
-        string = string.replace("<link></link>"+NEW_LINE,"");
 		string = string.replace("<title>","Title: ");
 		string = string.replace("</title>","");
 		string = string.replace("<body>","Body: ");
 		string = string.replace("</body>","");
-		string = string.replace("<picture>","Picture: ");
-		string = string.replace("</picture>","");		
-		string = string.replace("<audio>","Audio: ");
-		string = string.replace("</audio>","");		
-		string = string.replace("<link>","Link: ");
-		string = string.replace("</link>","");		
 		string = string.replace("</note>","");
 		string = string.replace("</page>"," ");
 		string = string.replace("</ListNote>","");
 		string = string.trim();
 		return string;
 	}
-	
-	
-	// get local real path from URI
-	public static String getLocalRealPathByUri(Context context, Uri contentUri) {
-		  Cursor cursor = null;
-		  try { 
-		    String[] proj = { MediaStore.Images.Media.DATA };
-		    cursor = context.getContentResolver().query(contentUri,  proj, null, null, null);
-		    int column_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
-		    cursor.moveToFirst();
-		    return cursor.getString(column_index);
-		  }
-		  catch (Exception e){
-			return null;  
-		  }
-		  finally {
-		    if (cursor != null) {
-		      cursor.close();
-		    }
-		  }
-	}
-	
-	// get scheme by Uri string
-	public static String getUriScheme(String string)
-	{
- 		Uri uri = Uri.parse(string);
-		return uri.getScheme();
-	}
-	
-	
-	// is URI existed for Activity
-	public static boolean isUriExisted(String uriString, Activity activity)
-	{
-		boolean bFileExist = false;
-		if(!Util.isEmptyString(uriString))
-		{
-			Uri uri = Uri.parse(uriString);
 
-			// when scheme is content and check local file
-			File file = null;
-			try
-			{
-				file = new File(uri.getPath());
-			}
-			catch(Exception e)
-			{
-				System.out.println("Util / _isUriExisted / local file not found exception");
-			}
-
-			if(file != null)
-			{
-				if(file.exists())
-					bFileExist = true;
-				else
-                {
-                    // for some file (eg. Universal Image Loader @#&=+-_.,!()~'%20.png ) ,_file.exists will return false,
-                    // after _createNewFile, will create a file whose file size is zero, _file.exists will return true
-                    try {
-                        file.createNewFile();
-//                        System.out.println("Util / _isUriExisted / 0 size file is created");
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                    // check again after _createNewFile
-                    bFileExist = file.exists() ? true: false;
-                }
-			}
-			else
-				bFileExist = false;
-
-			// when scheme is content and check remote file
-			if(!bFileExist)
-			{
-				try
-				{
-					ContentResolver cr = activity.getContentResolver();
-					cr.openInputStream(uri);
-					bFileExist = true;
-				}
-				catch (FileNotFoundException exception)
-				{
-					System.out.println("Util / _isUriExisted / remote file not found exception");
-			    }
-				catch (SecurityException se)
-				{
-					System.out.println("Util / _isUriExisted / remote security exception");
-				}
-				catch (Exception e)
-				{
-					System.out.println("Util / _isUriExisted / remote exception");
-				}
-			}
-//			System.out.println("Util / _isUriExisted / bFileExist (content)= " + bFileExist);
-
-			// when scheme is https or http
-			try
-			{
-				// init
-				if(Patterns.WEB_URL.matcher(uriString).matches())
-					bFileExist = false;
-
-				//enhance URL judgement
-				String scheme  = Util.getUriScheme(uriString);
-				if(scheme.equalsIgnoreCase("http")|| scheme.equalsIgnoreCase("https") )
-				{
-					if(Util.isNetworkConnected(activity))
-					{
-						try
-						{
-							boolean isEnd = false;
-							int i = 0;
-							while(!isEnd)
-							{
-								// check if network connection is OK
-								Util.tryUrlConnection(uriString, activity);
-								// wait for response
-//								Thread.sleep(Util.oneSecond/10);
-								Thread.sleep(Util.oneSecond/2);
-
-								// check response
-								if(200 <= Util.mResponseCode && Util.mResponseCode <= 399) {
-									System.out.println("bFileExist 1 = " + bFileExist + " / count = " + i);
-									bFileExist = true;
-									isEnd = true;
-								}
-								else if (404 == Util.mResponseCode)
-								{
-									bFileExist = false;
-									isEnd = true;
-								}
-								else {
-									bFileExist = false;
-									System.out.println("bFileExist = 2 " + bFileExist + " / count = " + i);
-									i++;
-									if (i == 3)
-										isEnd = true; // no more try
-								}
-							}
-						}
-						catch (Exception e1)
-						{
-							e1.printStackTrace();
-						}
-					}
-					else
-						bFileExist =  false;
-				}
-			}
-			catch (Exception e)
-			{
-
-		    }
-//			System.out.println("Util / _isUriExisted / bFileExist (web url)= " + bFileExist);
-		}
-		return bFileExist;
-	}
-	
 	// is Empty string
 	public static boolean isEmptyString(String str)
 	{
@@ -831,135 +635,11 @@ public class Util
 		return empty;
 	}
 	
-	/***
-	 * pictures directory or gallery directory
-	 * 
-	 * get: storage/emulated/0/
-	 * with: Environment.getExternalStorageDirectory();
-	 * 
-	 * get: storage/emulated/0/Pictures
-	 * with: Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
-	 * 
-	 * get: storage/emulated/0/DCIM
-	 * with: Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM);
-	 * or with: Environment.getExternalStorageDirectory().getAbsolutePath() + "/DCIM";  
-	 *  
-	 * get: storage/emulated/0/Android/data/com.cw.listnote/files
-	 * with: storageDir[0] got from File[] storageDir = context.getExternalFilesDirs(null);
-	 * 
-	 * get: storage/ext_sd/Android/data/com.cw.listnote/files
-	 * with: storageDir[1] got from File[] storageDir = context.getExternalFilesDirs(null);
-	 *   
-	 */
-	public static File getPicturesDir(Context context)
-    {
-    	if(Define.PICTURE_PATH_BY_SYSTEM_DEFAULT)
-    	{
-    		// Notes: 
-    		// 1 for Google Camera App: 
-    		// 	 - default path is /storage/sdcard/DCIM/Camera
-    		// 	 - Can not save file to external SD card
-    		// 2 for hTC default camera App:
-    		//   - default path is /storage/ext_sd/DCIM/100MEDIA
-    		//   - Can save file to internal SD card and external SD card, it is decided by hTC App
-    		
-//    		// is saved to preference after taking picture
-//    		SharedPreferences pref_takePicture = context.getSharedPreferences("takePicutre", 0);	
-//    		String picDirPathPref = pref_takePicture.getString("KEY_SET_PICTURE_DIR","unknown");
-//    		System.out.println("--- Util / _getPicturesDir / pictureDirPath = " + picDirPathPref);
-    		
-    		String dirString;
-    		File dir = null;
-    		if(Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) 
-        	{
-    			dirString = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM).getPath();
-        		// add App name for sub-directory
-        		dirString = dirString.concat("/"+ Util.getStorageDirName(context));
-        		System.out.println("Util / _getPicturesDir / dirString = " + dirString);
-        		dir = new File(dirString);
-        	}
-    		return dir;
-    	}
-    	else
-    	{
-    		File[] storageDir = context.getExternalFilesDirs(null); 
-    		for(File dir:storageDir)
-    			System.out.println("storageDir[] = " + dir);
-    		// for Kitkat: write permission is off for external SD card, 
-    		// but App can freely access Android/data/com.example.foo/ 
-    		// on external storage devices with no permissions. 
-    		// i.e. 
-        	//		storageDir[1] = file:///storage/ext_sd/Android/data/com.cw.listnote/files
-            File appPicturesDir = new File(storageDir[1]+"/"+"pictures");// 0: system 1:ext_sd    
-    		System.out.println("Util / _getPicturesDir / appPicturesDir = " + appPicturesDir);
-            return appPicturesDir;
-        }
-    }
-    
     static String mStringUrl;
     public static int mResponseCode;
     static String mResponseMessage;
 	public static int oneSecond = 1000;
     
-	// check network connection
-    public static boolean isNetworkConnected(Activity act)
-    {
-    	final ConnectivityManager conMgr = (ConnectivityManager) act.getSystemService(Context.CONNECTIVITY_SERVICE);
-    	final NetworkInfo activeNetwork = conMgr.getActiveNetworkInfo();
-    	if (activeNetwork != null && activeNetwork.isConnected()) {
-    		System.out.println("network is connected");
-    		return true;
-    	} else {
-    		System.out.println("network is NOT connected");
-    		return false;
-    	} 
-    }
-    
-    // try Url connection
-    protected static final String ALLOWED_URI_CHARS = "@#&=*+-_.,:!?()/~'%";
-    static public void tryUrlConnection(String strUrl, final Activity act) throws Exception 
-    {
-//    	mStringUrl = strUrl.replaceFirst("^https", "http");
-    	mResponseCode = 0;
-    	mStringUrl = strUrl;
-    	Executors.newSingleThreadExecutor().submit(new Runnable() {
-            @Override
-            public void run() 
-            {
-        	    try
-        	    {
-        			String encodedUrl = Uri.encode(mStringUrl, ALLOWED_URI_CHARS);
-        			HttpURLConnection conn = (HttpURLConnection) new URL(encodedUrl).openConnection();
-        			conn.setRequestMethod("HEAD");
-        			conn.setConnectTimeout(oneSecond); // cause exception if connection error
-        			conn.setReadTimeout(oneSecond*4);
-        			mResponseCode = conn.getResponseCode();
-        	        mResponseMessage = conn.getResponseMessage();
-        	    } 
-        	    catch (IOException exception) 
-        	    {
-        	    	mResponseCode = 0;
-        	    	mResponseMessage = "io exception";
-        	    	System.out.println("------------------ tryUrlConnection / io exception");
-        	    	exception.printStackTrace();
-				} 
-        	    catch (Exception e) 
-        	    {
-        	    	System.out.println("------------------ tryUrlConnection / exception");
-					e.printStackTrace();
-				}
-        	    System.out.println("Response Code : " + mResponseCode +
-        	    				   " / Response Message: " + mResponseMessage );
-            }
-        });    	
-    }    
-    
-
-	// get Url array of directory files
-    public final static int AUDIO = 0;
-    public final static int IMAGE = 1;
-    public final static int VIDEO = 2;
-
 	static public boolean isLandscapeOrientation(Activity act)
 	{
 		int currentOrientation = act.getResources().getConfiguration().orientation;

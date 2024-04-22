@@ -16,6 +16,7 @@
 
 package com.cw.ListNote.page;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
@@ -132,6 +133,7 @@ public class PageAdapter_recycler extends RecyclerView.Adapter<PageAdapter_recyc
     }
 
     // Replace the contents of a view (invoked by the layout manager)
+    @SuppressLint("Range")
     @Override
     public void onBindViewHolder(ViewHolder holder, final int _position) {
 
@@ -280,10 +282,6 @@ public class PageAdapter_recycler extends RecyclerView.Adapter<PageAdapter_recyc
                 i.putExtra("list_view_position", position);
                 i.putExtra(DB_page.KEY_NOTE_ID, rowId);
                 i.putExtra(DB_page.KEY_NOTE_TITLE, db_page.getNoteTitle_byId(rowId));
-                i.putExtra(DB_page.KEY_NOTE_PICTURE_URI , db_page.getNotePictureUri_byId(rowId));
-                i.putExtra(DB_page.KEY_NOTE_DRAWING_URI , db_page.getNoteDrawingUri_byId(rowId));
-                i.putExtra(DB_page.KEY_NOTE_AUDIO_URI , db_page.getNoteAudioUri_byId(rowId));
-                i.putExtra(DB_page.KEY_NOTE_LINK_URI , db_page.getNoteLinkUri_byId(rowId));
                 i.putExtra(DB_page.KEY_NOTE_BODY, db_page.getNoteBody_byId(rowId));
                 i.putExtra(DB_page.KEY_NOTE_CREATED, db_page.getNoteCreatedTime_byId(rowId));
                 mAct.startActivity(i);
@@ -332,22 +330,18 @@ public class PageAdapter_recycler extends RecyclerView.Adapter<PageAdapter_recyc
         }
 
         String strNote = db_page.getNoteTitle(position,false);
-        String strPictureUri = db_page.getNotePictureUri(position,false);
-        String strAudioUri = db_page.getNoteAudioUri(position,false);
-        String strDrawingUri = db_page.getNoteDrawingUri(position,false);
-        String strLinkUri = db_page.getNoteLinkUri(position,false);
         String strNoteBody = db_page.getNoteBody(position,false);
         Long idNote =  db_page.getNoteId(position,false);
 
         // toggle the marking
         if(db_page.getNoteMarking(position,false) == 0)
         {
-            db_page.updateNote(idNote, strNote, strPictureUri, strAudioUri, strDrawingUri, strLinkUri, strNoteBody, 1, 0, false);
+            db_page.updateNote(idNote, strNote, strNoteBody, 1, 0, false);
             marking = 1;
         }
         else
         {
-            db_page.updateNote(idNote, strNote, strPictureUri, strAudioUri, strDrawingUri, strLinkUri, strNoteBody, 0, 0, false);
+            db_page.updateNote(idNote, strNote, strNoteBody, 0, 0, false);
             marking = 0;
         }
         db_page.close();

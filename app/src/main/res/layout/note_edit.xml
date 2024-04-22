@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- title header 		   --> 
-<!-- title Edit and Picture-->
+<!-- title Edit -->
 <!-- body header 		   -->
 <!-- body Edit 			   -->
 <!-- bottoms 			   -->
@@ -39,7 +39,7 @@
 			android:text="@string/edit_note_dlg_title" />
 	</LinearLayout>
 	
-<!-- title Edit and Picture -->
+<!-- title Edit -->
 	<LinearLayout
 		android:id="@+id/edit_title_block"
 		android:layout_width="match_parent"

@@ -99,14 +99,10 @@ public class Note extends AppCompatActivity
 
 	} //onCreate end
 
-	// Add to prevent resizing full screen picture,
-	// when popup menu shows up at picture mode
 	@Override
 	public void onWindowFocusChanged(boolean hasFocus) {
 		super.onWindowFocusChanged(hasFocus);
 		System.out.println("Note / _onWindowFocusChanged");
-		if (hasFocus && isPictureMode() )
-			Util.setFullScreen(act);
 	}
 
 	void setLayoutView()
@@ -139,13 +135,8 @@ public class Note extends AppCompatActivity
 		viewPager.setAdapter(mPagerAdapter);
 		viewPager.setCurrentItem(NoteUi.getFocus_notePos());
 
-		// tab style
-//		if(TabsHost.mDbFolder != null)
-//			TabsHost.mDbFolder.close();
-
 		if(mDb_page != null) {
 			mNoteId = mDb_page.getNoteId(NoteUi.getFocus_notePos(), true);
-			mAudioUriInDB = mDb_page.getNoteAudioUri_byId(mNoteId);
 		}
 
 		// Note: if viewPager.getCurrentItem() is not equal to mEntryPosition, _onPageSelected will
@@ -162,10 +153,6 @@ public class Note extends AppCompatActivity
 				Intent intent = new Intent(Note.this, Note_edit.class);
 				intent.putExtra(DB_page.KEY_NOTE_ID, mNoteId);
 				intent.putExtra(DB_page.KEY_NOTE_TITLE, mDb_page.getNoteTitle_byId(mNoteId));
-				intent.putExtra(DB_page.KEY_NOTE_AUDIO_URI , mDb_page.getNoteAudioUri_byId(mNoteId));
-				intent.putExtra(DB_page.KEY_NOTE_PICTURE_URI , mDb_page.getNotePictureUri_byId(mNoteId));
-				intent.putExtra(DB_page.KEY_NOTE_DRAWING_URI , mDb_page.getNoteDrawingUri_byId(mNoteId));
-				intent.putExtra(DB_page.KEY_NOTE_LINK_URI , mDb_page.getNoteLinkUri_byId(mNoteId));
 				intent.putExtra(DB_page.KEY_NOTE_BODY, mDb_page.getNoteBody_byId(mNoteId));
 				intent.putExtra(DB_page.KEY_NOTE_CREATED, mDb_page.getNoteCreatedTime_byId(mNoteId));
 				startActivityForResult(intent, EDIT_CURRENT_VIEW);
@@ -220,7 +207,6 @@ public class Note extends AppCompatActivity
 			// show audio name
 			mNoteId = mDb_page.getNoteId(nextPosition,true);
 			System.out.println("Note / _onPageSelected / mNoteId = " + mNoteId);
-			mAudioUriInDB = mDb_page.getNoteAudioUri_byId(mNoteId);
 			System.out.println("Note / _onPageSelected / mAudioUriInDB = " + mAudioUriInDB);
 
             setOutline(act);
@@ -262,7 +248,7 @@ public class Note extends AppCompatActivity
 
     /** Set outline for selected view mode
     *
-    *   Determined by view mode: all, picture, text
+    *   Determined by view mode: all, text
     *
     *   Controlled factor:
     *   - action bar: hide, show
@@ -277,32 +263,13 @@ public class Note extends AppCompatActivity
             if(act.getSupportActionBar() != null)
 			    act.getSupportActionBar().show();
 		}
-		else if(isPictureMode())
-		{
-			Util.setFullScreen(act);
-            if(act.getSupportActionBar() != null)
-    			act.getSupportActionBar().hide();
-		}
 
         // renew pager
         showSelectedView();
 
 		LinearLayout buttonGroup = (LinearLayout) act.findViewById(R.id.view_button_group);
         // button group
-        if(Note.isPictureMode() )
-            buttonGroup.setVisibility(View.GONE);
-        else
-            buttonGroup.setVisibility(View.VISIBLE);
-
-		TextView audioTitle = (TextView) act.findViewById(R.id.pager_audio_title);
-        // audio title
-        if(!Note.isPictureMode())
-        {
-            if(!Util.isEmptyString(audioTitle.getText().toString()) )
-                audioTitle.setVisibility(View.VISIBLE);
-            else
-                audioTitle.setVisibility(View.GONE);
-        }
+        buttonGroup.setVisibility(View.VISIBLE);
 
         // renew options menu
         act.invalidateOptionsMenu();
@@ -535,29 +502,7 @@ public class Note extends AppCompatActivity
     	// web view can go back
     	String tagStr = "current"+ viewPager.getCurrentItem()+"linkWebView";
     	CustomWebView linkWebView = (CustomWebView) viewPager.findViewWithTag(tagStr);
-        if (linkWebView.canGoBack()) 
-        {
-        	linkWebView.goBack();
-        }
-        else if(isPictureMode())
-    	{
-            // dispatch touch event to show buttons
-            long downTime = SystemClock.uptimeMillis();
-            long eventTime = SystemClock.uptimeMillis() + 100;
-            float x = 0.0f;
-            float y = 0.0f;
-            // List of meta states found here: developer.android.com/reference/android/view/KeyEvent.html#getMetaState()
-            int metaState = 0;
-            MotionEvent event = MotionEvent.obtain(downTime, eventTime, MotionEvent.ACTION_UP,
-                                                    x, y,metaState);
-            dispatchTouchEvent(event);
-            event.recycle();
-
-            // in order to make sure ImageViewBackButton is effective to be clicked
-            mPagerHandler = new Handler();
-            mPagerHandler.postDelayed(mOnBackPressedRun, 500);
-        }
-    	else if(isTextMode())
+    	if(isTextMode())
     	{
 			// back to view all mode
     		setViewAllMode();
@@ -575,37 +520,10 @@ public class Note extends AppCompatActivity
 	{   @Override
 		public void run()
 		{
-            String tagStr = "current"+ NoteUi.getFocus_notePos() +"pictureView";
-            ViewGroup pictureGroup = (ViewGroup) viewPager.findViewWithTag(tagStr);
-            System.out.println("Note / _showPictureViewUI / tagStr = " + tagStr);
-
-            Button picView_back_button;
-            if(pictureGroup != null)
-            {
-                picView_back_button = (Button) (pictureGroup.findViewById(R.id.image_view_back));
-                picView_back_button.performClick();
-            }
-
 			if(Note_adapter.mIntentView != null)
 				Note_adapter.mIntentView = null;
 		}
 	};
-    
-    // get current picture string
-    public String getCurrentPictureString()
-    {
-		return mDb_page.getNotePictureUri(NoteUi.getFocus_notePos(),true);
-    }
-
-    // Mark current selected
-    void markCurrentSelected(MenuItem subItem, String str)
-    {
-        if(mPref_show_note_attribute.getString("KEY_PAGER_VIEW_MODE", "ALL")
-                .equalsIgnoreCase(str))
-            subItem.setIcon(R.drawable.btn_radio_on_holo_dark);
-        else
-            subItem.setIcon(R.drawable.btn_radio_off_holo_dark);
-    }
 
     // Show selected view
     static void showSelectedView()
@@ -616,7 +534,6 @@ public class Note extends AppCompatActivity
     		mPagerAdapter.notifyDataSetChanged(); // will call Note_adapter / _setPrimaryItem
     }
     
-    public static int mPositionOfChangeView;
     public static boolean mIsViewModeChanged;
     
     static void setViewAllMode()
@@ -624,27 +541,6 @@ public class Note extends AppCompatActivity
 		 mPref_show_note_attribute.edit()
 		   						  .putString("KEY_PAGER_VIEW_MODE","ALL")
 		   						  .apply();
-    }
-    
-    static void setPictureMode()
-    {
-		 mPref_show_note_attribute.edit()
-		   						  .putString("KEY_PAGER_VIEW_MODE","PICTURE_ONLY")
-		   						  .apply();
-    }
-    
-    static void setTextMode()
-    {
-		 mPref_show_note_attribute.edit()
-		   						  .putString("KEY_PAGER_VIEW_MODE","TEXT_ONLY")
-		   						  .apply();
-    }
-    
-    
-    public static boolean isPictureMode()
-    {
-	  	return mPref_show_note_attribute.getString("KEY_PAGER_VIEW_MODE", "ALL")
-										.equalsIgnoreCase("PICTURE_ONLY");
     }
     
     public static boolean isViewAllMode()
