@@ -55,8 +55,6 @@ public class Note_edit_ui {
     private DB_page dB_page;
 	private Activity act;
 	private int style;
-	private ProgressBar progressBar;
-
 	Note_edit_ui(Activity act, DB_page _db, Long noteId, String strTitle, String strBody, Long createdTime)
     {
     	this.act = act;
@@ -75,10 +73,7 @@ public class Note_edit_ui {
 
 	void UI_init()
     {
-
 		UI_init_text();
-
-        progressBar = (ProgressBar) act.findViewById(R.id.edit_progress_bar);
 
 		DB_folder dbFolder = new DB_folder(act, Pref.getPref_focusView_folder_tableId(act));
 		style = dbFolder.getPageStyle(TabsHost.getFocus_tabPos(), true);

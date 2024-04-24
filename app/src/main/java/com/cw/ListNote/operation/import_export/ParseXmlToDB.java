@@ -87,7 +87,7 @@ public class ParseXmlToDB {
             boolean isEnd = false;
             while (event != XmlPullParser.END_DOCUMENT)
             {
-                String name = myParser.getName(); //name: null, link, item, title, description
+                String name = myParser.getName(); //name: null, item, title, description
                 System.out.println("ParseXmlToDB / _parseXMLAndInsertDB / name = " + name);
                 System.out.println("ParseXmlToDB / _parseXMLAndInsertDB / event = " + event);
                 switch (event)

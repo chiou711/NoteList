@@ -459,14 +459,6 @@ public class MainAct extends AppCompatActivity implements FragmentManager.OnBack
     /**
      * on Activity Result
      */
-    AlertDialog.Builder builder;
-    AlertDialog alertDlg;
-    Handler handler;
-    int count;
-    String countStr;
-    String nextLink;
-    String nextTitle;
-
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data)
     {

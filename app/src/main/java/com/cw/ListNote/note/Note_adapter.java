@@ -31,7 +31,6 @@ import android.os.Build;
 import android.text.Html;
 import android.text.Spannable;
 import android.text.SpannableString;
-import android.text.TextUtils;
 import android.text.Layout.Alignment;
 import android.text.style.AlignmentSpan;
 import android.text.style.ForegroundColorSpan;
@@ -39,7 +38,6 @@ import android.text.util.Linkify;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.webkit.WebChromeClient;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.ProgressBar;
@@ -208,7 +206,6 @@ public class Note_adapter extends FragmentStatePagerAdapter
 	private void setWebView(final CustomWebView webView,Object object, int whichView)
 	{
         final SharedPreferences pref_web_view = act.getSharedPreferences("web_view", 0);
-		final ProgressBar spinner = (ProgressBar) ((View)object).findViewById(R.id.loading);
         if( whichView == CustomWebView.TEXT_VIEW )
         {
             int scale = pref_web_view.getInt("KEY_WEB_VIEW_SCALE",0);

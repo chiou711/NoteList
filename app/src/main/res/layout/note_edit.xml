@@ -58,19 +58,6 @@
 	    android:textSize="18sp"
 	    android:minLines="2"
 	    android:maxLines="20" />
-	<ImageView
-          android:id="@+id/edit_picture"
-          android:layout_width="100dp"
-          android:layout_height="75dp"
-          android:layout_margin="3dp"
-          android:contentDescription="ImageView"/>
-	<ProgressBar
-          android:id="@+id/edit_progress_bar"
-          android:layout_width="100dp"
-          android:layout_height="75dp"
-          android:paddingRight="5dp"
-          android:visibility="gone"
-          android:contentDescription="ProgressBar"/>	
 	</LinearLayout>
 
 <!-- body header -->

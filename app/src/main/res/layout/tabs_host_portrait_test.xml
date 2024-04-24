@@ -51,9 +51,6 @@
             android:maxLines="1"
             android:background="@drawable/bg_gray_border" />
 
-        <include
-            layout="@layout/audio_panel_portrait" />
-
         <!-- view for AdMob Banner Ad -->
         <!--if ENABLE_ADMOB = true, enable the following-->
         <com.google.android.gms.ads.AdView

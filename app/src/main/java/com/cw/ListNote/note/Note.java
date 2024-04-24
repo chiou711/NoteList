@@ -455,53 +455,10 @@ public class Note extends AppCompatActivity
         return super.onOptionsItemSelected(item);
     }
 
-//    //
-//    // Open link by native YouTube
-//    //
-//    // Due to "AdWords or copyright" server limitation, for some URI,
-//    // "video is not available" message could show up.
-//    // At this case, one solution is to switch current mobile website to desktop website by browser setting.
-//    // So, base on URI key words to decide "YouTube App" or "browser" launch.
-//    public void openLink_YouTube(String linkUri)
-//    {
-//        // by YouTube App
-//        if(linkUri.contains("youtu.be"))
-//        {
-//            // stop audio and video if playing
-//            stopAV();
-//
-//            String id = Util.getYoutubeId(linkUri);
-//            Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("vnd.youtube://" + id));
-//            act.startActivity(intent);
-//        }
-//        // by Chrome browser
-//        else if(linkUri.contains("youtube.com"))
-//        {
-//            Intent i = new Intent(Intent.ACTION_VIEW, Uri.parse(linkUri));
-//            i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-//            i.setPackage("com.android.chrome");
-//
-//            try
-//            {
-//                act.startActivity(i);
-//            }
-//            catch (ActivityNotFoundException e)
-//            {
-//                // Chrome is probably not installed
-//                // Try with the default browser
-//                i.setPackage(null);
-//                act.startActivity(i);
-//            }
-//        }
-//    }
-
     // on back pressed
     @Override
     public void onBackPressed() {
 		System.out.println("Note / _onBackPressed");
-    	// web view can go back
-    	String tagStr = "current"+ viewPager.getCurrentItem()+"linkWebView";
-    	CustomWebView linkWebView = (CustomWebView) viewPager.findViewWithTag(tagStr);
     	if(isTextMode())
     	{
 			// back to view all mode
