@@ -25,23 +25,13 @@ import androidx.viewpager.widget.ViewPager;
 
 public class NoteUi
 {
-    public static boolean showSeekBarProgress;
-    public static int videoFileLength_inMilliSeconds;
-    private static int mPosition;
-    private ViewPager pager;
     private AppCompatActivity act;
-
-    public static int getNotesCnt() {
-        return notesCnt;
-    }
 
     public static void setNotesCnt(int notesCnt) {
         NoteUi.notesCnt = notesCnt;
     }
 
     public static int notesCnt;
-
-
 
     // getter and setter of focus note position
     public static int mFocus_notePos;
@@ -54,19 +44,13 @@ public class NoteUi
         mFocus_notePos = Pos;
     }
 
-
     // constructor
-    public NoteUi(AppCompatActivity activity, ViewPager viewPager, int position)
-    {
-
+    public NoteUi(AppCompatActivity activity){
         System.out.println("NoteUi / constructor");
-        pager = viewPager;
         act = activity;
-        mPosition = position;
 
 	    DB_page db_page = new DB_page(act,TabsHost.getCurrentPageTableId());
         setNotesCnt(db_page.getNotesCount(true));
-
     } //Note_view_UI constructor
 
     static PopupMenu popup;

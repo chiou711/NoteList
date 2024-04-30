@@ -152,10 +152,10 @@ public class Drawer {
 
                     act.invalidateOptionsMenu(); // creates call to onPrepareOptionsMenu()
 
-                    if(listView.getCount() >0) {
-                        // will call Folder_adapter _getView to update audio playing high light
-                        listView.invalidateViews();
-                    }
+//                    if(listView.getCount() >0) {
+//                        // will call Folder_adapter _getView to update high light if implemented
+//                        listView.invalidateViews();
+//                    }
                 }// onDrawerOpened
 
                 public void onDrawerClosed(View view)

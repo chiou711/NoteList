@@ -6,7 +6,6 @@
     <string name="btn_Continue">Continue</string>
     <string name="btn_Stop">Stop</string>
     <string name="btn_Renew">Renew</string>
-    <string name="title_playing_audio">Still playing audio.</string>
     <string name="btn_Finish">Finish</string>
     <string name="btn_Select">Select</string>
     <string name="btn_None">None</string>

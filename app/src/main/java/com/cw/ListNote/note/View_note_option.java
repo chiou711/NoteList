@@ -63,8 +63,6 @@ public class View_note_option {
     static List<View_note_option> option_list;
 
     private final static int ID_OPTION_MAIL = 0;
-    private final static int ID_OPTION_AUTO_PLAY = 1;
-    private final static int ID_OPTION_SEARCH_YOUTUBE = 2;
     private final static int ID_OPTION_BACK = 9;
     static long noteId;
     static GridIconAdapter mGridIconAdapter;
@@ -95,11 +93,6 @@ public class View_note_option {
         {
             mGridIconAdapter = new GridIconAdapter(act);
             gridView.setAdapter(mGridIconAdapter);
-        }
-        else
-        {
-            Toast.makeText(act,R.string.gallery_toast_no_file, Toast.LENGTH_SHORT).show();
-            act.finish();
         }
 
         gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {

@@ -145,11 +145,6 @@ public class Checked_notes_option {
             GridIconAdapter mGridIconAdapter = new GridIconAdapter(act,noItemChecked());
             gridView.setAdapter(mGridIconAdapter);
         }
-        else
-        {
-            Toast.makeText(act,R.string.gallery_toast_no_file, Toast.LENGTH_SHORT).show();
-            act.finish();
-        }
 
         gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -287,7 +282,6 @@ public class Checked_notes_option {
     private void checkAll(int action)
     {
         System.out.println("Checked_notes_option / _checkAll / action = " + action);
-        boolean bStopAudio = false;
 
         mDb_page.open();
         int count = mDb_page.getNotesCount(false);
@@ -310,7 +304,6 @@ public class Checked_notes_option {
      */
     private void invertSelected()
     {
-        boolean bStopAudio = false;
         mDb_page.open();
         int count = mDb_page.getNotesCount(false);
         for(int i=0; i<count; i++)

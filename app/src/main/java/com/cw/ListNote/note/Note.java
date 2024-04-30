@@ -78,10 +78,7 @@ public class Note extends AppCompatActivity
     Button optionButton;
     Button backButton;
 
-	public static String mAudioUriInDB;
-
     public AppCompatActivity act;
-    public static int mPlayVideoPositionOfInstance;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) 
@@ -109,7 +106,6 @@ public class Note extends AppCompatActivity
 	{
         System.out.println("Note / _setLayoutView");
 
-		// video view will be reset after _setContentView
 		if(Util.isLandscapeOrientation(this))
 			setContentView(R.layout.note_view_landscape);
 		else
@@ -204,10 +200,9 @@ public class Note extends AppCompatActivity
 
 			mIsViewModeChanged = false;
 
-			// show audio name
+			// show
 			mNoteId = mDb_page.getNoteId(nextPosition,true);
 			System.out.println("Note / _onPageSelected / mNoteId = " + mNoteId);
-			System.out.println("Note / _onPageSelected / mAudioUriInDB = " + mAudioUriInDB);
 
             setOutline(act);
 		}
@@ -276,21 +271,6 @@ public class Note extends AppCompatActivity
 	}
 
 
-    //Refer to http://stackoverflow.com/questions/4434027/android-videoview-orientation-change-with-buffered-video
-	/***************************************************************
-	video play spec of Pause and Rotate:
-	1. Rotate: keep pause state
-	 pause -> rotate -> pause -> play -> continue
-
-	2. Rotate: keep play state
-	 play -> rotate -> continue play
-
-	3. Key guard: enable pause
-	 play -> key guard on/off -> pause -> play -> continue
-
-	4. Key guard and Rotate: keep pause
-	 play -> key guard on/off -> pause -> rotate -> pause
-	 ****************************************************************/	
 	@Override
 	public void onConfigurationChanged(Configuration newConfig) {
 	    super.onConfigurationChanged(newConfig);

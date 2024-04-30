@@ -275,7 +275,6 @@ public class Note_adapter extends FragmentStatePagerAdapter
     	String strBody = db_page.getNoteBody(position,true);
 
     	// replace note title
-		//若沒有Title與Body,但有YouTube link或Web link則Title會使用link得到的title,且用Gray顏色
 		boolean bSetGray = false;
 
     	Long createTime = db_page.getNoteCreatedTime(position,true);

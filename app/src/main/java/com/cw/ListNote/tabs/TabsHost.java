@@ -71,7 +71,6 @@ public class TabsHost extends AppCompatDialogFragment implements TabLayout.OnTab
     public static int mFocusTabPos;
 
     public static int lastPageTableId;
-    public static int audioPlayTabPos;
 
     public static int firstPos_pageId;
 
@@ -303,8 +302,8 @@ public class TabsHost extends AppCompatDialogFragment implements TabLayout.OnTab
         else
             System.out.println("TabsHost / _onTabSelected / not notifyDataSetChanged ");
 
-        // set tab audio icon when audio playing
-        tab.setCustomView(null);
+        // set tab high light if implemented
+//        tab.setCustomView(null);
 
         // call onCreateOptionsMenu
         MainAct.mAct.invalidateOptionsMenu();

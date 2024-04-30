@@ -604,8 +604,6 @@ public class MainAct extends AppCompatActivity implements FragmentManager.OnBack
      * onCreate Options Menu
      *
      *************************/
-    public static MenuItem mSubMenuItemAudio;
-    MenuItem playOrStopMusicButton;
     @Override
     public boolean onCreateOptionsMenu(android.view.Menu menu)
     {
@@ -614,8 +612,6 @@ public class MainAct extends AppCompatActivity implements FragmentManager.OnBack
 
         // inflate menu
         getMenuInflater().inflate(R.menu.main_menu, menu);
-
-        playOrStopMusicButton = menu.findItem(R.id.PLAY_OR_STOP_MUSIC);
 
         // enable drag note
         mPref_show_note_attribute = getSharedPreferences("show_note_attribute", 0);

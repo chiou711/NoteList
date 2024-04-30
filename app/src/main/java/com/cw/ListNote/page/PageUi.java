@@ -179,15 +179,7 @@ public class PageUi
 				swapPage(focus_tabPos,
 						focus_tabPos -1);
 
-				// shift left when audio playing
-				if(MainAct.mPlaying_folderPos == FolderUi.getFocus_folderPos()) {
-					// target is playing index
-					if (focus_tabPos == MainAct.mPlaying_pagePos)
-						MainAct.mPlaying_pagePos--;
-					// target is at right side of playing index
-					else if ((focus_tabPos - MainAct.mPlaying_pagePos) == 1)
-						MainAct.mPlaying_pagePos++;
-				}
+				// shift left
 				FolderUi.startTabsHostRun();
 				TabsHost.setFocus_tabPos(focus_tabPos-1);
 				updateButtonState(dlg);
@@ -212,15 +204,7 @@ public class PageUi
 				Pref.setPref_focusView_page_tableId(act, db.getPageTableId(focus_tabPos, true));
 				swapPage(focus_tabPos, focus_tabPos +1);
 
-				// shift right when audio playing
-				if(MainAct.mPlaying_folderPos == FolderUi.getFocus_folderPos()) {
-					// target is playing index
-					if (focus_tabPos== MainAct.mPlaying_pagePos)
-						MainAct.mPlaying_pagePos++;
-					// target is at left side of plying index
-					else if ((MainAct.mPlaying_pagePos - focus_tabPos) == 1)
-						MainAct.mPlaying_pagePos--;
-				}
+				// shift right
 				FolderUi.startTabsHostRun();
 				TabsHost.setFocus_tabPos(TabsHost.getFocus_tabPos()+1);
 				updateButtonState(dlg);
@@ -584,12 +568,5 @@ public class PageUi
 		}
 		dbFolder.close();
 	}
-
-    public static boolean isAudioPlayingPage()
-    {
-	    return ( (MainAct.mPlaying_pageTableId == TabsHost.getCurrentPageTableId())&&//mNow_pageTableId) &&
-			     (MainAct.mPlaying_pagePos == TabsHost.getFocus_tabPos()) &&
-	     	     (MainAct.mPlaying_folderPos == FolderUi.getFocus_folderPos())  );
-    }
 
 }

@@ -13,7 +13,6 @@
     <string name="dialog_add_new_multiple">新增本地文件笔记时：包括目录中的所有同类文件</string>
     <string name="note_text">文字</string>
     <string name="note_cancel_add_new">取消</string>
-    <string name="audio_message_could_not_open_file">无法开启档案</string>
     <string name="add_new_start">开始新增笔记</string>
     <string name="add_new_stop">停止新增笔记</string>
     <string name="add_new_file_error">新增多个文件时，请确认您的选择是本地文件。</string>

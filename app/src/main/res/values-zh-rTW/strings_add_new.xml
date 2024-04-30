@@ -13,7 +13,6 @@
     <string name="dialog_add_new_multiple">新增現成文件記事時：包括目錄中的所有同類文件</string>
     <string name="note_text">文字</string>
     <string name="note_cancel_add_new">取消</string>
-    <string name="audio_message_could_not_open_file">無法開啟檔案</string>
     <string name="add_new_start">開始新增筆記</string>
     <string name="add_new_stop">停止新增筆記</string>
     <string name="add_new_file_error">新增多個文件時，請確認您的選擇是本地文件。</string>

@@ -317,11 +317,11 @@ public class Note_addText extends AppCompatActivity {
 			if (rowId == null) // for Add new
 			{
 				if( (!Util.isEmptyString(title)) ||
-						(!Util.isEmptyString(body)) )
+					(!Util.isEmptyString(body)) )
 				{
 					// insert
 					System.out.println("Note_addText / _saveStateInDB / insert");
-					rowId = dB_page.insertNote(title, body, 0, (long) 0);// add new note, get return row Id
+					rowId = dB_page.insertNote(title, body, 1, (long) 0);// add new note, get return row Id
 				}
 			}
 			else if ( Util.isEmptyString(title) &&

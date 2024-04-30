@@ -71,7 +71,6 @@ public class Folder_adapter extends SimpleDragSortCursorAdapter
 
             // set up ViewHolder for this ListView item
             viewHolder = new ViewHolder();
-            viewHolder.audioPlayingIcon = (ImageView) convertView.findViewById(R.id.folder_audio);
             viewHolder.folderTitle = (TextView) convertView.findViewById(R.id.folderText);
             viewHolder.dragIcon = (ImageView) convertView.findViewById(R.id.folder_drag);
             convertView.setTag(viewHolder); // store as View's tag
@@ -93,9 +92,7 @@ public class Folder_adapter extends SimpleDragSortCursorAdapter
     }
 
 
-    private static class ViewHolder
-    {
-        ImageView audioPlayingIcon;
+    private static class ViewHolder {
         TextView folderTitle; // refers to ListView item's ImageView
         ImageView dragIcon;
     }
