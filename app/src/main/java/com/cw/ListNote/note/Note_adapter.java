@@ -84,8 +84,6 @@ public class Note_adapter extends FragmentStatePagerAdapter
     	int style = Note.getStyle();
         pagerView.setBackgroundColor(ColorSet.mBG_ColorArray[style]);
 
-		ProgressBar spinner = (ProgressBar) pagerView.findViewById(R.id.loading);
-
         // line view
         View line_view = pagerView.findViewById(R.id.line_view);
 
@@ -98,9 +96,6 @@ public class Note_adapter extends FragmentStatePagerAdapter
     	// set accessibility
         textGroup.setContentDescription(act.getResources().getString(R.string.note_text));
 		textWebView.getRootView().setContentDescription(act.getResources().getString(R.string.note_text));
-
-		// set text web view
-        setWebView(textWebView,spinner,CustomWebView.TEXT_VIEW);
 
         String strTitle = db_page.getNoteTitle(position,true);
         String strBody = db_page.getNoteBody(position,true);

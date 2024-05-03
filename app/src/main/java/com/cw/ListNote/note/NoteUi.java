@@ -21,7 +21,6 @@ import com.cw.ListNote.tabs.TabsHost;
 import android.widget.PopupMenu;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.viewpager.widget.ViewPager;
 
 public class NoteUi
 {

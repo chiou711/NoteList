@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2019 CW Chiu
+ * Copyright (C) 2024 CW Chiu
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,59 +20,18 @@ import android.content.Context;
 
 import com.cw.ListNote.R;
 
-/**
- * Created by CW on 2016/6/16.
- * Modified by CW on 2023/12/10
- *
- * build apk file size:
- * 1) prefer w/ assets files: 15,483 KB
- *
- * 2) default w/ assets files: 15,483 KB
- *
- * 3) default w/o assets files: 1,173 KB
- *
- * 4) release: 706 KB
- */
 public class Define {
-
-    public static int getAppBuildMode() {
-        return app_build_mode;
-    }
 
     //
     public final static int DEBUG_DEFAULT_BY_INITIAL = 0;
-    public final static int DEBUG_DEFAULT_BY_ASSETS = 1;
-    public final static int DEBUG_DEFAULT_BY_DOWNLOAD = 2;
-    public final static int RELEASE_DEFAULT_BY_INITIAL = 3;
-    public final static int RELEASE_DEFAULT_BY_ASSETS = 4;
-    public final static int RELEASE_DEFAULT_BY_DOWNLOAD = 5;
+    public final static int RELEASE_DEFAULT_BY_INITIAL = 1;
     public final static String  DB_FILE_NAME = "listnote.db";
 
-    public static void setAppBuildMode()
-    {
-        /**
-         * Set APP build mode
-         * Note:
-         *  1. for AdMob: it works after Google Play store release
-         *  2. for assets mode: need to enable build.gradle assets.srcDirs = ['preferred/assets/']
-         */
-
-        /** 1 debug, assets */
-//        int mode  = DEBUG_DEFAULT_BY_ASSETS;
-
-        /** 2 release, assets */
-//        int mode  =  RELEASE_DEFAULT_BY_ASSETS;
-
-        /** 3 debug, download */
-//        int mode  =  DEBUG_DEFAULT_BY_DOWNLOAD;
-
-        /** 4 release, download */
-//        int mode  =  RELEASE_DEFAULT_BY_DOWNLOAD;
-
-        /** 5 debug, initial */
+    public static void setAppBuildMode(){
+        /** 1 debug, initial */
         int mode = DEBUG_DEFAULT_BY_INITIAL;
 
-        /** 6 release, initial */
+        /** 2 release, initial */
 //        int mode  =  Define.RELEASE_DEFAULT_BY_INITIAL;
 
         setAppBuildMode(mode);
@@ -90,31 +49,11 @@ public class Define {
                 INITIAL_PAGES_COUNT = 1;// Page1_1
                 break;
 
-            case DEBUG_DEFAULT_BY_ASSETS:
-                CODE_MODE = DEBUG_MODE;
-                DEFAULT_CONTENT = BY_ASSETS;
-                break;
-
-            case DEBUG_DEFAULT_BY_DOWNLOAD:
-                CODE_MODE = DEBUG_MODE;
-                DEFAULT_CONTENT = BY_DOWNLOAD;
-                break;
-
             case RELEASE_DEFAULT_BY_INITIAL:
                 CODE_MODE = RELEASE_MODE;
                 DEFAULT_CONTENT = BY_INITIAL_TABLES;
                 INITIAL_FOLDERS_COUNT = 2;  // Folder1, Folder2
                 INITIAL_PAGES_COUNT = 1;// Page1_1
-                break;
-
-            case RELEASE_DEFAULT_BY_ASSETS:
-                CODE_MODE = RELEASE_MODE;
-                DEFAULT_CONTENT = BY_ASSETS;
-                break;
-
-            case RELEASE_DEFAULT_BY_DOWNLOAD:
-                CODE_MODE = RELEASE_MODE;
-                DEFAULT_CONTENT = BY_DOWNLOAD;
                 break;
 
             default:
@@ -134,32 +73,6 @@ public class Define {
     public static int RELEASE_MODE = 1;
 
 
-    /****************************************************************************
-     *
-     * Flags for Default tables after App installation:
-     * - default content: DEFAULT_CONTENT
-     *      - by initial tables: INITIAL_FOLDERS_COUNT, INITIAL_PAGES_COUNT
-     *      - by assets XML
-     *      - by download XML
-     * Note of flag setting: exclusive
-     *
-     * With default content
-     * - true : un-mark preferred/assets/ line in build.gradle file
-     * - false:    mark preferred/assets/ line in build.gradle file
-     *
-     * android {
-     * ...
-     *    sourceSets {
-     *        main {
-     *      // mark: W/O default content
-     *      // un-mark: With default content
-     *      // Apk file size will increase if assets directory is set at default location (src/main/assets)
-     *           assets.srcDirs = ['preferred/assets/']
-     *      }
-     *    }
-     * }
-     *
-     ************************************************************************************************************/
 
     /***
      *  With default content by XML file
@@ -168,9 +81,6 @@ public class Define {
     // by none
     public static int BY_INITIAL_TABLES = 0;
     // by assets XML file
-    public static int BY_ASSETS = 1;
-    // by downloaded XML file
-    public static int BY_DOWNLOAD = 2;
 
     /**
      * With initial tables: table count
@@ -181,16 +91,8 @@ public class Define {
     public static int INITIAL_FOLDERS_COUNT;
     public static int INITIAL_PAGES_COUNT;
 
-    /***************************************************************************
-     * Enable AdMob at page bottom
-     *
-     ***************************************************************************/
-    public static boolean ENABLE_ADMOB = false; //true; //false;
-
-
     // default style
     public static int STYLE_DEFAULT = 1;
-    public static int STYLE_PREFER = 2;
 
     public static String getTabTitle(Context context, Integer Id)
     {

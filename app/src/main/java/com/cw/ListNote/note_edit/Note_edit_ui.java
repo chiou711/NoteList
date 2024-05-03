@@ -29,15 +29,9 @@ import com.cw.ListNote.util.Util;
 
 import android.app.Activity;
 import android.content.Context;
-import android.view.View;
-import android.view.View.OnClickListener;
-import android.view.View.OnFocusChangeListener;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.ProgressBar;
-import android.widget.TextView;
 
 public class Note_edit_ui {
 

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2019 CW Chiu
+ * Copyright (C) 2024 CW Chiu
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -36,32 +36,20 @@ import com.cw.ListNote.operation.delete.DeletePages;
 import com.cw.ListNote.page.Checked_notes_option;
 import com.cw.ListNote.page.PageUi;
 import com.cw.ListNote.tabs.TabsHost;
-import com.cw.ListNote.util.DeleteFileAlarmReceiver;
-import com.cw.ListNote.operation.import_export.Export_toSDCardFragment;
-import com.cw.ListNote.operation.import_export.Import_filesList;
 import com.cw.ListNote.db.DB_drawer;
 import com.cw.ListNote.define.Define;
-import com.cw.ListNote.operation.mail.MailNotes;
 import com.cw.ListNote.util.OnBackPressedListener;
-import com.cw.ListNote.operation.mail.MailPagesFragment;
 import com.cw.ListNote.util.Util;
 import com.cw.ListNote.util.preferences.Pref;
 import com.mobeta.android.dslv.DragSortListView;
 
-import android.Manifest;
-import android.app.AlertDialog;
-import android.content.pm.PackageManager;
 import android.os.Build;
-import android.os.Environment;
-import android.os.Handler;
 import android.os.StrictMode;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.os.Bundle;
-import android.support.v4.media.MediaBrowserCompat;
-import android.support.v4.media.session.MediaControllerCompat;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -69,13 +57,9 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
-import androidx.core.app.ActivityCompat;
 import androidx.core.view.GravityCompat;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
-
-import static android.os.Build.VERSION_CODES.M;
-import static android.os.Build.VERSION_CODES.O;
 
 public class MainAct extends AppCompatActivity implements FragmentManager.OnBackStackChangedListener
 {
@@ -95,13 +79,6 @@ public class MainAct extends AppCompatActivity implements FragmentManager.OnBack
     public Drawer drawer;
     public static Folder mFolder;
     public static Toolbar mToolbar;
-
-    public static MediaBrowserCompat mMediaBrowserCompat;
-    public static MediaControllerCompat mMediaControllerCompat;
-    public static int mCurrentState;
-    public final static int STATE_PAUSED = 0;
-    public final static int STATE_PLAYING = 1;
-//    public boolean bEULA_accepted;
 
 	// Main Act onCreate
     @Override
@@ -297,7 +274,6 @@ public class MainAct extends AppCompatActivity implements FragmentManager.OnBack
     @Override
     protected void onPause() {
         super.onPause();
-//        bluetooth_device_receiver.abortBroadcast();//todo better place?
         System.out.println("MainAct / _onPause");
     }
 
@@ -308,22 +284,19 @@ public class MainAct extends AppCompatActivity implements FragmentManager.OnBack
         mAct = this;
 
         // Sync the toggle state after onRestoreInstanceState has occurred.
-//        if(bEULA_accepted)
-        {
-            if(drawer != null)
-                drawer.drawerToggle.syncState();
+        if(drawer != null)
+            drawer.drawerToggle.syncState();
 
-            // get focus folder table Id, default folder table Id: 1
-            DB_drawer dB_drawer = new DB_drawer(this);
-            dB_drawer.open();
-            for (int i = 0; i < dB_drawer.getFoldersCount(false); i++) {
-                if (dB_drawer.getFolderTableId(i, false) == Pref.getPref_focusView_folder_tableId(this)) {
-                    FolderUi.setFocus_folderPos(i);
-                    System.out.println("MainAct / _mainAction / FolderUi.getFocus_folderPos() = " + FolderUi.getFocus_folderPos());
-                }
+        // get focus folder table Id, default folder table Id: 1
+        DB_drawer dB_drawer = new DB_drawer(this);
+        dB_drawer.open();
+        for (int i = 0; i < dB_drawer.getFoldersCount(false); i++) {
+            if (dB_drawer.getFolderTableId(i, false) == Pref.getPref_focusView_folder_tableId(this)) {
+                FolderUi.setFocus_folderPos(i);
+                System.out.println("MainAct / _mainAction / FolderUi.getFocus_folderPos() = " + FolderUi.getFocus_folderPos());
             }
-            dB_drawer.close();
         }
+        dB_drawer.close();
     }
 
 
@@ -464,23 +437,6 @@ public class MainAct extends AppCompatActivity implements FragmentManager.OnBack
     {
         super.onActivityResult(requestCode,resultCode,data);
         System.out.println("MainAct / _onActivityResult ");
-        String stringFileName[] = null;
-
-        // mail
-        if((requestCode== MailNotes.EMAIL) || (requestCode== MailPagesFragment.EMAIL_PAGES)) {
-            if (requestCode == MailNotes.EMAIL)
-                stringFileName = MailNotes.mAttachmentFileName;
-            else if (requestCode == MailPagesFragment.EMAIL_PAGES)
-                stringFileName = MailPagesFragment.mAttachmentFileName;
-
-            Toast.makeText(mAct, R.string.mail_exit, Toast.LENGTH_SHORT).show();
-
-            // note: result code is always 0 (cancel), so it is not used
-            new DeleteFileAlarmReceiver(mAct,
-                    System.currentTimeMillis() + 1000 * 60 * 5, // formal: 300 seconds
-//					System.currentTimeMillis() + 1000 * 10, // test: 10 seconds
-                    stringFileName);
-        }
     }
 
     /***********************************************************************************
@@ -497,7 +453,7 @@ public class MainAct extends AppCompatActivity implements FragmentManager.OnBack
     public boolean onPrepareOptionsMenu(android.view.Menu menu) {
         System.out.println("MainAct / _onPrepareOptionsMenu");
 
-        if((drawer == null) || (drawer.drawerLayout == null)/* || (!bEULA_accepted)*/)
+        if((drawer == null) || (drawer.drawerLayout == null))
             return false;
 
         DB_drawer db_drawer = new DB_drawer(this);
@@ -573,12 +529,6 @@ public class MainAct extends AppCompatActivity implements FragmentManager.OnBack
 
                 // note operation
                 mMenu.findItem(R.id.note_operation).setVisible( (pgsCnt >0) && (notesCnt>0) );
-
-                // EXPORT TO SD CARD
-                mMenu.findItem(R.id.EXPORT_TO_SD_CARD).setVisible(pgsCnt >0);
-
-                // SEND PAGES
-                mMenu.findItem(R.id.SEND_PAGES).setVisible(pgsCnt >0);
 
                 /**
                  *  Note group
@@ -860,80 +810,6 @@ public class MainAct extends AppCompatActivity implements FragmentManager.OnBack
                 }
                 invalidateOptionsMenu();
                 TabsHost.reloadCurrentPage();
-                return true;
-
-            // sub menu for backup
-            case MenuId.IMPORT_FROM_SD_CARD:
-                if( (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) && //API23
-                        (ActivityCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) // check permission
-                                != PackageManager.PERMISSION_GRANTED))
-                {
-                    // No explanation needed, we can request the permission.
-                    ActivityCompat.requestPermissions(this,
-                            new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE,
-                                    Manifest.permission.READ_EXTERNAL_STORAGE},
-                            Util.PERMISSIONS_REQUEST_STORAGE_IMPORT);
-                }
-                else {
-                    //hide the menu
-                    mMenu.setGroupVisible(R.id.group_notes, false);
-                    mMenu.setGroupVisible(R.id.group_pages_and_more, false);
-                    // replace fragment
-                    Import_filesList importFragment = new Import_filesList();
-                    transaction.setCustomAnimations(R.anim.fragment_slide_in_left, R.anim.fragment_slide_out_left, R.anim.fragment_slide_in_right, R.anim.fragment_slide_out_right);
-                    transaction.replace(R.id.content_frame, importFragment, "import").addToBackStack(null).commit();
-                }
-                return true;
-
-            case MenuId.EXPORT_TO_SD_CARD:
-                if( (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) && //API23
-                        (ActivityCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) // check permission
-                                != PackageManager.PERMISSION_GRANTED))
-                {
-                    // No explanation needed, we can request the permission.
-                    ActivityCompat.requestPermissions(this,
-                            new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE,
-                                    Manifest.permission.READ_EXTERNAL_STORAGE},
-                            Util.PERMISSIONS_REQUEST_STORAGE_EXPORT);
-                }
-                else {
-                    //hide the menu
-                    mMenu.setGroupVisible(R.id.group_notes, false);
-                    mMenu.setGroupVisible(R.id.group_pages_and_more, false);
-                    if (dB_folder.getPagesCount(true) > 0) {
-                        Export_toSDCardFragment exportFragment = new Export_toSDCardFragment();
-                        transaction.setCustomAnimations(R.anim.fragment_slide_in_left, R.anim.fragment_slide_out_left, R.anim.fragment_slide_in_right, R.anim.fragment_slide_out_right);
-                        transaction.replace(R.id.content_frame, exportFragment, "export").addToBackStack(null).commit();
-                    } else {
-                        Toast.makeText(this, R.string.no_page_yet, Toast.LENGTH_SHORT).show();
-                    }
-                }
-                return true;
-
-            case MenuId.SEND_PAGES:
-                if( (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) && //API23
-                        (ActivityCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) // check permission
-                                != PackageManager.PERMISSION_GRANTED))
-                {
-                    // No explanation needed, we can request the permission.
-                    ActivityCompat.requestPermissions(this,
-                            new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE,
-                                    Manifest.permission.READ_EXTERNAL_STORAGE},
-                            Util.PERMISSIONS_REQUEST_STORAGE);
-                }
-                else {
-                    //hide the menu
-                    mMenu.setGroupVisible(R.id.group_notes, false);
-                    mMenu.setGroupVisible(R.id.group_pages_and_more, false);
-
-                    if (dB_folder.getPagesCount(true) > 0) {
-                        MailPagesFragment mailFragment = new MailPagesFragment();
-                        transaction.setCustomAnimations(R.anim.fragment_slide_in_left, R.anim.fragment_slide_out_left, R.anim.fragment_slide_in_right, R.anim.fragment_slide_out_right);
-                        transaction.replace(R.id.content_frame, mailFragment, "mail").addToBackStack(null).commit();
-                    } else {
-                        Toast.makeText(this, R.string.no_page_yet, Toast.LENGTH_SHORT).show();
-                    }
-                }
                 return true;
 
             case MenuId.CONFIG:

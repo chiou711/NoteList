@@ -27,13 +27,8 @@ import android.widget.BaseAdapter;
 import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.cw.ListNote.R;
-import com.cw.ListNote.db.DB_page;
-import com.cw.ListNote.operation.mail.MailNotes;
-import com.cw.ListNote.tabs.TabsHost;
-import com.cw.ListNote.util.Util;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -62,7 +57,6 @@ public class View_note_option {
      */
     static List<View_note_option> option_list;
 
-    private final static int ID_OPTION_MAIL = 0;
     private final static int ID_OPTION_BACK = 9;
     static long noteId;
     static GridIconAdapter mGridIconAdapter;
@@ -75,11 +69,6 @@ public class View_note_option {
         View rootView = act.getLayoutInflater().inflate(R.layout.option_grid, null);
 
         option_list = new ArrayList<>();
-
-        // mail
-        option_list.add(new View_note_option(ID_OPTION_MAIL ,
-                        android.R.drawable.ic_menu_send,
-                        R.string.mail_notes_btn));
 
         // Back
         option_list.add(new View_note_option(ID_OPTION_BACK,
@@ -116,16 +105,6 @@ public class View_note_option {
         System.out.println("View_note_option / _startAddNoteActivity / optionId = " + optionId);
 
         switch (optionId) {
-            case ID_OPTION_MAIL:
-            {
-				// set Sent string Id
-				String sentString = Util.getStringWithXmlTag(TabsHost.getFocus_tabPos(),noteId);
-				sentString = Util.addXmlTag(sentString);
-
-				new MailNotes(act,sentString);
-            }
-            break;
-
             case ID_OPTION_BACK:
             {
                 dlgAddNew.dismiss();

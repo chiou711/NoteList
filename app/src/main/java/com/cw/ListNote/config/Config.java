@@ -295,7 +295,6 @@ public class Config extends Fragment
 
 			//set last tab Id to 0, otherwise TabId will not start from 0 when deleting all
 			//reset tab Index to 0
-			//fix: select tab over next import amount => clean all => import => export => error
 			TabsHost.setFocus_tabPos(0);
 			FolderUi.setFocus_folderPos(0);
 
@@ -368,9 +367,6 @@ public class Config extends Fragment
 
 		for (String child : children) {
 			System.out.println("original: " + child);
-
-			// EULA is using PreferenceManager.getDefaultSharedPreferences(MainAct.mAct)
-			// it will create packageName_preferences.xml
 
 			// clear each preferences XML file content, except DEFAULT shared preferences file
 			if (!child.contains("preferences")) {

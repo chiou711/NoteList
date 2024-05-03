@@ -107,7 +107,6 @@ public class Util
     SharedPreferences mPref_vibration;
     private static Context mContext;
 	private Activity mAct;
-	private String mEMailString;
     private static DB_folder mDbFolder;
     public static String NEW_LINE = "\r" + System.getProperty("line.separator");
 
@@ -115,10 +114,6 @@ public class Util
 
 	private int defaultBgClr;
 	private int defaultTextClr;
-
-	public static final int PERMISSIONS_REQUEST_STORAGE = 13;
-	public static final int PERMISSIONS_REQUEST_STORAGE_IMPORT = 14;
-	public static final int PERMISSIONS_REQUEST_STORAGE_EXPORT = 15;
 
 	public Util(){}
     
@@ -147,94 +142,6 @@ public class Util
     	}
 	}
 	
-	// export to SD card: for checked pages
-	public String exportToSdCard(String filename, List<Boolean> checkedTabs)
-	{   
-		//first row text
-		String data ="";
-
-		//get data from DB
-		data = queryDB(data,checkedTabs);
-		
-		// sent data
-		data = addXmlTag(data);
-		mEMailString = data;
-
-        exportToSdCardFile(filename,data);
-
-		return mEMailString;
-	}
-	
-	// Export data to be SD Card file
-	public void exportToSdCardFile(String filename,String data)
-	{
-	    // SD card path + "/" + directory path
-	    String dirString = Environment.getExternalStorageDirectory().toString() +
-	    		              "/" +
-	    		              Util.getStorageDirName(mContext);
-
-		File dir = new File(dirString);
-		if(!dir.isDirectory())
-			dir.mkdir();
-		File file = new File(dir, filename);
-		file.setReadOnly();
-
-//		FileWriter fw = null;
-//		try {
-//			fw = new FileWriter(file);
-//		} catch (IOException e1) {
-//			System.out.println("_FileWriter error");
-//			e1.printStackTrace();
-//		}
-//		BufferedWriter bw = new BufferedWriter(fw);
-
-		BufferedWriter bw = null;
-		OutputStreamWriter osw = null;
-
-		int BUFFER_SIZE = 8192;
-		try {
-			osw = new OutputStreamWriter(new FileOutputStream(file.getPath()), "UTF-8");
-			bw = new BufferedWriter(osw,BUFFER_SIZE);
-
-		} catch (UnsupportedEncodingException e1) {
-			e1.printStackTrace();
-		} catch (FileNotFoundException e1) {
-			e1.printStackTrace();
-		}
-
-		try {
-			bw.write(data);
-			bw.flush();
-			osw.close();
-			bw.close();
-		} catch (FileNotFoundException e) {
-		} catch (IOException e) {
-		}
-	}
-	
-    /**
-     * Query current data base
-     *
-     */
-    private String queryDB(String data, List<Boolean> checkedTabs)
-    {
-    	String curData = data;
-    	
-    	// folder
-    	int folderTableId = Pref.getPref_focusView_folder_tableId(mContext);
-    	mDbFolder = new DB_folder(mContext, folderTableId);
-
-    	// page
-    	int tabCount = checkedTabs.size();
-    	for(int i=0;i<tabCount;i++)
-    	{
-            if(checkedTabs.get(i))
-				curData = curData.concat(getStringWithXmlTag(i, ID_FOR_TABS));
-    	}
-    	return curData;
-    	
-    }
-    
     // get current time string
     public static String getCurrentTimeString()
     {
@@ -295,19 +202,6 @@ public class Util
 		
 		return strTime;
     }
-    
-//    void deleteAttachment(String mAttachmentFileName)
-//    {
-//		// delete file after sending
-//		String attachmentPath_FileName = Environment.getExternalStorageDirectory().getPath() + "/" +
-//										 mAttachmentFileName;
-//		File file = new File(attachmentPath_FileName);
-//		boolean deleted = file.delete();
-//		if(deleted)
-//			System.out.println("delete file is OK");
-//		else
-//			System.out.println("delete file is NG");
-//    }
     
     // add mark to current page
 	public void addMarkToCurrentPage(DialogInterface dialogInterface,final int action)
@@ -409,28 +303,6 @@ public class Util
 	    });
 	}
 	
-	// get App default storage directory name
-	static public String getStorageDirName(Context context)
-	{
-//		return context.getResources().getString(R.string.app_name);
-
-		Resources currentResources = context.getResources();
-		Configuration conf = new Configuration(currentResources.getConfiguration());
-		conf.locale = Locale.ENGLISH; // apply English to avoid reading directory error
-		Resources newResources = new Resources(context.getAssets(), 
-											   currentResources.getDisplayMetrics(),
-											   conf);
-		String appName = newResources.getString(R.string.app_name);
-
-		// restore locale
-		new Resources(context.getAssets(), 
-					  currentResources.getDisplayMetrics(), 
-					  currentResources.getConfiguration());
-		
-//		System.out.println("Util / _getStorageDirName / appName = " + appName);
-		return appName;		
-	}
-	
 	// get style
 	static public int getNewPageStyle(Context context)
 	{
@@ -467,162 +339,6 @@ public class Util
 		return ColorSet.mBG_ColorArray.length;
 	}
 
-    private static int ID_FOR_TABS = -1;
-    public static int ID_FOR_NOTES = -2;
-    /**
-     * Get string with XML tags
-     * @param tabPos tab position
-     * @param noteId: ID_FOR_TABS for checked tabs(pages), ID_FOR_NOTES for checked notes
-     * @return string with tags
-     */
-	public static String getStringWithXmlTag(int tabPos,long noteId)
-	{
-		String PAGE_TAG_B = "<page>";
-		String PAGE_NAME_TAG_B = "<page_name>";
-		String PAGE_NAME_TAG_E = "</page_name>";
-		String NOTE_ITEM_TAG_B = "<note>";
-		String NOTE_ITEM_TAG_E = "</note>";
-		String TITLE_TAG_B = "<title>";
-		String TITLE_TAG_E = "</title>";
-		String BODY_TAG_B = "<body>";
-		String BODY_TAG_E = "</body>";
-		String PAGE_TAG_E = "</page>";
-
-		String sentString = NEW_LINE;
-
-		int pageTableId = TabsHost.mTabsPagerAdapter.getItem(tabPos).page_tableId;
-		List<Long> noteIdArray = new ArrayList<>();
-
-		DB_page dbPage = new DB_page(MainAct.mAct, pageTableId);
-        dbPage.open();
-
-        int count = dbPage.getNotesCount(false);
-
-		if(noteId == ID_FOR_TABS)
-		{
-			for (int i = 0; i < count; i++)
-                noteIdArray.add(i, dbPage.getNoteId(i, false));
-		}
-        else if(noteId == ID_FOR_NOTES)
-        {
-            // for checked notes
-            int j=0;
-            for (int i = 0; i < count; i++)
-            {
-                if(dbPage.getNoteMarking(i,false) == 1) {
-                    noteIdArray.add(j, dbPage.getNoteId(i, false));
-                    j++;
-                }
-            }
-        }
-		else
-			noteIdArray.add(0, noteId);//only one for View note case
-
-        dbPage.close();
-
-		// when page has page name only, no notes
-		if(noteIdArray.size() == 0)
-		{
-			sentString = sentString.concat(NEW_LINE + PAGE_TAG_B );
-			sentString = sentString.concat(NEW_LINE + PAGE_NAME_TAG_B + mDbFolder.getCurrentPageTitle() + PAGE_NAME_TAG_E);
-			sentString = sentString.concat(NEW_LINE + NOTE_ITEM_TAG_B);
-			sentString = sentString.concat(NEW_LINE + TITLE_TAG_B + TITLE_TAG_E);
-			sentString = sentString.concat(NEW_LINE + BODY_TAG_B +  BODY_TAG_E);
-			sentString = sentString.concat(NEW_LINE + NOTE_ITEM_TAG_E);
-			sentString = sentString.concat(NEW_LINE + PAGE_TAG_E );
-			sentString = sentString.concat(NEW_LINE);
-		}
-		else
-		{
-			for(int i=0;i< noteIdArray.size();i++)
-			{
-				dbPage.open();
-				Cursor cursorNote = dbPage.queryNote(noteIdArray.get(i));
-                String title = cursorNote.getString(cursorNote.getColumnIndexOrThrow(DB_page.KEY_NOTE_TITLE));
-				title = replaceEscapeCharacter(title);
-
-				String body = cursorNote.getString(cursorNote.getColumnIndexOrThrow(DB_page.KEY_NOTE_BODY));
-				body = replaceEscapeCharacter(body);
-
-				int mark = cursorNote.getInt(cursorNote.getColumnIndexOrThrow(DB_page.KEY_NOTE_MARKING));
-				String srtMark = (mark == 1)? "[s]":"[n]";
-				dbPage.close();
-
-				if(i==0)
-				{
-					DB_folder db_folder = new DB_folder(MainAct.mAct, Pref.getPref_focusView_folder_tableId(MainAct.mAct));
-					sentString = sentString.concat(NEW_LINE + PAGE_TAG_B );
-					sentString = sentString.concat(NEW_LINE + PAGE_NAME_TAG_B + db_folder.getCurrentPageTitle() + PAGE_NAME_TAG_E );
-				}
-
-				sentString = sentString.concat(NEW_LINE + NOTE_ITEM_TAG_B);
-				sentString = sentString.concat(NEW_LINE + TITLE_TAG_B + srtMark + title + TITLE_TAG_E);
-				sentString = sentString.concat(NEW_LINE + BODY_TAG_B + body + BODY_TAG_E);
-				sentString = sentString.concat(NEW_LINE + NOTE_ITEM_TAG_E);
-				sentString = sentString.concat(NEW_LINE);
-				if(i==noteIdArray.size()-1)
-					sentString = sentString.concat(NEW_LINE +  PAGE_TAG_E);
-
-			}
-		}
-		return sentString;
-	}
-
-
-    // replace special character (e.q. amp sign) for avoiding XML paring exception 
-	//      &   &amp;
-	//      >   &gt;
-	//      <   &lt;
-	//      '   &apos;
-	//      "   &quot;
-	private static String replaceEscapeCharacter(String str)
-	{
-        str = str.replaceAll("&", "&amp;");
-        str = str.replaceAll(">", "&gt;");
-        str = str.replaceAll("<", "&lt;");
-        str = str.replaceAll("'", "&apos;");
-        str = str.replaceAll("\"", "&quot;");
-        return str;
-	}
-	
-	// add XML tag
-	public static String addXmlTag(String str)
-	{
-		String ENCODING = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>";
-        String XML_TAG_B = NEW_LINE + "<ListNote>";
-        String XML_TAG_E = NEW_LINE + "</ListNote>";
-        
-        String data = ENCODING + XML_TAG_B;
-        
-        data = data.concat(str);
-		data = data.concat(XML_TAG_E);
-		
-		return data;
-	}
-
-	// trim XML tag
-	public String trimXMLtag(String string) {
-		string = string.replace("<?xml version=\"1.0\" encoding=\"UTF-8\"?>","");
-		string = string.replace("<ListNote>","");
-		string = string.replace("<page>","");
-		string = string.replace("<page_name>","=== Page: ");
-		string = string.replace("</page_name>"," ===");
-		string = string.replace("<note>","--- note ---");
-		string = string.replace("[s]","");
-		string = string.replace("[n]","");
-		string = string.replace("<title></title>"+NEW_LINE,"");
-        string = string.replace("<body></body>"+NEW_LINE,"");
-		string = string.replace("<title>","Title: ");
-		string = string.replace("</title>","");
-		string = string.replace("<body>","Body: ");
-		string = string.replace("</body>","");
-		string = string.replace("</note>","");
-		string = string.replace("</page>"," ");
-		string = string.replace("</ListNote>","");
-		string = string.trim();
-		return string;
-	}
-
 	// is Empty string
 	public static boolean isEmptyString(String str)
 	{
@@ -635,11 +351,6 @@ public class Util
 		return empty;
 	}
 	
-    static String mStringUrl;
-    public static int mResponseCode;
-    static String mResponseMessage;
-	public static int oneSecond = 1000;
-    
 	static public boolean isLandscapeOrientation(Activity act)
 	{
 		int currentOrientation = act.getResources().getConfiguration().orientation;
@@ -661,38 +372,6 @@ public class Util
 	}
 
 
-	static public void lockOrientation(Activity act) {
-//	    if (act.getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
-//	        act.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_USER_PORTRAIT);
-//	    } else {
-//	        act.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_USER_LANDSCAPE);
-//	    }
-	    
-	    int currentOrientation = act.getResources().getConfiguration().orientation;
-	    if (currentOrientation == Configuration.ORIENTATION_LANDSCAPE) {
-//		       act.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR_LANDSCAPE);
-		       act.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED);
-	    }
-	    else {
-//		       act.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR_PORTRAIT);
-		       act.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED);
-	    }	    
-	}
-
-	static public void unlockOrientation(Activity act) {
-	    act.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED);
-	}
-	
-	// get time format string
-	static public String getTimeFormatString(long duration)
-	{
-		long hour = TimeUnit.MILLISECONDS.toHours(duration);
-		long min = TimeUnit.MILLISECONDS.toMinutes(duration) - TimeUnit.HOURS.toMinutes(hour);
-		long sec = TimeUnit.MILLISECONDS.toSeconds(duration) - TimeUnit.HOURS.toSeconds(hour) - TimeUnit.MINUTES.toSeconds(min);
-		String str = String.format(Locale.US,"%2d:%02d:%02d", hour, min, sec);
-		return str;
-	}
-	
 	// set full screen for no immersive sticky
 	public static void setFullScreen_noImmersive(Activity act)
 	{

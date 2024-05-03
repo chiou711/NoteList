@@ -35,7 +35,6 @@ import com.cw.ListNote.R;
 import com.cw.ListNote.db.DB_folder;
 import com.cw.ListNote.db.DB_page;
 import com.cw.ListNote.main.MainAct;
-import com.cw.ListNote.operation.mail.MailNotes;
 import com.cw.ListNote.tabs.TabsHost;
 import com.cw.ListNote.util.Util;
 import com.cw.ListNote.util.preferences.Pref;
@@ -82,7 +81,6 @@ public class Checked_notes_option {
     private final static int INVERT_SELECTED = 3;
     private final static int MOVE_CHECKED_NOTE = 4;
     private final static int COPY_CHECKED_NOTE = 5;
-    private final static int MAIL_CHECKED_NOTE = 6;
     private final static int DELETE_CHECKED_NOTE = 7;
 
 
@@ -125,11 +123,6 @@ public class Checked_notes_option {
         checkedOperationList.add(new Checked_notes_option(COPY_CHECKED_NOTE,
                 R.drawable.ic_menu_copy_holo_dark,
                 R.string.checked_notes_copy_to));
-
-        // MAIL_CHECKED_NOTE
-        checkedOperationList.add(new Checked_notes_option(MAIL_CHECKED_NOTE,
-                android.R.drawable.ic_menu_send,
-                R.string.mail_notes_btn));
 
         // DELETE_CHECKED_NOTE
         checkedOperationList.add(new Checked_notes_option(DELETE_CHECKED_NOTE,
@@ -219,37 +212,6 @@ public class Checked_notes_option {
                     else if(option == COPY_CHECKED_NOTE)
                         operateCheckedTo(mAct,copyItemsTitle, copyItemsBody, copyItemsTime, COPY_TO);// copy to
 
-                }
-                else
-                    Toast.makeText(act,
-                            R.string.delete_checked_no_checked_items,
-                            Toast.LENGTH_SHORT)
-                            .show();
-                dlgAddNew.dismiss();
-                break;
-
-            case MAIL_CHECKED_NOTE:
-                if(!noItemChecked())
-                {
-                    // set Sent string Id
-                    List<Long> noteIdArray = new ArrayList<>();
-                    int j=0;
-                    mDb_page.open();
-                    int count = mDb_page.getNotesCount(false);
-                    for(int i=0; i<count; i++)
-                    {
-                        if(mDb_page.getNoteMarking(i,false) == 1)
-                        {
-                            j++;
-                        }
-                    }
-                    mDb_page.close();
-
-                    // message
-                    String sentString = Util.getStringWithXmlTag(TabsHost.getFocus_tabPos(),Util.ID_FOR_NOTES);
-                    sentString = Util.addXmlTag(sentString);
-
-                    new MailNotes(mAct,sentString);
                 }
                 else
                     Toast.makeText(act,

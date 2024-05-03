@@ -42,7 +42,6 @@ import android.widget.TextView;
 import com.cw.ListNote.R;
 import com.cw.ListNote.db.DB_folder;
 import com.cw.ListNote.db.DB_page;
-import com.cw.ListNote.define.Define;
 import com.cw.ListNote.drawer.Drawer;
 import com.cw.ListNote.folder.FolderUi;
 import com.cw.ListNote.main.MainAct;
@@ -51,13 +50,6 @@ import com.cw.ListNote.util.ColorSet;
 import com.cw.ListNote.util.Util;
 import com.cw.ListNote.util.preferences.Pref;
 
-//if(Define.ENABLE_ADMOB), enable the following
-import com.google.android.gms.ads.AdRequest;
-import com.google.android.gms.ads.AdView;
-import com.google.android.gms.ads.MobileAds;
-
-import com.google.android.gms.ads.initialization.InitializationStatus;
-import com.google.android.gms.ads.initialization.OnInitializationCompleteListener;
 import com.google.android.material.tabs.TabLayout;
 
 import java.util.ArrayList;
@@ -75,8 +67,6 @@ public class TabsHost extends AppCompatDialogFragment implements TabLayout.OnTab
     public static int firstPos_pageId;
 
     public static boolean isDoingMarking;
-    private AdView adView;
-
     public TabsHost()
     {
 //        System.out.println("TabsHost / construct");
@@ -97,24 +87,10 @@ public class TabsHost extends AppCompatDialogFragment implements TabLayout.OnTab
 
         // set layout by orientation
         if (Util.isLandscapeOrientation(MainAct.mAct)) {
-            if(Define.ENABLE_ADMOB) {
-                if (Define.CODE_MODE == Define.DEBUG_MODE)
-                    rootView = inflater.inflate(R.layout.tabs_host_landscape_test, container, false);
-                else
-                    rootView = inflater.inflate(R.layout.tabs_host_landscape, container, false);
-            }
-            else
-                rootView = inflater.inflate(R.layout.tabs_host_landscape_no_admob, container, false);
+            rootView = inflater.inflate(R.layout.tabs_host_landscape, container, false);
         }
         else {
-            if(Define.ENABLE_ADMOB) {
-                if (Define.CODE_MODE == Define.DEBUG_MODE)
-                    rootView = inflater.inflate(R.layout.tabs_host_portrait_test, container, false);
-                else
-                    rootView = inflater.inflate(R.layout.tabs_host_portrait, container, false);
-            }
-            else
-                rootView = inflater.inflate(R.layout.tabs_host_portrait_no_admob, container, false);
+            rootView = inflater.inflate(R.layout.tabs_host_portrait, container, false);
         }
 
         // view pager
@@ -169,46 +145,6 @@ public class TabsHost extends AppCompatDialogFragment implements TabLayout.OnTab
         mFooterMessage.setBackgroundColor(Color.BLUE);
         mFooterMessage.setVisibility(View.VISIBLE);
 
-
-        // AdMob support
-        // if ENABLE_ADMOB = true, enable the following
-        // test app id
-        if(Define.ENABLE_ADMOB) {
-            // old code
-//                if (Define.CODE_MODE == Define.DEBUG_MODE)
-//                    MobileAds.initialize(getActivity(), getActivity().getResources().getString(R.string.ad_mob_app_id_test));
-//                else // real app id
-//                    MobileAds.initialize(getActivity(), getActivity().getResources().getString(R.string.ad_mob_app_id));
-//
-//                // Load an ad into the AdMob banner view.
-//                AdView adView = (AdView) rootView.findViewById(R.id.adView);
-//                AdRequest adRequest = new AdRequest.Builder().build();
-//                adView.loadAd(adRequest);
-
-            // new code
-            // Initialize the Mobile Ads SDK.
-            MobileAds.initialize(getActivity(), new OnInitializationCompleteListener() {
-                @Override
-                public void onInitializationComplete(InitializationStatus initializationStatus) {}
-            });
-
-            // get test ads on a physical device
-//            String android_id = Settings.Secure.getString(getActivity().getContentResolver(), Settings.Secure.ANDROID_ID);
-//            String deviceId = md5(android_id).toUpperCase();
-//
-//            Log.d("TabsHost  <deviceId>" , deviceId);
-//
-//            MobileAds.setRequestConfiguration(
-//                    new RequestConfiguration.Builder().setTestDeviceIds(Arrays.asList(deviceId))
-//                            .build());
-
-            // Create an ad request.
-            AdRequest adRequest = new AdRequest.Builder().build();
-
-            adView = rootView.findViewById(R.id.adView);
-            // Start loading the ad in the background.
-            adView.loadAd(adRequest);
-        }
         return rootView;
     }
 
@@ -366,10 +302,6 @@ public class TabsHost extends AppCompatDialogFragment implements TabLayout.OnTab
 
         // set long click listener
         setLongClickListener();
-
-        if (adView != null) {
-            adView.resume();
-        }
     }
 
     @Override
@@ -380,18 +312,11 @@ public class TabsHost extends AppCompatDialogFragment implements TabLayout.OnTab
         //  Remove fragments
         if(!MainAct.mAct.isDestroyed())
             removeTabs();//Put here will solve onBackStackChanged issue (no Page_recycler / _onCreate)
-
-        if (adView != null) {
-            adView.pause();
-        }
     }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
-        if (adView != null) {
-            adView.destroy();
-        }
     }
 
     // store scroll of recycler view
@@ -661,7 +586,7 @@ public class TabsHost extends AppCompatDialogFragment implements TabLayout.OnTab
 
         // show footer
         mFooterMessage.setTextColor(ColorSet.color_white);
-        if(mFooterMessage != null) //add this for avoiding null exception when after e-Mail action
+        if(mFooterMessage != null)
         {
             mFooterMessage.setText(getFooterMessage(mAct));
             mFooterMessage.setBackgroundColor(ColorSet.getBarColor(mAct));

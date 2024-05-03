@@ -93,35 +93,6 @@
             </menu>
         </item>
 
-        <!-- backup operation -->
-        <item
-            android:id="@+id/backup_operation"
-            android:orderInCategory="5"
-            app:showAsAction="never"
-            android:title="@string/backup_operation"
-            >
-            <menu>
-                <item
-                    android:id="@+id/IMPORT_FROM_SD_CARD"
-                    android:orderInCategory="2"
-                    app:showAsAction="never"
-                    android:title="@string/config_import_SDCard_entry"
-                    android:icon="@android:drawable/ic_menu_revert"/>
-                <item
-                    android:id="@+id/EXPORT_TO_SD_CARD"
-                    android:orderInCategory="3"
-                    app:showAsAction="never"
-                    android:title="@string/config_export_SDCard_title"
-                    android:icon="@android:drawable/ic_menu_save"/>
-                <item
-                    android:id="@+id/SEND_PAGES"
-                    android:orderInCategory="4"
-                    app:showAsAction="never"
-                    android:title="@string/mail_notes_title"
-                    android:icon="@android:drawable/ic_menu_send"/>
-            </menu>
-        </item>
-
         <!-- Config -->
         <item
             android:id="@+id/CONFIG"

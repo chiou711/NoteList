@@ -20,13 +20,9 @@ import com.cw.ListNote.note_edit.Note_edit;
 import com.cw.ListNote.R;
 import com.cw.ListNote.db.DB_folder;
 import com.cw.ListNote.db.DB_page;
-import com.cw.ListNote.main.MainAct;
 import com.cw.ListNote.page.PageAdapter_recycler;
 import com.cw.ListNote.tabs.TabsHost;
-import com.cw.ListNote.util.CustomWebView;
-import com.cw.ListNote.util.DeleteFileAlarmReceiver;
 import com.cw.ListNote.util.preferences.Pref;
-import com.cw.ListNote.operation.mail.MailNotes;
 import com.cw.ListNote.util.Util;
 
 import android.content.Intent;
@@ -34,16 +30,12 @@ import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.os.Handler;
-import android.os.SystemClock;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.LinearLayout;
-import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -91,9 +83,6 @@ public class Note extends AppCompatActivity
 		NoteUi.setFocus_notePos(mEntryPosition);
 
 		act = this;
-
-        MainAct.mMediaBrowserCompat = null;
-
 	} //onCreate end
 
 	@Override
@@ -221,18 +210,6 @@ public class Note extends AppCompatActivity
 	{
 		super.onActivityResult(requestCode,resultCode,data);
 		System.out.println("Note / _onActivityResult ");
-        if((requestCode==EDIT_CURRENT_VIEW) || (requestCode==MAIL_CURRENT_VIEW))
-        {
-        }
-		else if(requestCode == MailNotes.EMAIL)
-		{
-			Toast.makeText(act,R.string.mail_exit,Toast.LENGTH_SHORT).show();
-			// note: result code is always 0 (cancel), so it is not used
-			new DeleteFileAlarmReceiver(act,
-					                    System.currentTimeMillis() + 1000 * 60 * 5, // formal: 300 seconds
-//						    		    System.currentTimeMillis() + 1000 * 10, // test: 10 seconds
-					                    MailNotes.mAttachmentFileName);
-		}
 
 	    // check if there is one note at least in the pager
 		if( viewPager.getAdapter().getCount() > 0 )
