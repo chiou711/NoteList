@@ -23,30 +23,75 @@ import android.graphics.Color;
 
 import com.cw.ListNote.R;
 
-public class ColorSet
-{
-    // style
+public class ColorSet{
+    // style color array
     // 0,2,4,6,8: dark background, 1,3,5,7,9: light background
-    public static int[] mBG_ColorArray = new int[]{Color.rgb(34,34,34), //#222222
+    public static int[] mBG_ColorArray = new int[]{
+            // 0
+            Color.rgb(34,34,34), //#222222
             Color.rgb(255,255,255),
             Color.rgb(38,87,51), //#265733
             Color.rgb(186,249,142),
             Color.rgb(87,38,51),//#572633
+            // 5
             Color.rgb(249,186,142),
             Color.rgb(38,51,87),//#263357
             Color.rgb(142,186,249),
             Color.rgb(87,87,51),//#575733
-            Color.rgb(249,249,140)};
-    public static int[] mText_ColorArray = new int[]{Color.rgb(255,255,255),
-            Color.rgb(0,0,0),
+            Color.rgb(249,249,140),
+
+            // traditional China color pair
+            // 10
+            Color.parseColor("#66A9C9"),
+            Color.parseColor("#F0C9CF"),
+
+            Color.parseColor("#2C2F3B"),
+            Color.parseColor("#FAC03D"),
+
+            Color.parseColor("#D24735"),
+            // 15
+            Color.parseColor("#F7EEAD"),
+
+            Color.parseColor("#00695A"),
+            Color.parseColor("#BE9457"),
+
+            Color.parseColor("#86D2ec"),
+            Color.parseColor("#ee7934"),
+            // note: must sync with select_style.xml
+            };
+    public static int[] mText_ColorArray = new int[]{
+            // 0
             Color.rgb(255,255,255),
             Color.rgb(0,0,0),
             Color.rgb(255,255,255),
             Color.rgb(0,0,0),
             Color.rgb(255,255,255),
+            // 5
             Color.rgb(0,0,0),
             Color.rgb(255,255,255),
-            Color.rgb(0,0,0)};
+            Color.rgb(0,0,0),
+            Color.rgb(255,255,255),
+            Color.rgb(0,0,0),
+
+            // traditional China color pair
+            // 10
+            Color.parseColor("#F0C9CF"),
+            Color.parseColor("#66A9C9"),
+
+            Color.parseColor("#FAC03D"),
+            Color.parseColor("#2C2F3B"),
+
+            Color.parseColor("#F7EEAD"),
+            // 15
+            Color.parseColor("#D24735"),
+
+            Color.parseColor("#BE9457"),
+            Color.parseColor("#00695A"),
+
+            Color.parseColor("#ee7934"),
+            Color.parseColor("#86D2ec"),
+            // note: must sync with select_style.xml
+    };
 
     public static int color_white = Color.rgb(255,255,255);
     public static int color_black = Color.rgb(0,0,0);

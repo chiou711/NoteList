@@ -40,11 +40,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
-import android.widget.CompoundButton;
-import android.widget.NumberPicker;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
-import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.RadioGroup.OnCheckedChangeListener;
 
@@ -66,8 +63,7 @@ public class Config extends Fragment
 	private AlertDialog dialog;
 	private Context mContext;
 	private LayoutInflater mInflater;
-	String[] mItemArray = new String[]{"1","2","3","4","5","6","7","8","9","10"};
-	
+
 	public Config(){}
 	static View mRootView;
 	
@@ -109,7 +105,7 @@ public class Config extends Fragment
 		
 		// set background color with current style 
 		mNewPageTVStyle.setBackgroundColor(ColorSet.mBG_ColorArray[iBtnId]);
-		mNewPageTVStyle.setText(mItemArray[iBtnId]);
+		mNewPageTVStyle.setText(String.valueOf(iBtnId+1));
 		mNewPageTVStyle.setTextColor(ColorSet.mText_ColorArray[iBtnId]);
 		
 		mViewStyle.setOnClickListener(new OnClickListener() {
@@ -134,18 +130,10 @@ public class Config extends Fragment
 		mInflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 		view = mInflater.inflate(R.layout.select_style, null);
 		RadioGroup RG_view = (RadioGroup)view.findViewById(R.id.radioGroup1);
-		
-		setButtonColor((RadioButton)RG_view.findViewById(R.id.radio0),0);
-		setButtonColor((RadioButton)RG_view.findViewById(R.id.radio1),1);
-		setButtonColor((RadioButton)RG_view.findViewById(R.id.radio2),2);
-		setButtonColor((RadioButton)RG_view.findViewById(R.id.radio3),3);
-		setButtonColor((RadioButton)RG_view.findViewById(R.id.radio4),4);
-		setButtonColor((RadioButton)RG_view.findViewById(R.id.radio5),5);
-		setButtonColor((RadioButton)RG_view.findViewById(R.id.radio6),6);
-		setButtonColor((RadioButton)RG_view.findViewById(R.id.radio7),7);
-		setButtonColor((RadioButton)RG_view.findViewById(R.id.radio8),8);
-		setButtonColor((RadioButton)RG_view.findViewById(R.id.radio9),9);
-		
+
+		for(int i=0;i< RG_view.getChildCount();i++)
+			setButtonColor((RadioButton)(RG_view.getChildAt(i)), i);
+
 		builder.setView(view);
 
 		RadioGroup radioGroup = (RadioGroup) RG_view.findViewById(R.id.radioGroup1);
@@ -160,14 +148,14 @@ public class Config extends Fragment
 		dialog.show();
 	}
 	
-    private void setButtonColor(RadioButton rBtn,int iBtnId)
+    private void setButtonColor(RadioButton rBtn,int styleId)
     {
-		rBtn.setBackgroundColor(ColorSet.mBG_ColorArray[iBtnId]);
-		rBtn.setText(mItemArray[iBtnId]);
-		rBtn.setTextColor(ColorSet.mText_ColorArray[iBtnId]);
+		rBtn.setBackgroundColor(ColorSet.mBG_ColorArray[styleId]);
+	    rBtn.setText(String.valueOf(styleId+1));
+		rBtn.setTextColor(ColorSet.mText_ColorArray[styleId]);
 		
 		//set checked item
-		if(iBtnId == Util.getNewPageStyle(mContext))
+		if(styleId == Util.getNewPageStyle(mContext))
 			rBtn.setChecked(true);
 		else
 			rBtn.setChecked(false);
@@ -181,7 +169,7 @@ public class Config extends Fragment
 			mPref_style.edit().putInt("KEY_STYLE",mStyle).apply();
 			// update the style selection directly
 			mNewPageTVStyle.setBackgroundColor(ColorSet.mBG_ColorArray[mStyle]);
-			mNewPageTVStyle.setText(mItemArray[mStyle]);
+			mNewPageTVStyle.setText(String.valueOf(mStyle+1));
 			mNewPageTVStyle.setTextColor(ColorSet.mText_ColorArray[mStyle]);
 			//end
 			dialog.dismiss();

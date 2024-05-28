@@ -7,67 +7,107 @@
     <RadioGroup
         android:id="@+id/radioGroup1"
         android:layout_width="match_parent"
-        android:layout_height="191dp" >
+        android:layout_height="wrap_content" >
 
-	    <RadioButton
-	        android:id="@+id/radio0"
-	        android:layout_width="match_parent"
-	        android:layout_height="50dp"
-	        android:text="RadioButton0" />
-	
 	    <RadioButton
 	        android:id="@+id/radio1"
 	        android:layout_width="match_parent"
-	        android:layout_height="50dp"
-	        android:text="RadioButton1" />
+	        android:layout_height="50dp" />
 	
 	    <RadioButton
 	        android:id="@+id/radio2"
 	        android:layout_width="match_parent"
-	        android:layout_height="50dp"
-	        android:text="RadioButton2" />
+	        android:layout_height="50dp" />
 	
 	    <RadioButton
 	        android:id="@+id/radio3"
 	        android:layout_width="match_parent"
-	        android:layout_height="50dp"
-	        android:text="RadioButton3" />
+	        android:layout_height="50dp" />
 	    
   	    <RadioButton
 	        android:id="@+id/radio4"
 	        android:layout_width="match_parent"
-	        android:layout_height="50dp"
-	        android:text="RadioButton4" />
+	        android:layout_height="50dp"/>
   	    
   	    <RadioButton
 	        android:id="@+id/radio5"
 	        android:layout_width="match_parent"
-	        android:layout_height="50dp"
-	        android:text="RadioButton5" />
+	        android:layout_height="50dp" />
   	    
   	    <RadioButton
 	        android:id="@+id/radio6"
 	        android:layout_width="match_parent"
-	        android:layout_height="50dp"
-	        android:text="RadioButton6" />
+	        android:layout_height="50dp" />
 
   	    <RadioButton
 	        android:id="@+id/radio7"
 	        android:layout_width="match_parent"
-	        android:layout_height="50dp"
-	        android:text="RadioButton7" />
+	        android:layout_height="50dp" />
 
   	    <RadioButton
 	        android:id="@+id/radio8"
 	        android:layout_width="match_parent"
-	        android:layout_height="50dp"
-	        android:text="RadioButton8" />
+	        android:layout_height="50dp"/>
   	    
   	    <RadioButton
 	        android:id="@+id/radio9"
 	        android:layout_width="match_parent"
-	        android:layout_height="50dp"
-	        android:text="RadioButton9" />
-  	    	    	    	    	    	    
+	        android:layout_height="50dp" />
+
+		<RadioButton
+			android:id="@+id/radio10"
+			android:layout_width="match_parent"
+			android:layout_height="50dp" />
+
+		<RadioButton
+			android:id="@+id/radio11"
+			android:layout_width="match_parent"
+			android:layout_height="50dp" />
+
+		<RadioButton
+			android:id="@+id/radio12"
+			android:layout_width="match_parent"
+			android:layout_height="50dp" />
+
+		<RadioButton
+			android:id="@+id/radio13"
+			android:layout_width="match_parent"
+			android:layout_height="50dp" />
+
+		<RadioButton
+			android:id="@+id/radio14"
+			android:layout_width="match_parent"
+			android:layout_height="50dp" />
+
+		<RadioButton
+			android:id="@+id/radio15"
+			android:layout_width="match_parent"
+			android:layout_height="50dp" />
+
+		<RadioButton
+			android:id="@+id/radio16"
+			android:layout_width="match_parent"
+			android:layout_height="50dp" />
+
+		<RadioButton
+			android:id="@+id/radio17"
+			android:layout_width="match_parent"
+			android:layout_height="50dp" />
+
+		<RadioButton
+			android:id="@+id/radio18"
+			android:layout_width="match_parent"
+			android:layout_height="50dp" />
+
+		<RadioButton
+			android:id="@+id/radio19"
+			android:layout_width="match_parent"
+			android:layout_height="50dp" />
+
+		<RadioButton
+			android:id="@+id/radio20"
+			android:layout_width="match_parent"
+			android:layout_height="50dp" />
+		<!-- note: must sync with ColorSet.java -->
   	    </RadioGroup>
 </ScrollView>

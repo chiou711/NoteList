@@ -70,16 +70,9 @@ public class PageUi
 		View view = mInflater.inflate(R.layout.select_style, null);
 		RadioGroup RG_view = view.findViewById(R.id.radioGroup1);
 
-		Util.setButtonColor(RG_view.findViewById(R.id.radio0),0);
-		Util.setButtonColor(RG_view.findViewById(R.id.radio1),1);
-		Util.setButtonColor(RG_view.findViewById(R.id.radio2),2);
-		Util.setButtonColor(RG_view.findViewById(R.id.radio3),3);
-		Util.setButtonColor(RG_view.findViewById(R.id.radio4),4);
-		Util.setButtonColor(RG_view.findViewById(R.id.radio5),5);
-		Util.setButtonColor(RG_view.findViewById(R.id.radio6),6);
-		Util.setButtonColor(RG_view.findViewById(R.id.radio7),7);
-		Util.setButtonColor(RG_view.findViewById(R.id.radio8),8);
-		Util.setButtonColor(RG_view.findViewById(R.id.radio9),9);
+		for(int i=0;i< RG_view.getChildCount();i++)
+			Util.setButtonColor((RadioButton)(RG_view.getChildAt(i)), i);
+
 
 		// set current selection
 		for(int i=0;i< Util.getStyleCount();i++)

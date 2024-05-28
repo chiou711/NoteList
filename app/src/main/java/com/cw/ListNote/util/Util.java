@@ -16,93 +16,38 @@
 
 package com.cw.ListNote.util;
 
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.io.OutputStreamWriter;
-import java.io.UnsupportedEncodingException;
-import java.lang.reflect.Field;
-import java.lang.reflect.Method;
-import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.List;
 import java.util.Locale;
-import java.util.Timer;
-import java.util.TimerTask;
-import java.util.concurrent.Executors;
-import java.util.concurrent.TimeUnit;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import com.cw.ListNote.main.MainAct;
 import com.cw.ListNote.page.Checked_notes_option;
 import com.cw.ListNote.R;
 import com.cw.ListNote.db.DB_folder;
-import com.cw.ListNote.db.DB_page;
 import com.cw.ListNote.tabs.TabsHost;
 import com.cw.ListNote.util.preferences.Pref;
-import com.cw.ListNote.define.Define;
 
-import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.content.ComponentName;
-import android.content.ContentResolver;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.pm.ActivityInfo;
-import android.content.pm.LabeledIntent;
-import android.content.pm.PackageManager;
-import android.content.pm.ResolveInfo;
-import android.content.res.AssetManager;
 import android.content.res.Configuration;
-import android.content.res.Resources;
-import android.database.Cursor;
 import android.database.DataSetObserver;
-import android.graphics.Color;
 import android.graphics.Typeface;
-import android.graphics.drawable.Drawable;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
-import android.net.Uri;
-import android.os.AsyncTask;
 import android.os.Build;
-import android.os.Environment;
 import android.os.Vibrator;
-import android.provider.MediaStore;
-import android.text.Html;
-import android.text.Spannable;
-import android.text.SpannableString;
-import android.text.TextUtils;
-import android.text.style.ForegroundColorSpan;
-import android.util.Patterns;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
-import android.webkit.WebChromeClient;
-import android.webkit.WebView;
-import android.webkit.WebViewClient;
 import android.widget.CheckedTextView;
-import android.widget.EditText;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.RadioButton;
-import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-public class Util 
+public class Util
 {
     SharedPreferences mPref_vibration;
     private static Context mContext;
@@ -313,16 +258,15 @@ public class Util
 	
 	
 	// set button color
-	private static String[] mItemArray = new String[]{"1","2","3","4","5","6","7","8","9","10"};
-    public static void setButtonColor(RadioButton rBtn,int iBtnId)
+    public static void setButtonColor(RadioButton rBtn,int styleId)
     {
-    	if(iBtnId%2 == 0)
+    	if(styleId%2 == 0)
     		rBtn.setButtonDrawable(R.drawable.btn_radio_off_holo_dark);
     	else
     		rBtn.setButtonDrawable(R.drawable.btn_radio_off_holo_light);
-		rBtn.setBackgroundColor(ColorSet.mBG_ColorArray[iBtnId]);
-		rBtn.setText(mItemArray[iBtnId]);
-		rBtn.setTextColor(ColorSet.mText_ColorArray[iBtnId]);
+		rBtn.setBackgroundColor(ColorSet.mBG_ColorArray[styleId]);
+	    rBtn.setText(String.valueOf(styleId+1));
+		rBtn.setTextColor(ColorSet.mText_ColorArray[styleId]);
     }
 	
     // get current page style
