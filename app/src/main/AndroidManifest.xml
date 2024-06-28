@@ -47,6 +47,9 @@
         <activity android:name="com.cw.ListNote.note_edit.Note_edit"
                   android:windowSoftInputMode="adjustPan"/>
 
+        <activity android:name="com.cw.ListNote.operation.fontsize.Font_size_edit"
+            android:windowSoftInputMode="adjustPan"/>
+
         <activity android:name="com.cw.ListNote.note.Note"
                   android:theme="@style/MyTheme"
             	  android:configChanges="orientation|keyboard|keyboardHidden|screenSize|screenLayout|uiMode"

@@ -34,6 +34,7 @@ public class MenuId {
         static final int CHECKED_OPERATION = R.id.HANDLE_CHECKED_NOTES;
 
         // note operation
+        static final int TEXT_FONT_SIZE = R.id.TEXT_FONT_SIZE;
         static final int SHOW_BODY = R.id.SHOW_BODY;
         static final int ENABLE_NOTE_DRAG_AND_DROP = R.id.ENABLE_NOTE_DRAG_AND_DROP;
 

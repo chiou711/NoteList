@@ -14,6 +14,7 @@
     <string name="edit_page_color_title">設定顏色:</string>
     <string name="settings">設定</string>
     <string name="add_new_folder">新增文件夾</string>
+    <string name="note_font_size">字體大小</string>
     <string name="drag_note">拖放記事</string>
     <string name="preview_note_body">預覽本文</string>
     <string name="drag_folder">拖放文件夾</string>

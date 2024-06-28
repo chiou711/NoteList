@@ -33,6 +33,7 @@ import com.cw.ListNote.folder.FolderUi;
 import com.cw.ListNote.note_add.Note_addText;
 import com.cw.ListNote.operation.delete.DeleteFolders;
 import com.cw.ListNote.operation.delete.DeletePages;
+import com.cw.ListNote.operation.fontsize.Font_size_edit;
 import com.cw.ListNote.page.Checked_notes_option;
 import com.cw.ListNote.page.PageUi;
 import com.cw.ListNote.tabs.TabsHost;
@@ -729,8 +730,54 @@ public class MainAct extends AppCompatActivity implements FragmentManager.OnBack
                 op.open_option_grid(this);
                 return true;
 
-            case MenuId.ADD_NEW_PAGE:
+            case MenuId.TEXT_FONT_SIZE:
+                Intent intent1 = new Intent(this, Font_size_edit.class);
+                startActivity(intent1);
+                return true;
 
+            // note operation
+            case MenuId.ENABLE_NOTE_DRAG_AND_DROP:
+                mPref_show_note_attribute = mContext.getSharedPreferences("show_note_attribute", 0);
+                if(mPref_show_note_attribute.getString("KEY_ENABLE_DRAGGABLE", "yes").equalsIgnoreCase("yes")) {
+                    mPref_show_note_attribute.edit().putString("KEY_ENABLE_DRAGGABLE", "no").apply();
+                    Toast.makeText(this,getResources().getString(R.string.drag_note)+
+                                    ": " +
+                                    getResources().getString(R.string.set_disable),
+                            Toast.LENGTH_SHORT).show();
+                }
+                else {
+                    mPref_show_note_attribute.edit().putString("KEY_ENABLE_DRAGGABLE", "yes").apply();
+                    Toast.makeText(this,getResources().getString(R.string.drag_note) +
+                                    ": " +
+                                    getResources().getString(R.string.set_enable),
+                            Toast.LENGTH_SHORT).show();
+                }
+                invalidateOptionsMenu();
+                TabsHost.reloadCurrentPage();
+                return true;
+
+            case MenuId.SHOW_BODY:
+                mPref_show_note_attribute = mContext.getSharedPreferences("show_note_attribute", 0);
+                if(mPref_show_note_attribute.getString("KEY_SHOW_BODY", "yes").equalsIgnoreCase("yes")) {
+                    mPref_show_note_attribute.edit().putString("KEY_SHOW_BODY", "no").apply();
+                    Toast.makeText(this,getResources().getString(R.string.preview_note_body) +
+                                    ": " +
+                                    getResources().getString(R.string.set_disable),
+                            Toast.LENGTH_SHORT).show();
+                }
+                else {
+                    mPref_show_note_attribute.edit().putString("KEY_SHOW_BODY", "yes").apply();
+                    Toast.makeText(this,getResources().getString(R.string.preview_note_body) +
+                                    ": " +
+                                    getResources().getString(R.string.set_enable),
+                            Toast.LENGTH_SHORT).show();
+                }
+                invalidateOptionsMenu();
+                TabsHost.reloadCurrentPage();
+                return true;
+
+            // page operation
+            case MenuId.ADD_NEW_PAGE:
                 // get current Max page table Id
                 int currentMaxPageTableId = 0;
                 int pgCnt = FolderUi.getFolder_pagesCount(this,FolderUi.getFocus_folderPos());
@@ -771,46 +818,6 @@ public class MainAct extends AppCompatActivity implements FragmentManager.OnBack
                     Toast.makeText(this, R.string.no_page_yet, Toast.LENGTH_SHORT).show();
                 }
             return true;
-
-            case MenuId.ENABLE_NOTE_DRAG_AND_DROP:
-                mPref_show_note_attribute = mContext.getSharedPreferences("show_note_attribute", 0);
-                if(mPref_show_note_attribute.getString("KEY_ENABLE_DRAGGABLE", "yes").equalsIgnoreCase("yes")) {
-                    mPref_show_note_attribute.edit().putString("KEY_ENABLE_DRAGGABLE", "no").apply();
-                    Toast.makeText(this,getResources().getString(R.string.drag_note)+
-                                        ": " +
-                                        getResources().getString(R.string.set_disable),
-                                   Toast.LENGTH_SHORT).show();
-                }
-                else {
-                    mPref_show_note_attribute.edit().putString("KEY_ENABLE_DRAGGABLE", "yes").apply();
-                    Toast.makeText(this,getResources().getString(R.string.drag_note) +
-                                        ": " +
-                                        getResources().getString(R.string.set_enable),
-                                   Toast.LENGTH_SHORT).show();
-                }
-                invalidateOptionsMenu();
-                TabsHost.reloadCurrentPage();
-                return true;
-
-            case MenuId.SHOW_BODY:
-                mPref_show_note_attribute = mContext.getSharedPreferences("show_note_attribute", 0);
-                if(mPref_show_note_attribute.getString("KEY_SHOW_BODY", "yes").equalsIgnoreCase("yes")) {
-                    mPref_show_note_attribute.edit().putString("KEY_SHOW_BODY", "no").apply();
-                    Toast.makeText(this,getResources().getString(R.string.preview_note_body) +
-                                        ": " +
-                                        getResources().getString(R.string.set_disable),
-                                    Toast.LENGTH_SHORT).show();
-                }
-                else {
-                    mPref_show_note_attribute.edit().putString("KEY_SHOW_BODY", "yes").apply();
-                    Toast.makeText(this,getResources().getString(R.string.preview_note_body) +
-                                        ": " +
-                                        getResources().getString(R.string.set_enable),
-                                   Toast.LENGTH_SHORT).show();
-                }
-                invalidateOptionsMenu();
-                TabsHost.reloadCurrentPage();
-                return true;
 
             case MenuId.CONFIG:
                 mMenu.setGroupVisible(R.id.group_notes, false); //hide the menu

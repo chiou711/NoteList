@@ -43,14 +43,20 @@
             >
             <menu>
                 <item
-                    android:id="@+id/ENABLE_NOTE_DRAG_AND_DROP"
+                    android:id="@+id/TEXT_FONT_SIZE"
                     android:orderInCategory="1"
+                    app:showAsAction="never"
+                    android:title="@string/note_font_size"
+                    android:icon="@android:drawable/ic_menu_sort_by_size"/>
+                <item
+                    android:id="@+id/ENABLE_NOTE_DRAG_AND_DROP"
+                    android:orderInCategory="2"
                     app:showAsAction="never"
                     android:title="@string/drag_note"
                     android:icon="@drawable/btn_check_off_holo_light"/>
                 <item
                     android:id="@+id/SHOW_BODY"
-                    android:orderInCategory="2"
+                    android:orderInCategory="3"
                     app:showAsAction="never"
                     android:title="@string/preview_note_body"
                     android:icon="@drawable/btn_check_off_holo_light"/>

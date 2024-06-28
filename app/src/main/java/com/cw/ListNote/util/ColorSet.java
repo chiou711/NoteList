@@ -74,22 +74,40 @@ public class ColorSet{
             Color.rgb(0,0,0),
 
             // traditional China color pair
+//            // 10
+//            Color.parseColor("#F0C9CF"),
+//            Color.parseColor("#66A9C9"),
+//
+//            Color.parseColor("#FAC03D"),
+//            Color.parseColor("#2C2F3B"),
+//
+//            Color.parseColor("#F7EEAD"),
+//            // 15
+//            Color.parseColor("#D24735"),
+//
+//            Color.parseColor("#BE9457"),
+//            Color.parseColor("#00695A"),
+//
+//            Color.parseColor("#ee7934"),
+//            Color.parseColor("#86D2ec"),
+
             // 10
-            Color.parseColor("#F0C9CF"),
-            Color.parseColor("#66A9C9"),
+            Color.parseColor("#000000"),
+            Color.parseColor("#000000"),
 
             Color.parseColor("#FAC03D"),
             Color.parseColor("#2C2F3B"),
 
-            Color.parseColor("#F7EEAD"),
+            Color.parseColor("#000000"),
             // 15
-            Color.parseColor("#D24735"),
+            Color.parseColor("#000000"),
 
-            Color.parseColor("#BE9457"),
-            Color.parseColor("#00695A"),
+            Color.parseColor("#FFFFFF"),
+            Color.parseColor("#000000"),
 
-            Color.parseColor("#ee7934"),
-            Color.parseColor("#86D2ec"),
+            Color.parseColor("#000000"),
+            Color.parseColor("#000000"),
+
             // note: must sync with select_style.xml
     };
 
