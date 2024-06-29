@@ -20,9 +20,11 @@ import android.app.ActionBar;
 import android.app.Activity;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.util.TypedValue;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 
 import com.cw.ListNote.R;
 import com.cw.ListNote.util.ColorSet;
@@ -30,6 +32,10 @@ import com.cw.ListNote.util.ColorSet;
 public class Font_size_edit extends Activity {
 
     Font_size_edit_ui note_edit_ui;
+
+    TextView titleText;
+    TextView bodyText;
+    private float fontSize;
     @Override
     protected void onCreate(Bundle savedInstanceState) 
     {
@@ -39,7 +45,8 @@ public class Font_size_edit extends Activity {
         setTitle(R.string.note_font_size);// set title
     	
         System.out.println("Note_edit / onCreate");
-        
+        titleText  = findViewById(R.id.edit_title);
+        bodyText = findViewById(R.id.edit_body);
 
 		ActionBar actionBar = getActionBar();
 		actionBar.setDisplayHomeAsUpEnabled(true);
@@ -53,7 +60,13 @@ public class Font_size_edit extends Activity {
 
     	// show view
 		note_edit_ui.populateFields_all();
-		
+
+        float px = titleText.getTextSize();
+        float density = getResources().getDisplayMetrics().scaledDensity;
+//        System.out.println("--- density = " + density); //4.3875
+        fontSize = px / density;
+//        System.out.println("--- fontSize = " + fontSize); //18.0057
+
 		// OK button: edit OK, save
         Button okButton = (Button) findViewById(R.id.note_edit_ok);
 //        okButton.setCompoundDrawablesWithIntrinsicBounds(android.R.drawable.ic_menu_save, 0, 0, 0);
@@ -72,8 +85,12 @@ public class Font_size_edit extends Activity {
 //        delButton.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_delete, 0, 0, 0);
         // delete
         size_up.setOnClickListener(new View.OnClickListener() {
-
             public void onClick(View view){
+//                System.out.println("---u fontSize 1= " + fontSize);
+                fontSize += 4f;
+//                System.out.println("---u fontSize 2= " + fontSize);
+                titleText.setTextSize(TypedValue.COMPLEX_UNIT_SP, fontSize);
+                bodyText.setTextSize(TypedValue.COMPLEX_UNIT_SP, fontSize);
             }
         });
         
@@ -81,9 +98,12 @@ public class Font_size_edit extends Activity {
         Button size_down = (Button) findViewById(R.id.font_size_down);
 //        cancelButton.setCompoundDrawablesWithIntrinsicBounds(android.R.drawable.ic_menu_close_clear_cancel, 0, 0, 0);
         size_down.setOnClickListener(new View.OnClickListener() {
-
             public void onClick(View view) {
-                setResult(RESULT_CANCELED);
+//                System.out.println("---d fontSize 1= " + fontSize);
+                fontSize -= 4f;
+//                System.out.println("---d fontSize 2= " + fontSize);
+                titleText.setTextSize(TypedValue.COMPLEX_UNIT_SP, fontSize);
+                bodyText.setTextSize(TypedValue.COMPLEX_UNIT_SP, fontSize);
             }
         });
     }

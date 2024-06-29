@@ -19,8 +19,8 @@ package com.cw.ListNote.operation.fontsize;
 import android.app.Activity;
 import android.content.Context;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import com.cw.ListNote.R;
 import com.cw.ListNote.db.DB_folder;
@@ -31,8 +31,8 @@ import com.cw.ListNote.util.preferences.Pref;
 
 public class Font_size_edit_ui {
 
-	private EditText titleEditText;
-	private EditText bodyEditText;
+	private TextView titleEditText;
+	private TextView bodyEditText;
 	private Activity act;
 	private int style;
 	Font_size_edit_ui(Activity act){
@@ -59,8 +59,8 @@ public class Font_size_edit_ui {
 		if(block != null)
 			block.setBackgroundColor(ColorSet.mBG_ColorArray[style]);
 
-		titleEditText = (EditText) act.findViewById(R.id.edit_title);
-		bodyEditText = (EditText) act.findViewById(R.id.edit_body);
+		titleEditText = act.findViewById(R.id.edit_title);
+		bodyEditText = act.findViewById(R.id.edit_body);
 
 		//set title color
 		titleEditText.setTextColor(ColorSet.mText_ColorArray[style]);
@@ -76,12 +76,10 @@ public class Font_size_edit_ui {
 		// title
 		String strTitleEdit = "text_title";
 		titleEditText.setText(strTitleEdit);
-		titleEditText.setSelection(strTitleEdit.length());
 
 		// body
 		String strBodyEdit = "text_body";
 		bodyEditText.setText(strBodyEdit);
-		bodyEditText.setSelection(strBodyEdit.length());
 	}
 
     // populate all fields
