@@ -28,6 +28,7 @@ import android.widget.TextView;
 
 import com.cw.ListNote.R;
 import com.cw.ListNote.util.ColorSet;
+import com.cw.ListNote.util.preferences.Pref;
 
 public class Font_size_edit extends Activity {
 
@@ -35,7 +36,7 @@ public class Font_size_edit extends Activity {
 
     TextView titleText;
     TextView bodyText;
-    private float fontSize;
+    private float titleFontSize,bodyFontSize;
     @Override
     protected void onCreate(Bundle savedInstanceState) 
     {
@@ -52,8 +53,6 @@ public class Font_size_edit extends Activity {
 		actionBar.setDisplayHomeAsUpEnabled(true);
 		actionBar.setBackgroundDrawable(new ColorDrawable(ColorSet.getBarColor(this)));
 
-    	Bundle extras = getIntent().getExtras();
-
         //initialization
         note_edit_ui = new Font_size_edit_ui(this);
         note_edit_ui.UI_init();
@@ -61,15 +60,16 @@ public class Font_size_edit extends Activity {
     	// show view
 		note_edit_ui.populateFields_all();
 
-        float px = titleText.getTextSize();
-        float density = getResources().getDisplayMetrics().scaledDensity;
-//        System.out.println("--- density = " + density); //4.3875
-        fontSize = px / density;
-//        System.out.println("--- fontSize = " + fontSize); //18.0057
+        float title_px = titleText.getTextSize();
+        float title_density = getResources().getDisplayMetrics().scaledDensity;
+        titleFontSize = title_px / title_density;
+
+        float body_px = bodyText.getTextSize();
+        float body_density = getResources().getDisplayMetrics().scaledDensity;
+        bodyFontSize = body_px / body_density;
 
 		// OK button: edit OK, save
         Button okButton = (Button) findViewById(R.id.note_edit_ok);
-//        okButton.setCompoundDrawablesWithIntrinsicBounds(android.R.drawable.ic_menu_save, 0, 0, 0);
 		// OK
         okButton.setOnClickListener(new View.OnClickListener() {
 
@@ -81,29 +81,44 @@ public class Font_size_edit extends Activity {
         });
         
         // up button
-        Button size_up = (Button) findViewById(R.id.font_size_up);
-//        delButton.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_delete, 0, 0, 0);
+        Button title_size_up = (Button) findViewById(R.id.title_font_size_up);
         // delete
-        size_up.setOnClickListener(new View.OnClickListener() {
+        title_size_up.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view){
-//                System.out.println("---u fontSize 1= " + fontSize);
-                fontSize += 4f;
-//                System.out.println("---u fontSize 2= " + fontSize);
-                titleText.setTextSize(TypedValue.COMPLEX_UNIT_SP, fontSize);
-                bodyText.setTextSize(TypedValue.COMPLEX_UNIT_SP, fontSize);
+                titleFontSize += 4f;
+                titleText.setTextSize(TypedValue.COMPLEX_UNIT_SP, titleFontSize);
+                Pref.setPref_title_font_size(Font_size_edit.this,(int) titleFontSize);
             }
         });
         
         // down button
-        Button size_down = (Button) findViewById(R.id.font_size_down);
-//        cancelButton.setCompoundDrawablesWithIntrinsicBounds(android.R.drawable.ic_menu_close_clear_cancel, 0, 0, 0);
-        size_down.setOnClickListener(new View.OnClickListener() {
+        Button title_size_down = (Button) findViewById(R.id.title_font_size_down);
+        title_size_down.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
-//                System.out.println("---d fontSize 1= " + fontSize);
-                fontSize -= 4f;
-//                System.out.println("---d fontSize 2= " + fontSize);
-                titleText.setTextSize(TypedValue.COMPLEX_UNIT_SP, fontSize);
-                bodyText.setTextSize(TypedValue.COMPLEX_UNIT_SP, fontSize);
+                titleFontSize -= 4f;
+                titleText.setTextSize(TypedValue.COMPLEX_UNIT_SP, titleFontSize);
+                Pref.setPref_title_font_size(Font_size_edit.this,(int) titleFontSize);
+            }
+        });
+
+        // body up button
+        Button body_size_up = (Button) findViewById(R.id.body_font_size_up);
+        // delete
+        body_size_up.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View view){
+                bodyFontSize += 4f;
+                bodyText.setTextSize(TypedValue.COMPLEX_UNIT_SP, bodyFontSize);
+                Pref.setPref_body_font_size(Font_size_edit.this,(int) bodyFontSize);
+            }
+        });
+
+        // body down button
+        Button body_size_down = (Button) findViewById(R.id.body_font_size_down);
+        body_size_down.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View view) {
+                bodyFontSize -= 4f;
+                bodyText.setTextSize(TypedValue.COMPLEX_UNIT_SP, bodyFontSize);
+                Pref.setPref_body_font_size(Font_size_edit.this,(int) bodyFontSize);
             }
         });
     }

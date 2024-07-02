@@ -172,4 +172,36 @@ public class Pref
         return strLocation;
     }
 
+    // set default title font size
+    public static void setPref_title_font_size(Activity act, int fontSize )
+    {
+        SharedPreferences pref = act.getSharedPreferences("font_size", 0);
+        String keyName = "KEY_TITLE_FONT_SIZE";
+        pref.edit().putInt(keyName, fontSize).apply();
+    }
+
+    // get default title font size
+    public static int getPref_title_font_size(Context context)
+    {
+        SharedPreferences pref = context.getSharedPreferences("font_size", 0);
+        String keyName = "KEY_TITLE_FONT_SIZE";
+        return pref.getInt(keyName, 18); // folder table Id: default is 1
+    }
+
+    // set default body font size
+    public static void setPref_body_font_size(Activity act, int fontSize )
+    {
+        SharedPreferences pref = act.getSharedPreferences("font_size", 0);
+        String keyName = "KEY_BODY_FONT_SIZE";
+        pref.edit().putInt(keyName, fontSize).apply();
+    }
+
+    // get default body font size
+    public static int getPref_body_font_size(Context context)
+    {
+        SharedPreferences pref = context.getSharedPreferences("font_size", 0);
+        String keyName = "KEY_BODY_FONT_SIZE";
+        return pref.getInt(keyName, 18); // folder table Id: default is 1
+    }
+
 }

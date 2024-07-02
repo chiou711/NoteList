@@ -39,7 +39,7 @@
 			android:text="@string/edit_note_dlg_title" />
 	</LinearLayout>
 	
-<!-- title Edit -->
+	<!-- title text -->
 	<LinearLayout
 		android:id="@+id/edit_title_block"
 		android:layout_width="match_parent"
@@ -48,18 +48,45 @@
         >
 	<TextView
     	android:id="@+id/edit_title" 
-	  	android:layout_width="0dp"
-        android:layout_weight="1"
+	  	android:layout_width="match_parent"
 		android:layout_height="wrap_content"
-	    android:textCursorDrawable="@null"
 		android:layout_gravity="center"
-	    android:inputType=""
 	    android:textSize="18sp"
-	    android:minLines="2"
-	    android:maxLines="20" />
+	     />
 	</LinearLayout>
 
-<!-- body header -->
+	<!-- title buttons  -->
+	<LinearLayout
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:background="@color/bar_color"
+		android:orientation="horizontal" >
+		<Button
+			android:id="@+id/title_font_size_down"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_margin="3dp"
+			android:paddingRight="10dp"
+			android:paddingLeft="10dp"
+			android:background="@drawable/button"
+			android:textColor="@android:color/white"
+			android:drawableStart="@android:drawable/ic_media_previous"
+			android:text="-" />
+		<Button
+			android:id="@+id/title_font_size_up"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_margin="3dp"
+			android:paddingRight="10dp"
+			android:paddingLeft="10dp"
+			android:background="@drawable/button"
+			android:textColor="@android:color/white"
+			android:drawableStart="@android:drawable/ic_media_next"
+			android:text="+" />
+	</LinearLayout>
+
+
+	<!-- body header -->
 	<LinearLayout
 	    android:layout_width="match_parent"
 	    android:layout_height="wrap_content"
@@ -80,36 +107,29 @@
 			android:text="@string/edit_note_dlg_body" />
 	</LinearLayout>
 
-<!-- body Edit -->	
+
+
+	<!-- body text -->
 	<TextView
 	    android:id="@+id/edit_body"
 	    android:layout_width="match_parent"
-		android:layout_height="0dp"
-        android:layout_weight="1"
-		android:textCursorDrawable="@null"
-	    android:inputType=""
-	    android:minLines="5"
-		android:maxLines="1000"
-	    android:autoLink="all"
+		android:layout_height="wrap_content"
 	    android:textSize="18sp"
-		android:scrollbars="vertical"
 		android:gravity="top"
 		/>
 
 	<View android:layout_width="match_parent" android:layout_height="1dip" android:background="#4f4f4f" />
 
-<!-- buttons  -->
-	
+	<!-- body buttons  -->
 	<LinearLayout
 	    android:layout_width="match_parent"
 	    android:layout_height="wrap_content"
 		android:background="@color/bar_color"
 	    android:orientation="horizontal" >
 	    <Button
-	        android:id="@+id/font_size_down"
-	        android:layout_width="0dp"
+	        android:id="@+id/body_font_size_down"
+	        android:layout_width="wrap_content"
 	        android:layout_height="wrap_content"
-	        android:layout_weight="1"
 			android:layout_margin="3dp"
 			android:paddingRight="10dp"
 			android:paddingLeft="10dp"
@@ -118,10 +138,9 @@
 			android:drawableStart="@android:drawable/ic_media_previous"
 	        android:text="-" />
 	    <Button
-	        android:id="@+id/font_size_up"
-	        android:layout_width="0dp"
+	        android:id="@+id/body_font_size_up"
+	        android:layout_width="wrap_content"
 	        android:layout_height="wrap_content"
-	        android:layout_weight="1"
 			android:layout_margin="3dp"
 			android:paddingRight="10dp"
 			android:paddingLeft="10dp"
@@ -129,19 +148,19 @@
 			android:textColor="@android:color/white"
 			android:drawableStart="@android:drawable/ic_media_next"
 	        android:text="+" />
-	    <Button
-	        android:id="@+id/note_edit_ok"
-	        android:layout_width="0dp"
-	        android:layout_height="wrap_content"
-	        android:layout_weight="1"
-			android:layout_margin="3dp"
-			android:paddingRight="10dp"
-			android:paddingLeft="10dp"
-			android:background="@drawable/button"
-			android:textColor="@android:color/white"
-			android:drawableStart="@android:drawable/ic_menu_save"
-	        android:text="@string/edit_note_button_save" />
-	</LinearLayout>
 
+	</LinearLayout>
+	<Button
+		android:id="@+id/note_edit_ok"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:layout_gravity="center"
+		android:layout_margin="3dp"
+		android:paddingRight="10dp"
+		android:paddingLeft="10dp"
+		android:background="@drawable/button"
+		android:textColor="@android:color/white"
+		android:drawableStart="@android:drawable/ic_menu_save"
+		android:text="@string/edit_note_button_save" />
 </LinearLayout>
 </ScrollView>

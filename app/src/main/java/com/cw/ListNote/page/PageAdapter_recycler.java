@@ -63,6 +63,7 @@ public class PageAdapter_recycler extends RecyclerView.Adapter<PageAdapter_recyc
 	private int page_pos;
     private final OnStartDragListener mDragStartListener;
 	private int page_table_id;
+    int title_font_size,body_font_size;
 
     PageAdapter_recycler(int pagePos,  int pageTableId, OnStartDragListener dragStartListener) {
 	    mAct = MainAct.mAct;
@@ -71,6 +72,8 @@ public class PageAdapter_recycler extends RecyclerView.Adapter<PageAdapter_recyc
         dbFolder = new DB_folder(mAct,Pref.getPref_focusView_folder_tableId(mAct));
 	    page_pos = pagePos;
 	    page_table_id = pageTableId;
+        title_font_size = Pref.getPref_title_font_size(mAct);
+        body_font_size = Pref.getPref_body_font_size(mAct);
     }
 
     /**
@@ -197,18 +200,20 @@ public class PageAdapter_recycler extends RecyclerView.Adapter<PageAdapter_recyc
 		holder.textTitle.setVisibility(View.VISIBLE);
 		holder.textTitle.setText(strTitle);
 		holder.textTitle.setTextColor(ColorSet.mText_ColorArray[style]);
+        holder.textTitle.setTextSize(title_font_size);
 
 		// Show text body
 	  	if(pref_show_note_attribute.getString("KEY_SHOW_BODY", "yes").equalsIgnoreCase("yes"))
 	  	{
 			holder.textBody.setText(strBody);
-//			holder.textBody.setTextSize(12);
 
-//			holder.rowDivider.setVisibility(View.VISIBLE);
 			holder.textBody.setTextColor(ColorSet.mText_ColorArray[style]);
+            holder.textBody.setTextSize(body_font_size);
+
 			// time stamp
             holder.textTime.setText(Util.getTimeString(timeCreated));
 			holder.textTime.setTextColor(ColorSet.mText_ColorArray[style]);
+            holder.textTime.setTextSize(body_font_size); //same text size as body text
 	  	}
 	  	else
 	  	{

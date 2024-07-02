@@ -31,8 +31,8 @@ import com.cw.ListNote.util.preferences.Pref;
 
 public class Font_size_edit_ui {
 
-	private TextView titleEditText;
-	private TextView bodyEditText;
+	private TextView titleText;
+	private TextView bodyText;
 	private Activity act;
 	private int style;
 	Font_size_edit_ui(Activity act){
@@ -59,27 +59,29 @@ public class Font_size_edit_ui {
 		if(block != null)
 			block.setBackgroundColor(ColorSet.mBG_ColorArray[style]);
 
-		titleEditText = act.findViewById(R.id.edit_title);
-		bodyEditText = act.findViewById(R.id.edit_body);
+		titleText = act.findViewById(R.id.edit_title);
+		bodyText = act.findViewById(R.id.edit_body);
 
 		//set title color
-		titleEditText.setTextColor(ColorSet.mText_ColorArray[style]);
-		titleEditText.setBackgroundColor(ColorSet.mBG_ColorArray[style]);
+		titleText.setTextColor(ColorSet.mText_ColorArray[style]);
+		titleText.setBackgroundColor(ColorSet.mBG_ColorArray[style]);
+		titleText.setTextSize(Pref.getPref_title_font_size(act));
 
 		//set body color
-		bodyEditText.setTextColor(ColorSet.mText_ColorArray[style]);
-		bodyEditText.setBackgroundColor(ColorSet.mBG_ColorArray[style]);
+		bodyText.setTextColor(ColorSet.mText_ColorArray[style]);
+		bodyText.setBackgroundColor(ColorSet.mBG_ColorArray[style]);
+		bodyText.setTextSize(Pref.getPref_body_font_size(act));
 	}
 
     // populate text fields
 	void populateFields_text(){
 		// title
-		String strTitleEdit = "text_title";
-		titleEditText.setText(strTitleEdit);
+		String strTitleEdit = "Title";
+		titleText.setText(strTitleEdit);
 
 		// body
-		String strBodyEdit = "text_body";
-		bodyEditText.setText(strBodyEdit);
+		String strBodyEdit = "Body";
+		bodyText.setText(strBodyEdit);
 	}
 
     // populate all fields
