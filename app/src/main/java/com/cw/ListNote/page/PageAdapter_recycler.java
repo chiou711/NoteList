@@ -30,6 +30,7 @@ import android.widget.TextView;
 import com.cw.ListNote.R;
 import com.cw.ListNote.db.DB_folder;
 import com.cw.ListNote.db.DB_page;
+import com.cw.ListNote.define.Define;
 import com.cw.ListNote.main.MainAct;
 import com.cw.ListNote.note.Note;
 import com.cw.ListNote.note_edit.Note_edit;
@@ -175,7 +176,6 @@ public class PageAdapter_recycler extends RecyclerView.Adapter<PageAdapter_recyc
         holder.rowId.setText(String.valueOf(position+1));
         holder.rowId.setTextColor(ColorSet.mText_ColorArray[style]);
 
-
         // show marking check box
         if(marking == 1)
         {
@@ -210,15 +210,19 @@ public class PageAdapter_recycler extends RecyclerView.Adapter<PageAdapter_recyc
 			holder.textBody.setTextColor(ColorSet.mText_ColorArray[style]);
             holder.textBody.setTextSize(body_font_size);
 
-			// time stamp
-            holder.textTime.setText(Util.getTimeString(timeCreated));
-			holder.textTime.setTextColor(ColorSet.mText_ColorArray[style]);
-            holder.textTime.setTextSize(body_font_size); //same text size as body text
+            if(Define.PAGE_VIEW_SHOW_TIME) {
+                // time stamp
+                holder.textTime.setText(Util.getTimeString(timeCreated));
+			    holder.textTime.setTextColor(ColorSet.mText_ColorArray[style]);
+                holder.textTime.setTextSize(body_font_size); //same text size as body text
+            }
 	  	}
 	  	else
 	  	{
             holder.textBody.setVisibility(View.GONE);
-            holder.textTime.setVisibility(View.GONE);
+
+            if(Define.PAGE_VIEW_SHOW_TIME)
+                holder.textTime.setVisibility(View.GONE);
 	  	}
 
         setBindViewHolder_listeners(holder,position);

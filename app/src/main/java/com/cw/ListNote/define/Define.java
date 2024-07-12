@@ -73,7 +73,6 @@ public class Define {
     public static int RELEASE_MODE = 1;
 
 
-
     /***
      *  With default content by XML file
      */
@@ -107,4 +106,11 @@ public class Define {
         return title;
     }
 
+    // note view setting
+//    public static boolean NOTE_WEB_VIEW = true;
+    public static boolean NOTE_WEB_VIEW = false;
+
+    // page view setting
+//    public static boolean PAGE_VIEW_SHOW_TIME = true;
+    public static boolean PAGE_VIEW_SHOW_TIME = false;
 }

@@ -4,24 +4,41 @@
     android:layout_height="match_parent"
     android:orientation="vertical" >
 
-    <!-- line view -->
-	<View android:id="@+id/line_view" android:layout_width="match_parent" android:layout_height="1dip" android:background="#40404040" />
+	 <!-- line view -->
+	 <View android:id="@+id/line_view" android:layout_width="match_parent" android:layout_height="1dip" android:background="#40404040" />
+
+	 <LinearLayout
+		 android:id="@+id/textViewGroup"
+		 android:layout_width="match_parent"
+		 android:layout_height="0dp"
+		 android:layout_weight="1"
+		 android:orientation="vertical" >
+		 <TextView
+			 android:id="@+id/textViewTitle"
+			 android:layout_width="wrap_content"
+			 android:layout_height="wrap_content"
+			 android:textStyle="bold"/>
+		 <TextView
+			 android:id="@+id/textViewBody"
+			 android:layout_width="wrap_content"
+			 android:layout_height="wrap_content"/>
+	 </LinearLayout>
 
     <!-- bottom block of pager -->
     <LinearLayout
-        android:id="@+id/textGroup"     
+        android:id="@+id/webViewGroup"
 		android:layout_width="match_parent"
     	android:layout_height="0dp"
     	android:layout_weight="1"
     	android:orientation="vertical" >
-    <com.cw.ListNote.util.CustomWebView
-        android:id="@+id/textBody"
-        android:layout_width="match_parent"
-    	android:layout_height="match_parent" 
-        style="?android:textAppearanceMedium"
-        android:lineSpacingMultiplier="1.2"
-        android:autoLink="all"
-        android:layout_marginBottom="0dp" />
+		<com.cw.ListNote.util.CustomWebView
+			android:id="@+id/textBody"
+			android:layout_width="match_parent"
+			android:layout_height="match_parent"
+			style="?android:textAppearanceMedium"
+			android:lineSpacingMultiplier="1.2"
+			android:autoLink="all"
+			android:layout_marginBottom="0dp" />
     </LinearLayout>
 
 	 <!-- footer -->

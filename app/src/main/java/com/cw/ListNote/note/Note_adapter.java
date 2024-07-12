@@ -18,10 +18,12 @@ package com.cw.ListNote.note;
 
 import com.cw.ListNote.R;
 import com.cw.ListNote.db.DB_page;
+import com.cw.ListNote.define.Define;
 import com.cw.ListNote.tabs.TabsHost;
 import com.cw.ListNote.util.ColorSet;
 import com.cw.ListNote.util.CustomWebView;
 import com.cw.ListNote.util.Util;
+import com.cw.ListNote.util.preferences.Pref;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
@@ -83,36 +85,50 @@ public class Note_adapter extends FragmentStatePagerAdapter
     	View pagerView = inflater.inflate(R.layout.note_view_adapter, container, false);
     	int style = Note.getStyle();
         pagerView.setBackgroundColor(ColorSet.mBG_ColorArray[style]);
+	    // text group
+	    ViewGroup textViewGroup = (ViewGroup) pagerView.findViewById(R.id.textViewGroup);
+	    ViewGroup webViewGroup = (ViewGroup) pagerView.findViewById(R.id.webViewGroup);
 
-        // line view
-        View line_view = pagerView.findViewById(R.id.line_view);
+	    String strTitle = db_page.getNoteTitle(position, true);
+	    String strBody = db_page.getNoteBody(position, true);
 
-    	// text group
-        ViewGroup textGroup = (ViewGroup) pagerView.findViewById(R.id.textGroup);
+	    if(!Define.NOTE_WEB_VIEW) {
+		    webViewGroup.setVisibility(View.GONE);
 
-        // Set tag for text web view
-    	CustomWebView textWebView = ((CustomWebView) textGroup.findViewById(R.id.textBody));
+			TextView title = pagerView.findViewById(R.id.textViewTitle);
+			TextView body = pagerView.findViewById(R.id.textViewBody);
 
-    	// set accessibility
-        textGroup.setContentDescription(act.getResources().getString(R.string.note_text));
-		textWebView.getRootView().setContentDescription(act.getResources().getString(R.string.note_text));
+			title.setText(strTitle);
+			title.setTextSize(Pref.getPref_title_font_size(act));
+			body.setText(strBody);
+			body.setTextSize(Pref.getPref_body_font_size(act));
+		} else {
+		    textViewGroup.setVisibility(View.GONE);
 
-        String strTitle = db_page.getNoteTitle(position,true);
-        String strBody = db_page.getNoteBody(position,true);
+			// line view
+            View line_view = pagerView.findViewById(R.id.line_view);
 
-        // View mode
-	  	{
+			// Set tag for text web view
+    	    CustomWebView textWebView = ((CustomWebView) webViewGroup.findViewById(R.id.textBody));
+
+			// set accessibility
+            webViewGroup.setContentDescription(act.getResources().getString(R.string.note_text));
+			textWebView.getRootView().setContentDescription(act.getResources().getString(R.string.note_text));
+
+		    // set text web view
+		    setWebView(textWebView,CustomWebView.TEXT_VIEW);
+
+		    // View mode
 			System.out.println("Note_adapter / _instantiateItem / isTextMode ");
 
-	  		line_view.setVisibility(View.VISIBLE);
-	  		textGroup.setVisibility(View.VISIBLE);
+	        line_view.setVisibility(View.VISIBLE);
+	        webViewGroup.setVisibility(View.VISIBLE);
 
-	  	    if(!Util.isEmptyString(strTitle)||
-	 	  	   !Util.isEmptyString(strBody)     )
-	  	    {
-	  	    	showTextWebView(position,textWebView);
-	  	    }
-	  	}
+	        if(!Util.isEmptyString(strTitle)||
+	           !Util.isEmptyString(strBody)     ){
+	            showTextWebView(position,textWebView);
+	        }
+		}
 
 		// footer of note view
 		TextView footerText = (TextView) pagerView.findViewById(R.id.note_view_footer);
@@ -197,19 +213,13 @@ public class Note_adapter extends FragmentStatePagerAdapter
 	} //setPrimaryItem		
 
 	// Set web view
-    private static boolean bWebViewIsShown;
-	private void setWebView(final CustomWebView webView,Object object, int whichView)
+	private void setWebView(final CustomWebView webView, int whichView)
 	{
         final SharedPreferences pref_web_view = act.getSharedPreferences("web_view", 0);
         if( whichView == CustomWebView.TEXT_VIEW )
         {
             int scale = pref_web_view.getInt("KEY_WEB_VIEW_SCALE",0);
             webView.setInitialScale(scale);
-        }
-        else if( whichView == CustomWebView.LINK_VIEW )
-        {
-            bWebViewIsShown = false;
-            webView.setInitialScale(30);
         }
 
         int style = Note.getStyle();
