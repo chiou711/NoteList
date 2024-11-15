@@ -29,6 +29,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.cw.ListNote.R;
+import com.cw.ListNote.db.DB_page;
+import com.cw.ListNote.util.Util;
 import com.cw.ListNote.util.preferences.Pref;
 
 import java.util.ArrayList;
@@ -65,7 +67,7 @@ public class View_note_option {
     static long noteId;
     static GridIconAdapter mGridIconAdapter;
 
-    public static void note_option(final AppCompatActivity act, long _noteId)
+    public static void note_option(final AppCompatActivity act, long _noteId,DB_page dbPage)
     {
         AbsListView gridView;
         noteId = _noteId;
@@ -74,25 +76,34 @@ public class View_note_option {
 
         option_list = new ArrayList<>();
 
-        // down size
-        option_list.add(new View_note_option(ID_OPTION_NOTE_TITLE_FONT_SIZE_DOWN,
-                R.drawable.rate_star_small_on_holo_dark,
-                R.string.btn_size_down));
+        String strTitle = dbPage.getNoteTitle_byId(noteId);
 
-        // up size
-        option_list.add(new View_note_option(ID_OPTION_NOTE_TITLE_FONT_SIZE_UP,
-                R.drawable.rate_star_big_on_holo_dark,
-                R.string.btn_size_up));
+        // title
+        if(!Util.isEmptyString(strTitle)) {
+            // down size
+            option_list.add(new View_note_option(ID_OPTION_NOTE_TITLE_FONT_SIZE_DOWN,
+                    R.drawable.rate_star_small_on_holo_dark,
+                    R.string.btn_size_down));
 
-        // down size
-        option_list.add(new View_note_option(ID_OPTION_NOTE_BODY_FONT_SIZE_DOWN,
-                R.drawable.ic_media_previous,
-                R.string.btn_size_down));
+            // up size
+            option_list.add(new View_note_option(ID_OPTION_NOTE_TITLE_FONT_SIZE_UP,
+                    R.drawable.rate_star_big_on_holo_dark,
+                    R.string.btn_size_up));
+        }
 
-        // up size
-        option_list.add(new View_note_option(ID_OPTION_NOTE_BODY_FONT_SIZE_UP,
-                R.drawable.ic_media_next,
-                R.string.btn_size_up));
+        // body
+        String strBody = dbPage.getNoteBody_byId(noteId);
+        if(!Util.isEmptyString(strBody)) {
+            // down size
+            option_list.add(new View_note_option(ID_OPTION_NOTE_BODY_FONT_SIZE_DOWN,
+                    R.drawable.ic_media_previous,
+                    R.string.btn_size_down));
+
+            // up size
+            option_list.add(new View_note_option(ID_OPTION_NOTE_BODY_FONT_SIZE_UP,
+                    R.drawable.ic_media_next,
+                    R.string.btn_size_up));
+        }
 
         gridView = (GridView) rootView.findViewById(R.id.option_grid_view);
 

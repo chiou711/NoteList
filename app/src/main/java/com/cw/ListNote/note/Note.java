@@ -150,7 +150,7 @@ public class Note extends AppCompatActivity
 		{
 			public void onClick(View view)
 			{
-				View_note_option.note_option(act,mNoteId);
+				View_note_option.note_option(act,mNoteId,mDb_page);
 			}
 		});
 
