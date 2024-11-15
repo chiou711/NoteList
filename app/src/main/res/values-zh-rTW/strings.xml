@@ -3,6 +3,8 @@
     <string name="btn_OK">確定</string>
     <string name="btn_Cancel">取消</string>
     <string name="btn_back">返回</string>
+    <string name="btn_size_down">字體調小</string>
+    <string name="btn_size_up">字體調大</string>
     <string name="btn_Continue">繼續</string>
     <string name="btn_Stop">停止</string>
     <string name="btn_Renew">更新</string>

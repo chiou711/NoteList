@@ -61,7 +61,6 @@ public class Note extends AppCompatActivity
     public static Long mNoteId;
     int mEntryPosition;
     int EDIT_CURRENT_VIEW = 5;
-    int MAIL_CURRENT_VIEW = 6;
     static int mStyle;
     
     static SharedPreferences mPref_show_note_attribute;

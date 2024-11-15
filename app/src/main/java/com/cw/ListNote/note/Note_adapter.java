@@ -55,7 +55,6 @@ public class Note_adapter extends FragmentStatePagerAdapter
 	static int mLastPosition;
 	private static LayoutInflater inflater;
 	private AppCompatActivity act;
-	private static String mWebTitle;
 	private ViewPager pager;
 	DB_page db_page;
 
@@ -96,12 +95,16 @@ public class Note_adapter extends FragmentStatePagerAdapter
 		    webViewGroup.setVisibility(View.GONE);
 
 			TextView title = pagerView.findViewById(R.id.textViewTitle);
-			TextView body = pagerView.findViewById(R.id.textViewBody);
-
 			title.setText(strTitle);
-			title.setTextSize(Pref.getPref_title_font_size(act));
+			title.setTextSize(Pref.getPref_note_title_font_size(act));
+		    title.setTextColor(ColorSet.mText_ColorArray[Note.mStyle]);
+		    title.setBackgroundColor(ColorSet.mBG_ColorArray[Note.mStyle]);
+
+		    TextView body = pagerView.findViewById(R.id.textViewBody);
 			body.setText(strBody);
-			body.setTextSize(Pref.getPref_body_font_size(act));
+			body.setTextSize(Pref.getPref_note_body_font_size(act));
+		    body.setTextColor(ColorSet.mText_ColorArray[Note.mStyle]);
+		    body.setBackgroundColor(ColorSet.mBG_ColorArray[Note.mStyle]);
 		} else {
 		    textViewGroup.setVisibility(View.GONE);
 

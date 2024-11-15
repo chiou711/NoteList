@@ -29,6 +29,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.cw.ListNote.R;
+import com.cw.ListNote.util.preferences.Pref;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -57,7 +58,10 @@ public class View_note_option {
      */
     static List<View_note_option> option_list;
 
-    private final static int ID_OPTION_BACK = 9;
+    private final static int ID_OPTION_NOTE_TITLE_FONT_SIZE_DOWN = 9;
+    private final static int ID_OPTION_NOTE_TITLE_FONT_SIZE_UP = 10;
+    private final static int ID_OPTION_NOTE_BODY_FONT_SIZE_DOWN = 11;
+    private final static int ID_OPTION_NOTE_BODY_FONT_SIZE_UP = 12;
     static long noteId;
     static GridIconAdapter mGridIconAdapter;
 
@@ -70,10 +74,25 @@ public class View_note_option {
 
         option_list = new ArrayList<>();
 
-        // Back
-        option_list.add(new View_note_option(ID_OPTION_BACK,
-                R.drawable.ic_menu_back,
-                R.string.btn_back));
+        // down size
+        option_list.add(new View_note_option(ID_OPTION_NOTE_TITLE_FONT_SIZE_DOWN,
+                R.drawable.rate_star_small_on_holo_dark,
+                R.string.btn_size_down));
+
+        // up size
+        option_list.add(new View_note_option(ID_OPTION_NOTE_TITLE_FONT_SIZE_UP,
+                R.drawable.rate_star_big_on_holo_dark,
+                R.string.btn_size_up));
+
+        // down size
+        option_list.add(new View_note_option(ID_OPTION_NOTE_BODY_FONT_SIZE_DOWN,
+                R.drawable.ic_media_previous,
+                R.string.btn_size_down));
+
+        // up size
+        option_list.add(new View_note_option(ID_OPTION_NOTE_BODY_FONT_SIZE_UP,
+                R.drawable.ic_media_next,
+                R.string.btn_size_up));
 
         gridView = (GridView) rootView.findViewById(R.id.option_grid_view);
 
@@ -105,9 +124,40 @@ public class View_note_option {
         System.out.println("View_note_option / _startAddNoteActivity / optionId = " + optionId);
 
         switch (optionId) {
-            case ID_OPTION_BACK:
+            case ID_OPTION_NOTE_TITLE_FONT_SIZE_DOWN:
             {
-                dlgAddNew.dismiss();
+//                dlgAddNew.dismiss();
+                int titleFontSize = Pref.getPref_note_title_font_size(act);
+                titleFontSize -= 4;
+                Pref.setPref_note_title_font_size(act,titleFontSize);
+                Note.mPagerAdapter.notifyDataSetChanged();
+            }
+            break;
+
+            case ID_OPTION_NOTE_TITLE_FONT_SIZE_UP:
+            {
+                int titleFontSize = Pref.getPref_note_title_font_size(act);
+                titleFontSize += 4;
+                Pref.setPref_note_title_font_size(act,titleFontSize);
+                Note.mPagerAdapter.notifyDataSetChanged();
+            }
+            break;
+
+            case ID_OPTION_NOTE_BODY_FONT_SIZE_DOWN:
+            {
+                int bodyFontSize = Pref.getPref_note_body_font_size(act);
+                bodyFontSize -= 4;
+                Pref.setPref_note_body_font_size(act,bodyFontSize);
+                Note.mPagerAdapter.notifyDataSetChanged();
+            }
+            break;
+
+            case ID_OPTION_NOTE_BODY_FONT_SIZE_UP:
+            {
+                int bodyFontSize = Pref.getPref_note_body_font_size(act);
+                bodyFontSize += 4;
+                Pref.setPref_note_body_font_size(act,bodyFontSize);
+                Note.mPagerAdapter.notifyDataSetChanged();
             }
             break;
 

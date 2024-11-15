@@ -204,4 +204,35 @@ public class Pref
         return pref.getInt(keyName, 18); // folder table Id: default is 1
     }
 
+    // set default note title font size
+    public static void setPref_note_title_font_size(Activity act, int fontSize )
+    {
+        SharedPreferences pref = act.getSharedPreferences("note_font_size", 0);
+        String keyName = "KEY_NOTE_TITLE_FONT_SIZE";
+        pref.edit().putInt(keyName, fontSize).apply();
+    }
+
+    // get default note title font size
+    public static int getPref_note_title_font_size(Context context)
+    {
+        SharedPreferences pref = context.getSharedPreferences("note_font_size", 0);
+        String keyName = "KEY_NOTE_TITLE_FONT_SIZE";
+        return pref.getInt(keyName, 18); // folder table Id: default is 1
+    }
+
+    // set default note body font size
+    public static void setPref_note_body_font_size(Activity act, int fontSize )
+    {
+        SharedPreferences pref = act.getSharedPreferences("note_font_size", 0);
+        String keyName = "KEY_NOTE_BODY_FONT_SIZE";
+        pref.edit().putInt(keyName, fontSize).apply();
+    }
+
+    // get default note body font size
+    public static int getPref_note_body_font_size(Context context)
+    {
+        SharedPreferences pref = context.getSharedPreferences("note_font_size", 0);
+        String keyName = "KEY_NOTE_BODY_FONT_SIZE";
+        return pref.getInt(keyName, 18); // folder table Id: default is 1
+    }
 }
